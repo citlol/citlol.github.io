@@ -1,0 +1,487 @@
+/* Enhanced App.css - All Visual Effects */
+
+/* Root and body setup */
+#root {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Theme transitions */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Dark/Light mode body colors */
+html.dark body {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+html.light body {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Enhanced Grid background pattern with animation */
+.bg-grid {
+  background-image: 
+    linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 30px 30px;
+  animation: grid-move 20s linear infinite;
+}
+
+html.light .bg-grid {
+  background-image: 
+    linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+}
+
+@keyframes grid-move {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(30px, 30px); }
+}
+
+/* Matrix Background */
+#matrix-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.1;
+  z-index: 1;
+}
+
+/* Glitch Effect */
+.glitch {
+  position: relative;
+  animation: glitch-skew 1s infinite linear alternate-reverse;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.glitch::before {
+  animation: glitch 0.3s infinite;
+  color: #ff00c1;
+  z-index: -1;
+  clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+}
+
+.glitch::after {
+  animation: glitch 0.3s infinite;
+  color: #00fff9;
+  z-index: -2;
+  clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+}
+
+@keyframes glitch-skew {
+  0% { transform: skew(0deg); }
+  10% { transform: skew(-1deg); }
+  20% { transform: skew(1deg); }
+  30% { transform: skew(-0.5deg); }
+  40% { transform: skew(0.5deg); }
+  50% { transform: skew(0deg); }
+  60% { transform: skew(-0.5deg); }
+  70% { transform: skew(1deg); }
+  80% { transform: skew(-1deg); }
+  90% { transform: skew(0.5deg); }
+  100% { transform: skew(0deg); }
+}
+
+@keyframes glitch {
+  0%, 9%, 11%, 20%, 21%, 30%, 31%, 40%, 41%, 50%, 51%, 60%, 61%, 70%, 71%, 80%, 81%, 90%, 91%, 100% {
+    transform: translate(0);
+  }
+  10% { transform: translate(-2px, -2px); }
+  30% { transform: translate(-4px, -4px); }
+  50% { transform: translate(-2px, -2px); }
+  70% { transform: translate(-4px, -4px); }
+  90% { transform: translate(-2px, -2px); }
+}
+
+/* Scanning Line Effect */
+.scan-line {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #4ade80, transparent);
+  animation: scan 4s linear infinite;
+  z-index: 2;
+}
+
+.light .scan-line {
+  background: linear-gradient(90deg, transparent, #2563eb, transparent);
+}
+
+@keyframes scan {
+  0% { 
+    top: 0; 
+    opacity: 1; 
+  }
+  50% { 
+    opacity: 0.8; 
+  }
+  100% { 
+    top: 100%; 
+    opacity: 0; 
+  }
+}
+
+/* Terminal dots enhancement */
+.terminal-dots {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.terminal-dots .w-2 {
+  width: 0.5rem;
+  height: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.terminal-dots .w-3 {
+  width: 0.75rem;
+  height: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+/* Enhanced project card animations */
+.project-card {
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
+}
+
+.project-card:hover {
+  transform: translateY(-5px) rotateX(5deg);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.light .project-card:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Code animation in project previews */
+.code-line {
+  opacity: 0;
+  animation: type-in 0.5s ease-in-out forwards;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 2px solid;
+  animation: typing 2s steps(40, end), blink-caret 0.75s step-end infinite;
+}
+
+.code-line:nth-child(1) { animation-delay: 0s; }
+.code-line:nth-child(2) { animation-delay: 0.3s; }
+.code-line:nth-child(3) { animation-delay: 0.6s; }
+.code-line:nth-child(4) { animation-delay: 0.9s; }
+.code-line:nth-child(5) { animation-delay: 1.2s; }
+.code-line:nth-child(6) { animation-delay: 1.5s; }
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: currentColor; }
+}
+
+@keyframes type-in {
+  to { opacity: 1; }
+}
+
+/* Glow effects */
+.glow-green {
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+}
+
+.glow-blue {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+.glow-purple {
+  box-shadow: 0 0 20px rgba(147, 51, 234, 0.3);
+}
+
+/* Enhanced pulse animations */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.1; }
+  50% { opacity: 0.3; }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+}
+
+@keyframes pulse-fast {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.animate-pulse-fast {
+  animation: pulse-fast 1s ease-in-out infinite;
+}
+
+/* Typewriter cursor */
+.typewriter-cursor {
+  animation: cursor-blink 1s infinite;
+}
+
+@keyframes cursor-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* Interactive terminal styling */
+.interactive-terminal {
+  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+  border: 1px solid #333;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 
+              0 8px 32px rgba(0,0,0,0.5);
+}
+
+.terminal-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #4ade80;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  caret-color: #4ade80;
+}
+
+.terminal-output {
+  color: #4ade80;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  line-height: 1.4;
+}
+
+/* ASCII Art styling */
+.ascii-art {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  line-height: 0.8;
+  white-space: pre;
+  font-size: 0.6rem;
+  letter-spacing: -1px;
+}
+
+/* Hover glow effects for buttons */
+.hover-glow {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.hover-glow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transition: left 0.5s;
+}
+
+.hover-glow:hover::before {
+  left: 100%;
+}
+
+.hover-glow:hover {
+  transform: translateY(-2px);
+}
+
+.dark .hover-glow:hover {
+  box-shadow: 0 0 30px rgba(34, 197, 94, 0.4);
+}
+
+.light .hover-glow:hover {
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
+}
+
+/* Status indicators */
+.status-indicator {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.status-active {
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+  border: 1px solid #4ade80;
+  animation: pulse-fast 2s infinite;
+}
+
+.status-loading {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+  border: 1px solid #fbbf24;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333333;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555555;
+}
+
+.light ::-webkit-scrollbar-track {
+  background: #f9fafb;
+}
+
+.light ::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+}
+
+.light ::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+  .ascii-art {
+    font-size: 0.4rem;
+  }
+  
+  .glitch {
+    font-size: 2.5rem;
+  }
+  
+  .project-card:hover {
+    transform: translateY(-3px);
+  }
+}
+
+/* Animation delays for staggered effects */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-500 { animation-delay: 0.5s; }
+.delay-700 { animation-delay: 0.7s; }
+.delay-1000 { animation-delay: 1s; }
+
+/* Fade in animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* Terminal boot sequence */
+.terminal-boot {
+  color: #ffffff;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Courier New', monospace;
+}
+
+.hero-content h1 {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Courier New', monospace;
+  font-weight: normal;
+  line-height: 1;
+  margin: 2rem 0;
+  text-align: center;
+}
+
+/* Terminal buttons */
+.terminal-button {
+  min-width: 140px;
+  text-align: center;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.terminal-button:hover {
+  transform: translateY(-1px);
+}
+
+/* Contact terminal links */
+.typed-terminal a,
+.Typewriter__wrapper a {
+  color: #2563eb !important;
+  text-decoration: underline !important;
+  transition: color 0.2s ease !important;
+}
+
+.typed-terminal a:hover,
+.Typewriter__wrapper a:hover {
+  color: #1d4ed8 !important;
+  text-shadow: 0 0 8px rgba(37, 99, 235, 0.5);
+}
+
+.dark .typed-terminal a,
+.dark .Typewriter__wrapper a {
+  color: #60a5fa !important;
+}
+
+.dark .typed-terminal a:hover,
+.dark .Typewriter__wrapper a:hover {
+  color: #93c5fd !important;
+  text-shadow: 0 0 8px rgba(96, 165, 250, 0.5);
+}
+
+/* Typewriter cursor */
+.Typewriter__cursor {
+  color: #ffffff !important;
+  font-weight: normal;
+  animation: cursor-blink 1s infinite;
+}
+
+/* Focus states for accessibility */
+section[role="button"] {
+  outline: none;
+}
+
+section[role="button"]:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.3);
+  outline-offset: -2px;
+}
