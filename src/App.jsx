@@ -65,88 +65,12 @@ function App() {
     }
   };
 
-  // Desktop Taskbar component
-  const Taskbar = () => (
-    <div className={`taskbar fixed bottom-0 left-0 right-0 z-50 h-12 border-t backdrop-blur-sm transition-colors duration-200 ${
-      isDarkMode 
-        ? 'bg-gray-900/95 border-gray-700' 
-        : 'bg-gray-200/95 border-gray-300'
-    }`} role="navigation" aria-label="Desktop taskbar">
-      <div className="flex items-center justify-between h-full px-4">
-        {/* Left side - Applications */}
-        <div className="flex items-center space-x-2">
-          {[
-            { name: 'about', icon: '📄', label: 'About' },
-            { name: 'skills', icon: '⚡', label: 'Skills' },
-            { name: 'projects', icon: '📁', label: 'Projects' },
-            { name: 'contact', icon: '📧', label: 'Contact' }
-          ].map((app) => (
-            <button
-              key={app.name}
-              onClick={() => handleNavClick(app.name)}
-              onKeyPress={(e) => handleKeyPress(e, app.name)}
-              className={`desktop-icon flex items-center space-x-1 px-3 py-1 rounded-md text-sm font-mono transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                activeSection === app.name
-                  ? isDarkMode
-                    ? 'bg-gray-800 text-white border border-gray-600 focus:ring-gray-500'
-                    : 'bg-white text-black border border-gray-400 focus:ring-gray-500'
-                  : isDarkMode
-                  ? 'text-gray-400 hover:bg-gray-800 hover:text-white focus:ring-gray-500'
-                  : 'text-gray-600 hover:bg-white hover:text-black focus:ring-gray-500'
-              }`}
-              aria-current={activeSection === app.name ? 'page' : undefined}
-              title={app.label}
-            >
-              <span className="text-base">{app.icon}</span>
-              <span className="hidden sm:inline">{app.name}</span>
-            </button>
-          ))}
-        </div>
-
-        {/* Right side - System tray */}
-        <div className="flex items-center space-x-4">
-          {/* Theme toggle */}
-          <button
-            onClick={toggleTheme}
-            className={`px-2 py-1 text-xs font-mono rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-              isDarkMode
-                ? 'text-gray-400 hover:text-white hover:bg-gray-800 focus:ring-gray-500'
-                : 'text-gray-600 hover:text-black hover:bg-gray-100 focus:ring-gray-500'
-            }`}
-            aria-label={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
-            title={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
-          >
-            {isDarkMode ? '☀️' : '🌙'}
-          </button>
-          
-          {/* Clock */}
-          <div className={`text-xs font-mono ${
-            isDarkMode ? 'text-gray-400' : 'text-gray-600'
-          }`}>
-            {currentTime.toLocaleTimeString('en-US', { 
-              hour: '2-digit', 
-              minute: '2-digit',
-              hour12: false 
-            })}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
 
   // Terminal Window component
   const TerminalWindow = ({ children, title = "terminal" }) => (
-    <div className={`terminal-window w-full max-w-5xl mx-auto border rounded-lg overflow-hidden shadow-2xl transition-colors duration-200 ${
-      isDarkMode 
-        ? 'bg-gray-950 border-gray-800' 
-        : 'bg-white border-gray-300'
-    }`}>
+    <div className="terminal-window w-full max-w-5xl mx-auto border rounded-lg overflow-hidden shadow-2xl bg-black border-gray-700">
       {/* Terminal header */}
-      <div className={`px-4 py-3 border-b flex items-center justify-between transition-colors duration-200 ${
-        isDarkMode 
-          ? 'bg-gray-900 border-gray-800' 
-          : 'bg-gray-200 border-gray-300'
-      }`}>
+      <div className="px-4 py-3 border-b bg-gray-900 border-gray-700">
         <div className="flex items-center space-x-3">
           {/* Window controls */}
           <div className="flex space-x-2">
@@ -154,18 +78,9 @@ function App() {
             <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
             <div className="w-3 h-3 bg-green-500 rounded-full"></div>
           </div>
-          <div className={`font-mono text-sm transition-colors duration-200 ${
-            isDarkMode ? 'text-gray-400' : 'text-gray-600'
-          }`}>
+          <div className="font-mono text-sm text-gray-400">
             {title}
           </div>
-        </div>
-        
-        {/* Terminal title on right */}
-        <div className={`font-mono text-sm transition-colors duration-200 ${
-          isDarkMode ? 'text-gray-500' : 'text-gray-500'
-        }`}>
-          citlalli@portfolio:~/{activeSection}
         </div>
       </div>
 
@@ -176,26 +91,42 @@ function App() {
     </div>
   );
 
+  // Navigation helper component for all sections
+  const NavigationHelper = () => (
+    <div className="mt-8 pt-4 border-t border-gray-600 space-y-2">
+      <div className="text-xs text-gray-500">
+        Navigation: 
+        <button onClick={() => handleNavClick('home')} className="ml-2 text-blue-400 hover:text-blue-300">cd ~</button>
+        <button onClick={() => handleNavClick('about')} className="ml-2 text-blue-400 hover:text-blue-300">about</button>
+        <button onClick={() => handleNavClick('skills')} className="ml-2 text-blue-400 hover:text-blue-300">skills</button>
+        <button onClick={() => handleNavClick('projects')} className="ml-2 text-blue-400 hover:text-blue-300">projects</button>
+        <button onClick={() => handleNavClick('contact')} className="ml-2 text-blue-400 hover:text-blue-300">contact</button>
+        <button onClick={toggleTheme} className="ml-4 text-yellow-400 hover:text-yellow-300">theme</button>
+      </div>
+      <div className="text-gray-500">
+        user@portfolio:~/{activeSection === 'home' ? '' : activeSection}$ <span className="terminal-cursor">█</span>
+      </div>
+    </div>
+  );
+
   // Home/Welcome section for terminal
   const WelcomeSection = () => (
-    <div className={`font-mono text-sm space-y-4 ${
-      isDarkMode ? 'text-gray-300' : 'text-gray-700'
-    }`}>
-      <div className={`${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+    <div className="font-mono text-sm space-y-4 text-gray-300">
+      <div className="text-gray-500">
         user@portfolio:~$ ./citlalli.exe --version
       </div>
       
       <div className="space-y-2">
-        <div className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-black'}`}>
+        <div className="text-2xl font-bold text-white">
           citlalli.exe v1.0.0
         </div>
-        <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+        <div className="text-gray-400">
           Computer Science Student | Accessibility-First Developer
         </div>
       </div>
 
       <div className="my-6">
-        <div className={`${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+        <div className="text-gray-500">
           user@portfolio:~$ cat README.md
         </div>
         <div className="mt-2 pl-4 border-l-2 border-gray-500 space-y-2">
@@ -206,22 +137,25 @@ function App() {
       </div>
 
       <div className="space-y-1">
-        <div className={`${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+        <div className="text-gray-500">
           user@portfolio:~$ ls -la
         </div>
         <div className="pl-4 space-y-1">
           {[
-            { name: 'about.md', desc: 'Personal information and background' },
-            { name: 'skills.json', desc: 'Technical skills and expertise' },
-            { name: 'projects/', desc: 'Portfolio of completed work' },
-            { name: 'contact.sh', desc: 'Get in touch with me' }
+            { name: 'about.md', desc: 'Personal information and background', cmd: 'cat about.md' },
+            { name: 'skills.json', desc: 'Technical skills and expertise', cmd: 'cat skills.json' },
+            { name: 'projects/', desc: 'Portfolio of completed work', cmd: 'ls projects/' },
+            { name: 'contact.sh', desc: 'Get in touch with me', cmd: './contact.sh' }
           ].map((file, index) => (
             <div key={index} className="flex items-center space-x-4">
-              <span className={`text-blue-400 cursor-pointer hover:underline`}
-                    onClick={() => handleNavClick(file.name.split('.')[0])}>
+              <button 
+                className="text-blue-400 hover:text-blue-300 cursor-pointer hover:underline transition-colors"
+                onClick={() => handleNavClick(file.name.split('.')[0])}
+                onKeyPress={(e) => handleKeyPress(e, file.name.split('.')[0])}
+              >
                 {file.name}
-              </span>
-              <span className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+              </button>
+              <span className="text-xs text-gray-500">
                 {file.desc}
               </span>
             </div>
@@ -229,26 +163,37 @@ function App() {
         </div>
       </div>
 
-      <div className="mt-8 pt-4 border-t border-gray-600">
-        <div className={`${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
-          user@portfolio:~$ <span className="terminal-cursor">█</span>
+      <div className="mt-6 space-y-2">
+        <div className="text-gray-500">
+          user@portfolio:~$ help
+        </div>
+        <div className="pl-4 text-xs space-y-1 text-gray-400">
+          <p>Available commands:</p>
+          <div className="grid grid-cols-2 gap-2 mt-2">
+            <button onClick={() => handleNavClick('about')} className="text-left text-blue-400 hover:text-blue-300">cat about.md</button>
+            <button onClick={() => handleNavClick('skills')} className="text-left text-blue-400 hover:text-blue-300">cat skills.json</button>
+            <button onClick={() => handleNavClick('projects')} className="text-left text-blue-400 hover:text-blue-300">ls projects/</button>
+            <button onClick={() => handleNavClick('contact')} className="text-left text-blue-400 hover:text-blue-300">./contact.sh</button>
+            <button onClick={() => handleNavClick('home')} className="text-left text-blue-400 hover:text-blue-300">cd ~</button>
+            <button onClick={toggleTheme} className="text-left text-yellow-400 hover:text-yellow-300">theme --toggle</button>
+          </div>
         </div>
       </div>
+
+      <NavigationHelper />
     </div>
   );
 
   // About Section for terminal
   const AboutSection = () => (
-    <div className={`font-mono text-sm space-y-4 ${
-      isDarkMode ? 'text-gray-300' : 'text-gray-700'
-    }`}>
-      <div className={`${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+    <div className="font-mono text-sm space-y-4 text-gray-300">
+      <div className="text-gray-500">
         user@portfolio:~/about$ cat about.md
       </div>
       
       <div className="space-y-6">
         <div>
-          <div className={`text-lg font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>
+          <div className="text-lg font-bold mb-2 text-white">
             # About Me
           </div>
           <div className="pl-4 border-l-2 border-blue-500 space-y-2">
@@ -259,7 +204,7 @@ function App() {
         </div>
 
         <div>
-          <div className={`text-lg font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>
+          <div className="text-lg font-bold mb-2 text-white">
             ## Philosophy
           </div>
           <div className="pl-4 border-l-2 border-green-500 space-y-2">
@@ -274,7 +219,7 @@ function App() {
 
         <div className="grid md:grid-cols-2 gap-8">
           <div>
-            <div className={`text-base font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>
+            <div className="text-base font-bold mb-2 text-white">
               ### Current Focus
             </div>
             <div className="pl-4 space-y-1">
@@ -293,7 +238,7 @@ function App() {
           </div>
 
           <div>
-            <div className={`text-base font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>
+            <div className="text-base font-bold mb-2 text-white">
               ### Interests
             </div>
             <div className="pl-4 space-y-1">
@@ -313,11 +258,7 @@ function App() {
         </div>
       </div>
 
-      <div className="mt-8 pt-4 border-t border-gray-600">
-        <div className={`${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
-          user@portfolio:~/about$ <span className="terminal-cursor">█</span>
-        </div>
-      </div>
+      <NavigationHelper />
     </div>
   );
 
@@ -342,15 +283,13 @@ function App() {
     ];
 
     return (
-      <div className={`font-mono text-sm space-y-4 ${
-        isDarkMode ? 'text-gray-300' : 'text-gray-700'
-      }`}>
-        <div className={`${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+      <div className="font-mono text-sm space-y-4 text-gray-300">
+        <div className="text-gray-500">
           user@portfolio:~/skills$ cat skills.json
         </div>
         
         <div className="space-y-6">
-          <div className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-black'}`}>
+          <div className="text-lg font-bold text-white">
             {`{`}
           </div>
 
@@ -358,13 +297,13 @@ function App() {
             <div key={index} className="pl-4">
               <div className="flex items-center space-x-2 mb-2">
                 <span className="text-blue-400">"{category.title}":</span>
-                <span className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>
+                <span className="text-gray-400">
                   // {category.title}{category.extension}
                 </span>
               </div>
               
               <div className="pl-4">
-                <div className={`${isDarkMode ? 'text-white' : 'text-black'}`}>[</div>
+                <div className="text-white">[</div>
                 <div className="pl-4 space-y-1">
                   {category.skills.map((skill, skillIndex) => (
                     <div key={skillIndex} className="flex items-center space-x-2">
@@ -372,28 +311,24 @@ function App() {
                       <span className="text-orange-400">{skill}</span>
                       <span className="text-green-400">"</span>
                       {skillIndex < category.skills.length - 1 && (
-                        <span className={isDarkMode ? 'text-white' : 'text-black'}>,</span>
+                        <span className="text-white">,</span>
                       )}
                     </div>
                   ))}
                 </div>
-                <div className={`${isDarkMode ? 'text-white' : 'text-black'}`}>
+                <div className="text-white">
                   ]{index < skillCategories.length - 1 ? ',' : ''}
                 </div>
               </div>
             </div>
           ))}
 
-          <div className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-black'}`}>
+          <div className="text-lg font-bold text-white">
             {`}`}
           </div>
         </div>
 
-        <div className="mt-8 pt-4 border-t border-gray-600">
-          <div className={`${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
-            user@portfolio:~/skills$ <span className="terminal-cursor">█</span>
-          </div>
-        </div>
+        <NavigationHelper />
       </div>
     );
   };
@@ -432,10 +367,8 @@ function App() {
     ];
 
     return (
-      <div className={`font-mono text-sm space-y-4 ${
-        isDarkMode ? 'text-gray-300' : 'text-gray-700'
-      }`}>
-        <div className={`${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+      <div className="font-mono text-sm space-y-4 text-gray-300">
+        <div className="text-gray-500">
           user@portfolio:~/projects$ ls -la
         </div>
         
@@ -451,17 +384,17 @@ function App() {
                 }`}>
                   {project.status}
                 </span>
-                <span className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+                <span className="text-xs text-gray-500">
                   [{project.type}]
                 </span>
               </div>
               
               <div className="pl-4 space-y-1">
-                <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                <div className="text-gray-400">
                   {project.desc}
                 </div>
                 <div className="flex items-center space-x-2">
-                  <span className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+                  <span className="text-xs text-gray-500">
                     tech:
                   </span>
                   {project.tech.map((tech, techIndex) => (
@@ -489,32 +422,29 @@ function App() {
         </div>
 
         <div className="mt-6 pt-4 border-t border-gray-600 space-y-2">
-          <div className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+          <div className="text-xs text-gray-500">
             Total: {projects.length} projects | Active: {projects.filter(p => p.status === 'active').length} | In Progress: {projects.filter(p => p.status === 'in_progress').length}
           </div>
-          <div className={`${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
-            user@portfolio:~/projects$ <span className="terminal-cursor">█</span>
-          </div>
         </div>
+        
+        <NavigationHelper />
       </div>
     );
   };
 
   // Contact Section for terminal
   const ContactSection = () => (
-    <div className={`font-mono text-sm space-y-4 ${
-      isDarkMode ? 'text-gray-300' : 'text-gray-700'
-    }`}>
-      <div className={`${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+    <div className="font-mono text-sm space-y-4 text-gray-300">
+      <div className="text-gray-500">
         user@portfolio:~/contact$ ./contact.sh
       </div>
       
       <div className="space-y-4">
         <div className="space-y-2">
-          <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+          <div className="text-gray-400">
             Initializing contact protocols...
           </div>
-          <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+          <div className="text-gray-400">
             Scanning available communication channels...
           </div>
         </div>
@@ -541,7 +471,7 @@ function App() {
 
         <div className="space-y-2">
           <div className="flex items-center space-x-2">
-            <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>email:</span>
+            <span className="text-gray-400">email:</span>
             <a 
               href="mailto:citlalli.tdr@gmail.com" 
               className="text-blue-400 hover:text-blue-300 underline"
@@ -550,7 +480,7 @@ function App() {
             </a>
           </div>
           <div className="flex items-center space-x-2">
-            <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>linkedin:</span>
+            <span className="text-gray-400">linkedin:</span>
             <a 
               href="https://linkedin.com/in/citlalli-trejo-del-rio" 
               target="_blank" 
@@ -561,7 +491,7 @@ function App() {
             </a>
           </div>
           <div className="flex items-center space-x-2">
-            <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>github:</span>
+            <span className="text-gray-400">github:</span>
             <a 
               href="https://github.com/citlol" 
               target="_blank" 
@@ -574,11 +504,7 @@ function App() {
         </div>
       </div>
 
-      <div className="mt-8 pt-4 border-t border-gray-600">
-        <div className={`${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
-          user@portfolio:~/contact$ <span className="terminal-cursor">█</span>
-        </div>
-      </div>
+      <NavigationHelper />
     </div>
   );
 
@@ -601,21 +527,15 @@ function App() {
   };
 
   return (
-    <div className={`min-h-screen font-mono transition-colors duration-200 relative ${
-      isDarkMode ? 'bg-black text-white' : 'bg-white text-black'
+    <div className={`min-h-screen font-mono transition-colors duration-200 ${
+      isDarkMode ? 'bg-black text-white' : 'bg-gray-900 text-white'
     }`}>
-      {/* Desktop background */}
-      <div className="absolute inset-0 bg-grid opacity-10"></div>
-      
-      {/* Main desktop area */}
-      <div className="relative z-10 min-h-screen flex items-center justify-center p-4 pb-16">
+      {/* Pure black desktop with terminal in center */}
+      <div className="min-h-screen flex items-center justify-center p-4">
         <TerminalWindow title={`citlalli@portfolio:~/${activeSection === 'home' ? '' : activeSection}`}>
           {renderSectionContent()}
         </TerminalWindow>
       </div>
-      
-      {/* Desktop Taskbar */}
-      <Taskbar />
     </div>
   );
 }
