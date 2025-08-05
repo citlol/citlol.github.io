@@ -4,7 +4,7 @@ import Typewriter from 'typewriter-effect';
 
 function App() {
   const [activeSection, setActiveSection] = useState('home');
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
   
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
@@ -39,6 +39,14 @@ function App() {
     }
   }, []);
 
+  // Update time every minute
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000);
+    return () => clearInterval(timer);
+  }, []);
+
   // Toggle theme function
   const toggleTheme = () => {
     setIsDarkMode(prev => !prev);
@@ -47,7 +55,6 @@ function App() {
   // Handle navigation clicks
   const handleNavClick = (section) => {
     setActiveSection(section);
-    setIsMenuOpen(false);
   };
 
   // Handle keyboard navigation
@@ -58,322 +65,263 @@ function App() {
     }
   };
 
-  // Navigation component
-  const Navigation = () => (
-    <nav className={`backdrop-blur-sm border-b sticky top-0 z-50 transition-colors duration-200 ${
+  // Desktop Taskbar component
+  const Taskbar = () => (
+    <div className={`taskbar fixed bottom-0 left-0 right-0 z-50 h-12 border-t backdrop-blur-sm transition-colors duration-200 ${
       isDarkMode 
-        ? 'bg-black/95 border-gray-800' 
-        : 'bg-white/95 border-gray-200'
-    }`} role="navigation" aria-label="Main navigation">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex-shrink-0">
-            <h1 className={`text-xl font-mono tracking-wider transition-colors duration-200 ${
-              isDarkMode ? 'text-gray-300' : 'text-gray-700'
-            }`}>
-              portfolio.exe
-            </h1>
-          </div>
-
-          <div className="flex items-center space-x-4">
-            {/* Theme Toggle Button */}
+        ? 'bg-gray-900/95 border-gray-700' 
+        : 'bg-gray-200/95 border-gray-300'
+    }`} role="navigation" aria-label="Desktop taskbar">
+      <div className="flex items-center justify-between h-full px-4">
+        {/* Left side - Applications */}
+        <div className="flex items-center space-x-2">
+          {[
+            { name: 'about', icon: '📄', label: 'About' },
+            { name: 'skills', icon: '⚡', label: 'Skills' },
+            { name: 'projects', icon: '📁', label: 'Projects' },
+            { name: 'contact', icon: '📧', label: 'Contact' }
+          ].map((app) => (
             <button
-              onClick={toggleTheme}
-              className={`px-3 py-2 text-sm font-mono rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                isDarkMode
-                  ? 'text-gray-400 hover:text-white hover:bg-gray-800 focus:ring-gray-500 focus:ring-offset-black'
-                  : 'text-gray-600 hover:text-black hover:bg-gray-100 focus:ring-gray-500 focus:ring-offset-white'
+              key={app.name}
+              onClick={() => handleNavClick(app.name)}
+              onKeyPress={(e) => handleKeyPress(e, app.name)}
+              className={`desktop-icon flex items-center space-x-1 px-3 py-1 rounded-md text-sm font-mono transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+                activeSection === app.name
+                  ? isDarkMode
+                    ? 'bg-gray-800 text-white border border-gray-600 focus:ring-gray-500'
+                    : 'bg-white text-black border border-gray-400 focus:ring-gray-500'
+                  : isDarkMode
+                  ? 'text-gray-400 hover:bg-gray-800 hover:text-white focus:ring-gray-500'
+                  : 'text-gray-600 hover:bg-white hover:text-black focus:ring-gray-500'
               }`}
-              aria-label={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
+              aria-current={activeSection === app.name ? 'page' : undefined}
+              title={app.label}
             >
-              {isDarkMode ? 'light_mode.js' : 'dark_mode.js'}
+              <span className="text-base">{app.icon}</span>
+              <span className="hidden sm:inline">{app.name}</span>
             </button>
-            
-            {/* Desktop Navigation */}
-            <div className="hidden md:block">
-              <div className="flex items-baseline space-x-6">
-                {['Home', 'About', 'Skills', 'Projects', 'Contact'].map((item) => (
-                  <button
-                    key={item}
-                    onClick={() => handleNavClick(item.toLowerCase())}
-                    onKeyPress={(e) => handleKeyPress(e, item.toLowerCase())}
-                    className={`px-3 py-2 text-sm font-mono transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-md ${
-                      activeSection === item.toLowerCase()
-                        ? isDarkMode
-                          ? 'text-white bg-gray-800 focus:ring-gray-500 focus:ring-offset-black'
-                          : 'text-black bg-gray-200 focus:ring-gray-500 focus:ring-offset-white'
-                        : isDarkMode
-                        ? 'text-gray-400 hover:text-white hover:bg-gray-900 focus:ring-gray-500 focus:ring-offset-black'
-                        : 'text-gray-600 hover:text-black hover:bg-gray-100 focus:ring-gray-500 focus:ring-offset-white'
-                    }`}
-                    aria-current={activeSection === item.toLowerCase() ? 'page' : undefined}
-                  >
-                    {item.toLowerCase()}
-                  </button>
-                ))}
-              </div>
-            </div>
+          ))}
+        </div>
 
-            {/* Mobile menu button */}
-            <div className="md:hidden">
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className={`p-2 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                  isDarkMode
-                    ? 'text-gray-400 hover:text-white hover:bg-gray-900 focus:ring-gray-500 focus:ring-offset-black'
-                    : 'text-gray-600 hover:text-black hover:bg-gray-100 focus:ring-gray-500 focus:ring-offset-white'
-                }`}
-                aria-expanded={isMenuOpen}
-                aria-label="Toggle navigation menu"
-              >
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  {isMenuOpen ? (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  ) : (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                  )}
-                </svg>
-              </button>
+        {/* Right side - System tray */}
+        <div className="flex items-center space-x-4">
+          {/* Theme toggle */}
+          <button
+            onClick={toggleTheme}
+            className={`px-2 py-1 text-xs font-mono rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+              isDarkMode
+                ? 'text-gray-400 hover:text-white hover:bg-gray-800 focus:ring-gray-500'
+                : 'text-gray-600 hover:text-black hover:bg-gray-100 focus:ring-gray-500'
+            }`}
+            aria-label={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
+            title={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
+          >
+            {isDarkMode ? '☀️' : '🌙'}
+          </button>
+          
+          {/* Clock */}
+          <div className={`text-xs font-mono ${
+            isDarkMode ? 'text-gray-400' : 'text-gray-600'
+          }`}>
+            {currentTime.toLocaleTimeString('en-US', { 
+              hour: '2-digit', 
+              minute: '2-digit',
+              hour12: false 
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Terminal Window component
+  const TerminalWindow = ({ children, title = "terminal" }) => (
+    <div className={`terminal-window w-full max-w-5xl mx-auto border rounded-lg overflow-hidden shadow-2xl transition-colors duration-200 ${
+      isDarkMode 
+        ? 'bg-gray-950 border-gray-800' 
+        : 'bg-white border-gray-300'
+    }`}>
+      {/* Terminal header */}
+      <div className={`px-4 py-3 border-b flex items-center justify-between transition-colors duration-200 ${
+        isDarkMode 
+          ? 'bg-gray-900 border-gray-800' 
+          : 'bg-gray-200 border-gray-300'
+      }`}>
+        <div className="flex items-center space-x-3">
+          {/* Window controls */}
+          <div className="flex space-x-2">
+            <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+            <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+          </div>
+          <div className={`font-mono text-sm transition-colors duration-200 ${
+            isDarkMode ? 'text-gray-400' : 'text-gray-600'
+          }`}>
+            {title}
+          </div>
+        </div>
+        
+        {/* Terminal title on right */}
+        <div className={`font-mono text-sm transition-colors duration-200 ${
+          isDarkMode ? 'text-gray-500' : 'text-gray-500'
+        }`}>
+          citlalli@portfolio:~/{activeSection}
+        </div>
+      </div>
+
+      {/* Terminal content */}
+      <div className="p-6 min-h-[500px]">
+        {children}
+      </div>
+    </div>
+  );
+
+  // Home/Welcome section for terminal
+  const WelcomeSection = () => (
+    <div className={`font-mono text-sm space-y-4 ${
+      isDarkMode ? 'text-gray-300' : 'text-gray-700'
+    }`}>
+      <div className={`${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+        user@portfolio:~$ ./citlalli.exe --version
+      </div>
+      
+      <div className="space-y-2">
+        <div className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-black'}`}>
+          citlalli.exe v1.0.0
+        </div>
+        <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+          Computer Science Student | Accessibility-First Developer
+        </div>
+      </div>
+
+      <div className="my-6">
+        <div className={`${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+          user@portfolio:~$ cat README.md
+        </div>
+        <div className="mt-2 pl-4 border-l-2 border-gray-500 space-y-2">
+          <p>Building inclusive, accessible digital experiences</p>
+          <p>Passionate about creating technology that works for everyone</p>
+          <p>Currently seeking internship opportunities</p>
+        </div>
+      </div>
+
+      <div className="space-y-1">
+        <div className={`${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+          user@portfolio:~$ ls -la
+        </div>
+        <div className="pl-4 space-y-1">
+          {[
+            { name: 'about.md', desc: 'Personal information and background' },
+            { name: 'skills.json', desc: 'Technical skills and expertise' },
+            { name: 'projects/', desc: 'Portfolio of completed work' },
+            { name: 'contact.sh', desc: 'Get in touch with me' }
+          ].map((file, index) => (
+            <div key={index} className="flex items-center space-x-4">
+              <span className={`text-blue-400 cursor-pointer hover:underline`}
+                    onClick={() => handleNavClick(file.name.split('.')[0])}>
+                {file.name}
+              </span>
+              <span className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+                {file.desc}
+              </span>
             </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-8 pt-4 border-t border-gray-600">
+        <div className={`${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+          user@portfolio:~$ <span className="terminal-cursor">█</span>
+        </div>
+      </div>
+    </div>
+  );
+
+  // About Section for terminal
+  const AboutSection = () => (
+    <div className={`font-mono text-sm space-y-4 ${
+      isDarkMode ? 'text-gray-300' : 'text-gray-700'
+    }`}>
+      <div className={`${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+        user@portfolio:~/about$ cat about.md
+      </div>
+      
+      <div className="space-y-6">
+        <div>
+          <div className={`text-lg font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>
+            # About Me
+          </div>
+          <div className="pl-4 border-l-2 border-blue-500 space-y-2">
+            <p>Computer science student with a passion for creating meaningful digital experiences.</p>
+            <p>My approach combines technical precision with thoughtful design, always keeping</p>
+            <p>accessibility and user experience at the forefront.</p>
           </div>
         </div>
 
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className={`md:hidden border-t transition-colors duration-200 ${
-            isDarkMode ? 'border-gray-800' : 'border-gray-200'
-          }`}>
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              {['Home', 'About', 'Skills', 'Projects', 'Contact'].map((item) => (
-                <button
-                  key={item}
-                  onClick={() => handleNavClick(item.toLowerCase())}
-                  className={`w-full text-left px-3 py-2 text-base font-mono transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-md ${
-                    activeSection === item.toLowerCase()
-                      ? isDarkMode
-                        ? 'text-white bg-gray-800 focus:ring-gray-500 focus:ring-offset-black'
-                        : 'text-black bg-gray-200 focus:ring-gray-500 focus:ring-offset-white'
-                      : isDarkMode
-                      ? 'text-gray-400 hover:text-white hover:bg-gray-900 focus:ring-gray-500 focus:ring-offset-black'
-                      : 'text-gray-600 hover:text-black hover:bg-gray-100 focus:ring-gray-500 focus:ring-offset-white'
-                  }`}
-                  aria-current={activeSection === item.toLowerCase() ? 'page' : undefined}
-                >
-                  {item.toLowerCase()}
-                </button>
+        <div>
+          <div className={`text-lg font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>
+            ## Philosophy
+          </div>
+          <div className="pl-4 border-l-2 border-green-500 space-y-2">
+            <p><span className="text-yellow-400">accessibility_first_development:</span> I believe technology should be</p>
+            <p>inclusive and accessible to everyone. My projects prioritize semantic HTML, proper ARIA</p>
+            <p>implementation, and comprehensive keyboard navigation.</p>
+            <br />
+            <p>Currently seeking internship opportunities where I can contribute to innovative projects</p>
+            <p>while continuing to grow as a developer.</p>
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-8">
+          <div>
+            <div className={`text-base font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>
+              ### Current Focus
+            </div>
+            <div className="pl-4 space-y-1">
+              {[
+                'modern react development',
+                'accessible web applications', 
+                'clean, maintainable code',
+                'user-centered design'
+              ].map((item, index) => (
+                <div key={index} className="flex items-center space-x-2">
+                  <span className="text-green-400">▸</span>
+                  <span>{item}</span>
+                </div>
               ))}
             </div>
           </div>
-        )}
-      </div>
-    </nav>
-  );
 
-  // Hero Section
-  const HeroSection = () => (
-    <section className={`min-h-screen flex items-center justify-center relative overflow-hidden ${
-      isDarkMode ? 'bg-black' : 'bg-white'
-    }`} aria-labelledby="hero-heading">
-      {/* Subtle grid background */}
-      <div className="absolute inset-0 bg-grid opacity-20"></div>
-      
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-        
-        {/* Simple prompt indicator */}
-        <div className="mb-12">
-          <div className={`font-mono text-lg ${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
-            <span className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>user@portfolio:~$</span> ./citlalli.exe
-          </div>
-        </div>
-        
-        {/* Main title with better spacing */}
-        <h1 id="hero-heading" className={`text-5xl sm:text-6xl lg:text-7xl font-mono mb-8 tracking-wider ${
-          isDarkMode ? 'text-white' : 'text-black'
-        }`}>
-          citlalli.exe
-        </h1>
-        
-        {/* Subtitle */}
-        <div className="mb-12">
-          <p className={`font-mono text-lg italic mb-6 ${
-            isDarkMode ? 'text-gray-400' : 'text-gray-600'
-          }`}>
-            // building inclusive, accessible digital experiences
-          </p>
-          
-          {/* File extensions */}
-          <div className={`font-mono text-base space-y-2 ${
-            isDarkMode ? 'text-gray-500' : 'text-gray-600'
-          }`}>
-            <p>cs_student.cpp</p>
-            <p>inclusive_dev.sh</p>
-          </div>
-        </div>
-        
-        {/* Clean buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <button
-            onClick={() => handleNavClick('contact')}
-            className={`px-8 py-3 font-mono border-2 transition-all duration-200 ${
-              isDarkMode
-                ? 'bg-white text-black border-white hover:bg-gray-100'
-                : 'bg-black text-white border-black hover:bg-gray-900'
-            }`}
-            aria-label="Navigate to contact section"
-          >
-            ./contact
-          </button>
-          <button
-            onClick={() => handleNavClick('projects')}
-            className={`px-8 py-3 font-mono border-2 transition-all duration-200 ${
-              isDarkMode
-                ? 'bg-transparent text-white border-white hover:bg-white hover:text-black'
-                : 'bg-transparent text-black border-black hover:bg-black hover:text-white'
-            }`}
-            aria-label="Navigate to projects section"
-          >
-            ./projects
-          </button>
-        </div>
-        
-      </div>
-    </section>
-  );
-
-  // About Section
-  const AboutSection = () => (
-    <section className={`py-20 transition-colors duration-200 ${
-      isDarkMode ? 'bg-gray-950' : 'bg-gray-100'
-    }`} aria-labelledby="about-heading">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 id="about-heading" className={`text-3xl font-mono mb-12 tracking-wider transition-colors duration-200 ${
-          isDarkMode ? 'text-white' : 'text-black'
-        }`}>about.md</h2>
-
-        <div className="space-y-8">
-          <div className={`border p-6 rounded-lg backdrop-blur-sm transition-colors duration-200 ${
-            isDarkMode 
-              ? 'bg-black/50 border-gray-800' 
-              : 'bg-white border-gray-300'
-          }`}>
-            <div className={`font-mono text-sm mb-4 transition-colors duration-200 ${
-              isDarkMode ? 'text-gray-400' : 'text-gray-600'
-            }`}>// bio</div>
-            <p className={`leading-relaxed mb-6 font-mono transition-colors duration-200 ${
-              isDarkMode ? 'text-gray-300' : 'text-gray-700'
-            }`}>
-              computer science student with a passion for creating meaningful digital experiences.
-              my approach combines technical precision with thoughtful design, always keeping
-              accessibility and user experience at the forefront.
-            </p>
-          </div>
-
-          <div className={`border p-6 rounded-lg backdrop-blur-sm transition-colors duration-200 ${
-            isDarkMode 
-              ? 'bg-black/50 border-gray-800' 
-              : 'bg-white border-gray-300'
-          }`}>
-            <div className={`font-mono text-sm mb-4 transition-colors duration-200 ${
-              isDarkMode ? 'text-gray-400' : 'text-gray-600'
-            }`}>// philosophy</div>
-            <p className={`leading-relaxed mb-4 font-mono transition-colors duration-200 ${
-              isDarkMode ? 'text-gray-300' : 'text-gray-700'
-            }`}>
-              <span className={isDarkMode ? 'text-white' : 'text-black'}>accessibility_first_development:</span> i believe technology should be
-              inclusive and accessible to everyone. my projects prioritize semantic html, proper aria
-              implementation, and comprehensive keyboard navigation.
-            </p>
-            <p className={`leading-relaxed font-mono transition-colors duration-200 ${
-              isDarkMode ? 'text-gray-300' : 'text-gray-700'
-            }`}>
-              currently seeking internship opportunities where i can contribute to innovative projects
-              while continuing to grow as a developer.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className={`border p-6 rounded-lg backdrop-blur-sm transition-colors duration-200 ${
-              isDarkMode 
-                ? 'bg-black/50 border-gray-800' 
-                : 'bg-white border-gray-300'
-            }`}>
-              <div className={`font-mono text-sm mb-4 transition-colors duration-200 ${
-                isDarkMode ? 'text-gray-400' : 'text-gray-600'
-              }`}>// current_focus</div>
-              <ul className={`space-y-2 font-mono text-sm transition-colors duration-200 ${
-                isDarkMode ? 'text-gray-300' : 'text-gray-700'
-              }`}>
-                <li className="flex items-start">
-                  <span className={`mr-2 transition-colors duration-200 ${
-                    isDarkMode ? 'text-gray-500' : 'text-gray-400'
-                  }`}>•</span>
-                  modern react development
-                </li>
-                <li className="flex items-start">
-                  <span className={`mr-2 transition-colors duration-200 ${
-                    isDarkMode ? 'text-gray-500' : 'text-gray-400'
-                  }`}>•</span>
-                  accessible web applications
-                </li>
-                <li className="flex items-start">
-                  <span className={`mr-2 transition-colors duration-200 ${
-                    isDarkMode ? 'text-gray-500' : 'text-gray-400'
-                  }`}>•</span>
-                  clean, maintainable code
-                </li>
-                <li className="flex items-start">
-                  <span className={`mr-2 transition-colors duration-200 ${
-                    isDarkMode ? 'text-gray-500' : 'text-gray-400'
-                  }`}>•</span>
-                  user-centered design
-                </li>
-              </ul>
+          <div>
+            <div className={`text-base font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>
+              ### Interests
             </div>
-
-            <div className={`border p-6 rounded-lg backdrop-blur-sm transition-colors duration-200 ${
-              isDarkMode 
-                ? 'bg-black/50 border-gray-800' 
-                : 'bg-white border-gray-300'
-            }`}>
-              <div className={`font-mono text-sm mb-4 transition-colors duration-200 ${
-                isDarkMode ? 'text-gray-400' : 'text-gray-600'
-              }`}>// interests</div>
-              <ul className={`space-y-2 font-mono text-sm transition-colors duration-200 ${
-                isDarkMode ? 'text-gray-300' : 'text-gray-700'
-              }`}>
-                <li className="flex items-start">
-                  <span className={`mr-2 transition-colors duration-200 ${
-                    isDarkMode ? 'text-gray-500' : 'text-gray-400'
-                  }`}>•</span>
-                  web accessibility standards
-                </li>
-                <li className="flex items-start">
-                  <span className={`mr-2 transition-colors duration-200 ${
-                    isDarkMode ? 'text-gray-500' : 'text-gray-400'
-                  }`}>•</span>
-                  ui/ux design principles
-                </li>
-                <li className="flex items-start">
-                  <span className={`mr-2 transition-colors duration-200 ${
-                    isDarkMode ? 'text-gray-500' : 'text-gray-400'
-                  }`}>•</span>
-                  open source contribution
-                </li>
-                <li className="flex items-start">
-                  <span className={`mr-2 transition-colors duration-200 ${
-                    isDarkMode ? 'text-gray-500' : 'text-gray-400'
-                  }`}>•</span>
-                  tech communities
-                </li>
-              </ul>
+            <div className="pl-4 space-y-1">
+              {[
+                'web accessibility standards',
+                'ui/ux design principles',
+                'open source contribution',
+                'tech communities'
+              ].map((item, index) => (
+                <div key={index} className="flex items-center space-x-2">
+                  <span className="text-blue-400">▸</span>
+                  <span>{item}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
-    </section>
+
+      <div className="mt-8 pt-4 border-t border-gray-600">
+        <div className={`${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+          user@portfolio:~/about$ <span className="terminal-cursor">█</span>
+        </div>
+      </div>
+    </div>
   );
 
-  // Skills Section
+  // Skills Section for terminal
   const SkillsSection = () => {
     const skillCategories = [
       {
@@ -382,258 +330,263 @@ function App() {
         skills: ["react", "tailwind_css", "next.js", "html", "css"]
       },
       {
-        title: "backend",
+        title: "backend", 
         extension: ".py",
-        skills: ["node.js", "mongodb", "rest_apis", "linux"]
+        skills: ["node.js", "mongodb", "rest_apis"]
       },
       {
         title: "tools",
-        extension: ".config",
-        skills: ["git", "procreate", "figma", "accessibility_testing"]
+        extension: ".config", 
+        skills: ["git", "procreate", "figma", "linux", "accessibility_testing"]
       }
     ];
 
     return (
-      <section className={`py-20 transition-colors duration-200 ${
-        isDarkMode ? 'bg-black' : 'bg-white'
-      }`} aria-labelledby="skills-heading">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 id="skills-heading" className={`text-3xl font-mono mb-12 tracking-wider text-center transition-colors duration-200 ${
-            isDarkMode ? 'text-white' : 'text-black'
-          }`}>
-            skills.json
-          </h2>
+      <div className={`font-mono text-sm space-y-4 ${
+        isDarkMode ? 'text-gray-300' : 'text-gray-700'
+      }`}>
+        <div className={`${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+          user@portfolio:~/skills$ cat skills.json
+        </div>
+        
+        <div className="space-y-6">
+          <div className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-black'}`}>
+            {`{`}
+          </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {skillCategories.map((category, index) => (
-              <div key={index} className={`border rounded-lg overflow-hidden transition-colors duration-200 ${
-                isDarkMode 
-                  ? 'bg-gray-950 border-gray-800' 
-                  : 'bg-white border-gray-300'
-              }`}>
-                {/* File header */}
-                <div className={`px-4 py-2 border-b transition-colors duration-200 ${
-                  isDarkMode 
-                    ? 'bg-gray-900 border-gray-800' 
-                    : 'bg-gray-200 border-gray-300'
-                }`}>
-                  <div className={`font-mono text-sm transition-colors duration-200 ${
-                    isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                  }`}>
-                    {category.title}{category.extension}
-                  </div>
+          {skillCategories.map((category, index) => (
+            <div key={index} className="pl-4">
+              <div className="flex items-center space-x-2 mb-2">
+                <span className="text-blue-400">"{category.title}":</span>
+                <span className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>
+                  // {category.title}{category.extension}
+                </span>
+              </div>
+              
+              <div className="pl-4">
+                <div className={`${isDarkMode ? 'text-white' : 'text-black'}`}>[</div>
+                <div className="pl-4 space-y-1">
+                  {category.skills.map((skill, skillIndex) => (
+                    <div key={skillIndex} className="flex items-center space-x-2">
+                      <span className="text-green-400">"</span>
+                      <span className="text-orange-400">{skill}</span>
+                      <span className="text-green-400">"</span>
+                      {skillIndex < category.skills.length - 1 && (
+                        <span className={isDarkMode ? 'text-white' : 'text-black'}>,</span>
+                      )}
+                    </div>
+                  ))}
                 </div>
-
-                {/* File content */}
-                <div className="p-6">
-                  <div className="space-y-3">
-                    {category.skills.map((skill, skillIndex) => (
-                      <div
-                        key={skillIndex}
-                        className={`font-mono text-sm transition-colors duration-200 cursor-default flex items-center ${
-                          isDarkMode 
-                            ? 'text-gray-300 hover:text-white' 
-                            : 'text-gray-700 hover:text-black'
-                        }`}
-                      >
-                        <span className={`mr-3 transition-colors duration-200 ${
-                          isDarkMode ? 'text-gray-600' : 'text-gray-400'
-                        }`}>
-                          ├─
-                        </span>
-                        {skill}
-                      </div>
-                    ))}
-                  </div>
+                <div className={`${isDarkMode ? 'text-white' : 'text-black'}`}>
+                  ]{index < skillCategories.length - 1 ? ',' : ''}
                 </div>
               </div>
-            ))}
+            </div>
+          ))}
+
+          <div className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-black'}`}>
+            {`}`}
           </div>
         </div>
-      </section>
+
+        <div className="mt-8 pt-4 border-t border-gray-600">
+          <div className={`${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+            user@portfolio:~/skills$ <span className="terminal-cursor">█</span>
+          </div>
+        </div>
+      </div>
     );
   };
 
-  // Projects Section
-  const ProjectsSection = () => (
-    <section className={`py-20 transition-colors duration-200 ${
-      isDarkMode ? 'bg-gray-950' : 'bg-gray-100'
-    }`} aria-labelledby="projects-heading">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 id="projects-heading" className={`text-3xl font-mono mb-12 tracking-wider text-center transition-colors duration-200 ${
-          isDarkMode ? 'text-white' : 'text-black'
-        }`}>
-          projects/
-        </h2>
+  // Projects Section for terminal
+  const ProjectsSection = () => {
+    const projects = [
+      {
+        name: "accessibility_checker",
+        type: "web_app",
+        desc: "Tool for automated accessibility testing",
+        tech: ["react", "node.js", "axe-core"],
+        status: "active"
+      },
+      {
+        name: "portfolio_terminal",
+        type: "website", 
+        desc: "Interactive desktop-style portfolio",
+        tech: ["react", "tailwind", "typewriter"],
+        status: "active"
+      },
+      {
+        name: "inclusive_ui_lib",
+        type: "library",
+        desc: "Accessible React component library",
+        tech: ["react", "typescript", "storybook"],
+        status: "in_progress"
+      },
+      {
+        name: "screen_reader_tester",
+        type: "tool",
+        desc: "Cross-platform screen reader testing suite",
+        tech: ["python", "selenium", "pytest"],
+        status: "planned"
+      }
+    ];
+
+    return (
+      <div className={`font-mono text-sm space-y-4 ${
+        isDarkMode ? 'text-gray-300' : 'text-gray-700'
+      }`}>
+        <div className={`${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+          user@portfolio:~/projects$ ls -la
+        </div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {[1, 2, 3, 4, 5, 6].map((project) => (
-            <div key={project} className={`border rounded-lg overflow-hidden transition-all duration-200 group ${
-              isDarkMode 
-                ? 'bg-black border-gray-800 hover:border-gray-700' 
-                : 'bg-white border-gray-300 hover:border-gray-400'
-            }`}>
-              {/* Terminal header */}
-              <div className={`px-4 py-2 border-b transition-colors duration-200 ${
-                isDarkMode 
-                  ? 'bg-gray-900 border-gray-800' 
-                  : 'bg-gray-200 border-gray-300'
-              }`}>
+        <div className="space-y-4">
+          {projects.map((project, index) => (
+            <div key={index} className="pl-4 space-y-2">
+              <div className="flex items-center space-x-4">
+                <span className={`text-blue-400`}>{project.name}/</span>
+                <span className={`text-xs px-2 py-1 rounded ${
+                  project.status === 'active' ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
+                  project.status === 'in_progress' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
+                  'bg-gray-500/20 text-gray-400 border border-gray-500/30'
+                }`}>
+                  {project.status}
+                </span>
+                <span className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+                  [{project.type}]
+                </span>
+              </div>
+              
+              <div className="pl-4 space-y-1">
+                <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  {project.desc}
+                </div>
                 <div className="flex items-center space-x-2">
-                  <div className="terminal-dots">
-                    <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                    <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  </div>
-                  <div className={`font-mono text-xs transition-colors duration-200 ${
-                    isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                  }`}>
-                    project_{project}.md
-                  </div>
+                  <span className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+                    tech:
+                  </span>
+                  {project.tech.map((tech, techIndex) => (
+                    <span key={techIndex} className="text-orange-400 text-xs">
+                      {tech}{techIndex < project.tech.length - 1 ? ',' : ''}
+                    </span>
+                  ))}
                 </div>
-              </div>
-
-              {/* Project preview */}
-              <div className={`h-48 flex items-center justify-center relative overflow-hidden transition-colors duration-200 ${
-                isDarkMode 
-                  ? 'bg-gray-900' 
-                  : 'bg-gray-100'
-              }`}>
-                <div className={`absolute inset-0 transition-colors duration-200 ${
-                  isDarkMode 
-                    ? 'bg-gradient-to-br from-gray-800 to-gray-900' 
-                    : 'bg-gradient-to-br from-gray-200 to-gray-300'
-                }`}></div>
-                <div className={`relative z-10 font-mono text-sm transition-colors duration-200 ${
-                  isDarkMode ? 'text-gray-500' : 'text-gray-600'
-                }`}>
-                  // project preview
-                </div>
-              </div>
-
-              {/* Project info */}
-              <div className="p-6">
-                <h3 className={`font-mono text-lg mb-2 transition-colors duration-200 ${
-                  isDarkMode ? 'text-white' : 'text-black'
-                }`}>
-                  project_{project}
-                </h3>
-                <p className={`font-mono text-sm mb-4 leading-relaxed transition-colors duration-200 ${
-                  isDarkMode ? 'text-gray-400' : 'text-gray-700'
-                }`}>
-                  a brief description of this project and the technologies used to build it.
-                </p>
-
-                <div className="flex space-x-4">
-                  <button className={`font-mono text-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 border-b border-transparent hover:border-current ${
-                    isDarkMode 
-                      ? 'text-gray-400 hover:text-white focus:ring-gray-500 focus:ring-offset-black' 
-                      : 'text-gray-600 hover:text-black focus:ring-gray-500 focus:ring-offset-white'
-                  }`}>
-                    [live_demo]
+                
+                <div className="flex space-x-4 text-xs">
+                  <button className={`text-blue-400 hover:underline ${
+                    project.status === 'planned' ? 'opacity-50 cursor-not-allowed' : ''
+                  }`} disabled={project.status === 'planned'}>
+                    ./view_demo
                   </button>
-                  <button className={`font-mono text-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 border-b border-transparent hover:border-current ${
-                    isDarkMode 
-                      ? 'text-gray-400 hover:text-white focus:ring-gray-500 focus:ring-offset-black' 
-                      : 'text-gray-600 hover:text-black focus:ring-gray-500 focus:ring-offset-white'
-                  }`}>
-                    [source_code]
+                  <button className={`text-green-400 hover:underline ${
+                    project.status === 'planned' ? 'opacity-50 cursor-not-allowed' : ''
+                  }`} disabled={project.status === 'planned'}>
+                    ./source_code
                   </button>
                 </div>
               </div>
             </div>
           ))}
         </div>
-      </div>
-    </section>
-  );
 
-  // Contact Section  
-  const ContactTerminal = () => (
-    <div className={`font-mono text-sm whitespace-pre-wrap px-4 transition-colors duration-200 ${
-      isDarkMode ? 'text-gray-300' : 'text-gray-700'
-    }`}>
-      <Typewriter
-        options={{
-          delay: 30,
-          cursor: '█',
-          autoStart: true,
-          html: true,
-        }}
-        onInit={(typewriter) => {
-          const textColor = isDarkMode ? '#9ca3af' : '#6b7280';
-          const successColor = isDarkMode ? '#4ade80' : '#16a34a';
-          const commandColor = isDarkMode ? '#9ca3af' : '#6b7280';
-          const blueColor = isDarkMode ? '#60a5fa' : '#2563eb';
-          
-          typewriter
-            .typeString(`&nbsp;&nbsp;&nbsp;&nbsp;user@portfolio:~$ ./contact.sh<br/><br/>`)
-            .pauseFor(500)
-            .typeString(`&nbsp;&nbsp;&nbsp;&nbsp;initializing contact protocols...<br/>`)
-            .pauseFor(500)
-            .typeString(`&nbsp;&nbsp;&nbsp;&nbsp;scanning available communication channels...<br/>`)
-            .pauseFor(400)
-            .typeString(`&nbsp;&nbsp;&nbsp;&nbsp;<span style='color: ${successColor}'>✓ email service active</span><br/>`)
-            .typeString(`&nbsp;&nbsp;&nbsp;&nbsp;<span style='color: ${successColor}'>✓ linkedin connection established</span><br/>`)
-            .typeString(`&nbsp;&nbsp;&nbsp;&nbsp;<span style='color: ${successColor}'>✓ github repository accessible</span><br/><br/>`)
-            .typeString(`&nbsp;&nbsp;&nbsp;&nbsp;let's connect! i'm always interested in discussing new opportunities,<br/>`)
-            .typeString(`&nbsp;&nbsp;&nbsp;&nbsp;collaborations, and innovative projects.<br/><br/>`)
-            .typeString(`&nbsp;&nbsp;&nbsp;&nbsp;email: <a href='mailto:citlalli.tdr@gmail.com' style='color: ${blueColor}; text-decoration: underline;'>citlalli.tdr@gmail.com</a><br/>`)
-            .typeString(`&nbsp;&nbsp;&nbsp;&nbsp;linkedin: <a href='https://linkedin.com/in/citlalli-trejo-del-rio' target='_blank' rel='noopener noreferrer' style='color: ${blueColor}; text-decoration: underline;'>linkedin.com/in/citlalli-trejo-del-rio</a><br/>`)
-            .typeString(`&nbsp;&nbsp;&nbsp;&nbsp;github: <a href='https://github.com/citlol' target='_blank' rel='noopener noreferrer' style='color: ${blueColor}; text-decoration: underline;'>github.com/citlol</a><br/><br/>`)
-            .typeString(`<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;user@portfolio:~$`)
-            .start();
-        }}
-      />
-    </div>
-  );
-
-  const ContactSection = () => (
-    <section className={`py-20 transition-colors duration-200 ${
-      isDarkMode ? 'bg-black' : 'bg-white'
-    }`} aria-labelledby="contact-heading">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 id="contact-heading" className={`text-3xl font-mono mb-12 tracking-wider text-center transition-colors duration-200 ${
-          isDarkMode ? 'text-white' : 'text-black'
-        }`}>contact.sh</h2>
-
-        <div className={`border rounded-lg overflow-hidden transition-colors duration-200 ${
-          isDarkMode 
-            ? 'bg-gray-950 border-gray-800' 
-            : 'bg-white border-gray-300'
-        }`}>
-          {/* Terminal header */}
-          <div className={`px-4 py-3 border-b transition-colors duration-200 ${
-            isDarkMode 
-              ? 'bg-gray-900 border-gray-800' 
-              : 'bg-gray-200 border-gray-300'
-          }`}>
-            <div className="flex items-center space-x-2">
-              <div className="terminal-dots flex space-x-1">
-                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              </div>
-              <div className={`font-mono text-sm transition-colors duration-200 ${
-                isDarkMode ? 'text-gray-400' : 'text-gray-600'
-              }`}>terminal</div>
-            </div>
+        <div className="mt-6 pt-4 border-t border-gray-600 space-y-2">
+          <div className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+            Total: {projects.length} projects | Active: {projects.filter(p => p.status === 'active').length} | In Progress: {projects.filter(p => p.status === 'in_progress').length}
           </div>
-
-          {/* Terminal content */}
-          <div className="p-8">
-            <ContactTerminal />
+          <div className={`${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+            user@portfolio:~/projects$ <span className="terminal-cursor">█</span>
           </div>
         </div>
       </div>
-    </section>
+    );
+  };
+
+  // Contact Section for terminal
+  const ContactSection = () => (
+    <div className={`font-mono text-sm space-y-4 ${
+      isDarkMode ? 'text-gray-300' : 'text-gray-700'
+    }`}>
+      <div className={`${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+        user@portfolio:~/contact$ ./contact.sh
+      </div>
+      
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            Initializing contact protocols...
+          </div>
+          <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            Scanning available communication channels...
+          </div>
+        </div>
+
+        <div className="space-y-1">
+          <div className="flex items-center space-x-2">
+            <span className="text-green-400">✓</span>
+            <span>email service active</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <span className="text-green-400">✓</span>
+            <span>linkedin connection established</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <span className="text-green-400">✓</span>
+            <span>github repository accessible</span>
+          </div>
+        </div>
+
+        <div className="py-4 space-y-2">
+          <p>Let's connect! I'm always interested in discussing new opportunities,</p>
+          <p>collaborations, and innovative projects.</p>
+        </div>
+
+        <div className="space-y-2">
+          <div className="flex items-center space-x-2">
+            <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>email:</span>
+            <a 
+              href="mailto:citlalli.tdr@gmail.com" 
+              className="text-blue-400 hover:text-blue-300 underline"
+            >
+              citlalli.tdr@gmail.com
+            </a>
+          </div>
+          <div className="flex items-center space-x-2">
+            <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>linkedin:</span>
+            <a 
+              href="https://linkedin.com/in/citlalli-trejo-del-rio" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-blue-400 hover:text-blue-300 underline"
+            >
+              linkedin.com/in/citlalli-trejo-del-rio
+            </a>
+          </div>
+          <div className="flex items-center space-x-2">
+            <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>github:</span>
+            <a 
+              href="https://github.com/citlol" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-blue-400 hover:text-blue-300 underline"
+            >
+              github.com/citlol
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-8 pt-4 border-t border-gray-600">
+        <div className={`${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+          user@portfolio:~/contact$ <span className="terminal-cursor">█</span>
+        </div>
+      </div>
+    </div>
   );
 
-  // Render current section
-  const renderSection = () => {
+  // Render current section content
+  const renderSectionContent = () => {
     switch (activeSection) {
       case 'home':
-        return <HeroSection />;
+        return <WelcomeSection />;
       case 'about':
         return <AboutSection />;
       case 'skills':
@@ -643,48 +596,26 @@ function App() {
       case 'contact':
         return <ContactSection />;
       default:
-        return <HeroSection />;
+        return <WelcomeSection />;
     }
   };
 
   return (
-    <div className={`min-h-screen font-mono transition-colors duration-200 ${
+    <div className={`min-h-screen font-mono transition-colors duration-200 relative ${
       isDarkMode ? 'bg-black text-white' : 'bg-white text-black'
     }`}>
-      <Navigation />
-      <main role="main">
-        {renderSection()}
-      </main>
+      {/* Desktop background */}
+      <div className="absolute inset-0 bg-grid opacity-10"></div>
       
-      {/* Footer */}
-      <footer className={`border-t py-8 transition-colors duration-200 ${
-        isDarkMode 
-          ? 'bg-gray-950 border-gray-800' 
-          : 'bg-gray-200 border-gray-300'
-      }`} role="contentinfo">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className={`font-mono text-sm transition-colors duration-200 ${
-            isDarkMode ? 'text-gray-500' : 'text-gray-700'
-          }`}>
-            © 2025 citlalli trejo del rio •{' '}
-            <a
-              href="https://www.w3.org/WAI/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`underline transition-colors duration-200 ${
-                isDarkMode 
-                  ? 'hover:text-white' 
-                  : 'hover:text-black'
-              }`}
-            >
-              WAI principles
-            </a>{' '}
-            driven • <span className={`ml-2 ${
-              isDarkMode ? 'text-gray-600' : 'text-gray-500'
-            }`}>v1.0.0</span>
-          </p>
-        </div>
-      </footer>
+      {/* Main desktop area */}
+      <div className="relative z-10 min-h-screen flex items-center justify-center p-4 pb-16">
+        <TerminalWindow title={`citlalli@portfolio:~/${activeSection === 'home' ? '' : activeSection}`}>
+          {renderSectionContent()}
+        </TerminalWindow>
+      </div>
+      
+      {/* Desktop Taskbar */}
+      <Taskbar />
     </div>
   );
 }
