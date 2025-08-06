@@ -66,27 +66,63 @@ function App() {
   };
 
 
+  // Desktop Icons scattered around
+  const DesktopIcons = () => (
+    <>
+      {/* Top left folders */}
+      <div className="absolute top-8 left-8 flex flex-col items-center space-y-2 cursor-pointer hover:bg-blue-100 p-2 rounded">
+        <div className="text-4xl">📁</div>
+        <span className="text-sm text-gray-800">Folder</span>
+      </div>
+      
+      {/* Top right folders */}
+      <div className="absolute top-8 right-48 flex flex-col items-center space-y-2 cursor-pointer hover:bg-blue-100 p-2 rounded">
+        <div className="text-4xl">📁</div>
+        <span className="text-sm text-gray-800">Folder</span>
+      </div>
+      
+      <div className="absolute top-32 right-48 flex flex-col items-center space-y-2 cursor-pointer hover:bg-blue-100 p-2 rounded">
+        <div className="text-4xl">📁</div>
+        <span className="text-sm text-gray-800">Folder</span>
+      </div>
+    </>
+  );
+
+  // Widget component
+  const Widget = () => (
+    <div className="absolute top-4 right-4 w-72 h-32 bg-gray-400 rounded-2xl shadow-lg flex items-center justify-center">
+      <span className="text-white font-medium">Widget</span>
+    </div>
+  );
+
   // Terminal Window component
-  const TerminalWindow = ({ children, title = "terminal" }) => (
-    <div className="terminal-window w-full max-w-5xl mx-auto border rounded-lg overflow-hidden shadow-2xl bg-black border-gray-700">
-      {/* Terminal header */}
-      <div className="px-4 py-3 border-b bg-gray-900 border-gray-700">
-        <div className="flex items-center space-x-3">
-          {/* Window controls */}
-          <div className="flex space-x-2">
-            <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-            <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-          </div>
-          <div className="font-mono text-sm text-gray-400">
-            {title}
-          </div>
-        </div>
+  const TerminalWindow = ({ children }) => (
+    <div className="terminal-window w-full max-w-4xl mx-auto rounded-lg overflow-hidden shadow-2xl bg-gray-800 border border-gray-600">
+      {/* Terminal header with X button */}
+      <div className="px-3 py-2 bg-black flex items-center justify-between">
+        <div></div> {/* Empty space for balance */}
+        <button className="text-white hover:bg-gray-700 px-2 py-1 rounded text-sm">
+          ✕
+        </button>
       </div>
 
       {/* Terminal content */}
-      <div className="p-6 min-h-[500px]">
+      <div className="p-4 min-h-[400px] text-white">
         {children}
+      </div>
+    </div>
+  );
+
+  // Bottom Dock component
+  const BottomDock = () => (
+    <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-300 rounded-2xl p-2 shadow-lg">
+      <div className="flex items-center space-x-2">
+        <div className="w-12 h-12 bg-gray-600 rounded-lg flex items-center justify-center text-white text-xs">
+          icon
+        </div>
+        <div className="w-12 h-12 bg-gray-600 rounded-lg flex items-center justify-center text-white text-xs">
+          icon
+        </div>
       </div>
     </div>
   );
@@ -94,101 +130,65 @@ function App() {
   // Navigation helper component for all sections
   const NavigationHelper = () => (
     <div className="mt-8 pt-4 border-t border-gray-600 space-y-2">
-      <div className="text-xs text-gray-500">
+      <div className="text-xs text-gray-400">
         Navigation: 
-        <button onClick={() => handleNavClick('home')} className="ml-2 text-blue-400 hover:text-blue-300">cd ~</button>
+        <button onClick={() => handleNavClick('home')} className="ml-2 text-blue-400 hover:text-blue-300">home</button>
         <button onClick={() => handleNavClick('about')} className="ml-2 text-blue-400 hover:text-blue-300">about</button>
         <button onClick={() => handleNavClick('skills')} className="ml-2 text-blue-400 hover:text-blue-300">skills</button>
         <button onClick={() => handleNavClick('projects')} className="ml-2 text-blue-400 hover:text-blue-300">projects</button>
         <button onClick={() => handleNavClick('contact')} className="ml-2 text-blue-400 hover:text-blue-300">contact</button>
-        <button onClick={toggleTheme} className="ml-4 text-yellow-400 hover:text-yellow-300">theme</button>
       </div>
-      <div className="text-gray-500">
-        user@portfolio:~/{activeSection === 'home' ? '' : activeSection}$ <span className="terminal-cursor">█</span>
+      <div className="text-gray-400">
+        citlol@portfolio ~/{activeSection === 'home' ? '' : activeSection} % <span className="terminal-cursor">█</span>
       </div>
     </div>
   );
 
   // Home/Welcome section for terminal
   const WelcomeSection = () => (
-    <div className="font-mono text-sm space-y-4 text-gray-300">
-      <div className="text-gray-500">
-        user@portfolio:~$ ./citlalli.exe --version
+    <div className="font-mono text-sm text-white">
+      <div className="text-gray-400 mb-4">
+        citlol@portfolio ~ %
       </div>
       
-      <div className="space-y-2">
-        <div className="text-2xl font-bold text-white">
-          citlalli.exe v1.0.0
-        </div>
-        <div className="text-gray-400">
-          Computer Science Student | Accessibility-First Developer
-        </div>
+      <div className="grid grid-cols-2 gap-x-8 gap-y-2 mb-6">
+        <button 
+          className="text-left text-white hover:text-blue-300 transition-colors"
+          onClick={() => handleNavClick('about')}
+        >
+          about.html
+        </button>
+        <button 
+          className="text-left text-white hover:text-blue-300 transition-colors"
+          onClick={() => handleNavClick('projects')}
+        >
+          projects.js
+        </button>
+        <button 
+          className="text-left text-white hover:text-blue-300 transition-colors"
+          onClick={() => handleNavClick('contact')}
+        >
+          contact.txt
+        </button>
+        <button 
+          className="text-left text-white hover:text-blue-300 transition-colors"
+          onClick={() => handleNavClick('skills')}
+        >
+          skills.config
+        </button>
       </div>
 
-      <div className="my-6">
-        <div className="text-gray-500">
-          user@portfolio:~$ cat README.md
-        </div>
-        <div className="mt-2 pl-4 border-l-2 border-gray-500 space-y-2">
-          <p>Building inclusive, accessible digital experiences</p>
-          <p>Passionate about creating technology that works for everyone</p>
-          <p>Currently seeking internship opportunities</p>
-        </div>
+      <div className="text-gray-400">
+        citlol@portfolio ~ % <span className="terminal-cursor">█</span>
       </div>
-
-      <div className="space-y-1">
-        <div className="text-gray-500">
-          user@portfolio:~$ ls -la
-        </div>
-        <div className="pl-4 space-y-1">
-          {[
-            { name: 'about.md', desc: 'Personal information and background', cmd: 'cat about.md' },
-            { name: 'skills.json', desc: 'Technical skills and expertise', cmd: 'cat skills.json' },
-            { name: 'projects/', desc: 'Portfolio of completed work', cmd: 'ls projects/' },
-            { name: 'contact.sh', desc: 'Get in touch with me', cmd: './contact.sh' }
-          ].map((file, index) => (
-            <div key={index} className="flex items-center space-x-4">
-              <button 
-                className="text-blue-400 hover:text-blue-300 cursor-pointer hover:underline transition-colors"
-                onClick={() => handleNavClick(file.name.split('.')[0])}
-                onKeyPress={(e) => handleKeyPress(e, file.name.split('.')[0])}
-              >
-                {file.name}
-              </button>
-              <span className="text-xs text-gray-500">
-                {file.desc}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="mt-6 space-y-2">
-        <div className="text-gray-500">
-          user@portfolio:~$ help
-        </div>
-        <div className="pl-4 text-xs space-y-1 text-gray-400">
-          <p>Available commands:</p>
-          <div className="grid grid-cols-2 gap-2 mt-2">
-            <button onClick={() => handleNavClick('about')} className="text-left text-blue-400 hover:text-blue-300">cat about.md</button>
-            <button onClick={() => handleNavClick('skills')} className="text-left text-blue-400 hover:text-blue-300">cat skills.json</button>
-            <button onClick={() => handleNavClick('projects')} className="text-left text-blue-400 hover:text-blue-300">ls projects/</button>
-            <button onClick={() => handleNavClick('contact')} className="text-left text-blue-400 hover:text-blue-300">./contact.sh</button>
-            <button onClick={() => handleNavClick('home')} className="text-left text-blue-400 hover:text-blue-300">cd ~</button>
-            <button onClick={toggleTheme} className="text-left text-yellow-400 hover:text-yellow-300">theme --toggle</button>
-          </div>
-        </div>
-      </div>
-
-      <NavigationHelper />
     </div>
   );
 
-  // About Section for terminal
+  // About Section for terminal  
   const AboutSection = () => (
-    <div className="font-mono text-sm space-y-4 text-gray-300">
-      <div className="text-gray-500">
-        user@portfolio:~/about$ cat about.md
+    <div className="font-mono text-sm space-y-4 text-white">
+      <div className="text-gray-400 mb-4">
+        citlol@portfolio ~/about % cat about.md
       </div>
       
       <div className="space-y-6">
@@ -527,15 +527,22 @@ function App() {
   };
 
   return (
-    <div className={`min-h-screen font-mono transition-colors duration-200 ${
-      isDarkMode ? 'bg-black text-white' : 'bg-gray-900 text-white'
-    }`}>
-      {/* Pure black desktop with terminal in center */}
+    <div className="min-h-screen bg-white font-mono relative">
+      {/* Desktop Icons - scattered around */}
+      <DesktopIcons />
+      
+      {/* Widget area top right */}
+      <Widget />
+      
+      {/* Central Terminal Window */}
       <div className="min-h-screen flex items-center justify-center p-4">
-        <TerminalWindow title={`citlalli@portfolio:~/${activeSection === 'home' ? '' : activeSection}`}>
+        <TerminalWindow>
           {renderSectionContent()}
         </TerminalWindow>
       </div>
+      
+      {/* Bottom Dock */}
+      <BottomDock />
     </div>
   );
 }
