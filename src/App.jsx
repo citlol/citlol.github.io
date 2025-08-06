@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 function App() {
   const [activeSection, setActiveSection] = useState('home');
   const [showSpotifyModal, setShowSpotifyModal] = useState(false);
+  const [isSpotifyLoading, setIsSpotifyLoading] = useState(true);
 
   const handleNavClick = (section) => {
     setActiveSection(section);
@@ -10,10 +11,12 @@ function App() {
 
   const openSpotifyModal = () => {
     setShowSpotifyModal(true);
+    setIsSpotifyLoading(true);
   };
 
   const closeSpotifyModal = () => {
     setShowSpotifyModal(false);
+    setIsSpotifyLoading(true);
   };
 
   return (
@@ -458,6 +461,26 @@ function App() {
               🎵 My Spotify Playlist
             </h3>
 
+            {/* Loading spinner */}
+            {isSpotifyLoading && (
+              <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '380px',
+                marginBottom: '20px'
+              }}>
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  border: '4px solid #333',
+                  borderTop: '4px solid #999',
+                  borderRadius: '50%',
+                  animation: 'spin 1s linear infinite'
+                }}></div>
+              </div>
+            )}
+
             {/* Spotify Embed - Replace with your playlist */}
             <iframe 
               src="https://open.spotify.com/embed/playlist/3zDiyeiXDga7ZeSspF85mn?utm_source=generator&theme=0" 
@@ -467,7 +490,11 @@ function App() {
               allowTransparency="true" 
               allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
               loading="lazy"
-              style={{ borderRadius: '12px' }}
+              style={{ 
+                borderRadius: '12px',
+                display: isSpotifyLoading ? 'none' : 'block'
+              }}
+              onLoad={() => setIsSpotifyLoading(false)}
             ></iframe>
 
             <p style={{ 

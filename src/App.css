@@ -457,6 +457,12 @@ html.light .bg-grid {
   }
 }
 
+/* Spinner animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 .fade-in-up {
   animation: fadeInUp 0.6s ease-out forwards;
 }
