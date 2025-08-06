@@ -255,9 +255,9 @@ function App() {
                 citlol@portfolio ~/projects % ls -la
               </div>
               <div style={{ marginBottom: '20px' }}>
-                <p>📁 accessibility_checker/</p>
-                <p>📁 portfolio_terminal/</p>
-                <p>📁 inclusive_ui_lib/</p>
+                <p>📁 Pancake/</p>
+                <p>📁 Miel-Pomodoro/</p>
+                <p>📁 Star-Wars-All-In-Game/</p>
               </div>
               <button 
                 onClick={() => handleNavClick('home')}
