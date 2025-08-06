@@ -475,30 +475,9 @@ function App() {
                 marginBottom: '20px',
                 gap: '8px'
               }}>
-                <div style={{
-                  width: '8px',
-                  height: '8px',
-                  backgroundColor: '#999',
-                  borderRadius: '50%',
-                  animation: 'dot-bounce 1.4s infinite ease-in-out both',
-                  animationDelay: '0s'
-                }}></div>
-                <div style={{
-                  width: '8px',
-                  height: '8px',
-                  backgroundColor: '#999',
-                  borderRadius: '50%',
-                  animation: 'dot-bounce 1.4s infinite ease-in-out both',
-                  animationDelay: '0.16s'
-                }}></div>
-                <div style={{
-                  width: '8px',
-                  height: '8px',
-                  backgroundColor: '#999',
-                  borderRadius: '50%',
-                  animation: 'dot-bounce 1.4s infinite ease-in-out both',
-                  animationDelay: '0.32s'
-                }}></div>
+                <div className="loading-dot"></div>
+                <div className="loading-dot"></div>
+                <div className="loading-dot"></div>
               </div>
             )}
 
