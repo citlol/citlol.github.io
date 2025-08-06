@@ -5,6 +5,9 @@ function App() {
   const [activeSection, setActiveSection] = useState('home');
   const [showSpotifyModal, setShowSpotifyModal] = useState(false);
   const [isSpotifyLoading, setIsSpotifyLoading] = useState(true);
+  const [showFigmaModal, setShowFigmaModal] = useState(false);
+  const [showLoLModal, setShowLoLModal] = useState(false);
+  const [hoveredIcon, setHoveredIcon] = useState(null);
 
   const handleNavClick = (section) => {
     setActiveSection(section);
@@ -22,6 +25,22 @@ function App() {
   const closeSpotifyModal = () => {
     setShowSpotifyModal(false);
     setIsSpotifyLoading(true);
+  };
+
+  const openFigmaModal = () => {
+    setShowFigmaModal(true);
+  };
+
+  const closeFigmaModal = () => {
+    setShowFigmaModal(false);
+  };
+
+  const openLoLModal = () => {
+    setShowLoLModal(true);
+  };
+
+  const closeLoLModal = () => {
+    setShowLoLModal(false);
   };
 
   return (
@@ -83,34 +102,14 @@ function App() {
         fontSize: '12px'
       }}>
         <img 
-          src="/Discord.svg" 
-          alt="Discord"
+          src="/DarkVersion.ico" 
+          alt="Folder"
           style={{
             width: '48px',
             height: '48px'
           }}
         />
-        <span>Discord</span>
-      </div>
-
-      <div style={{
-        position: 'absolute',
-        top: '220px',
-        left: '20px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        fontSize: '12px'
-      }}>
-        <img 
-          src="/Ai.svg" 
-          alt="AI Tools"
-          style={{
-            width: '48px',
-            height: '48px'
-          }}
-        />
-        <span>AI Tools</span>
+        <span>Folder</span>
       </div>
 
       {/* Terminal Window */}
@@ -337,6 +336,7 @@ function App() {
         border: '1px solid rgba(255, 255, 255, 0.3)'
       }}>
         <div style={{
+          position: 'relative',
           width: '50px',
           height: '50px',
           borderRadius: '12px',
@@ -344,8 +344,14 @@ function App() {
           transition: 'transform 0.2s ease',
           overflow: 'hidden'
         }}
-        onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'}
-        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'scale(1.1)';
+          setHoveredIcon('Terminal');
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'scale(1)';
+          setHoveredIcon(null);
+        }}
         >
           <img 
             src="/Terminal.svg" 
@@ -356,9 +362,27 @@ function App() {
               objectFit: 'cover'
             }}
           />
+          {hoveredIcon === 'Terminal' && (
+            <div style={{
+              position: 'absolute',
+              bottom: '60px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              color: 'white',
+              padding: '4px 8px',
+              borderRadius: '4px',
+              fontSize: '12px',
+              whiteSpace: 'nowrap',
+              pointerEvents: 'none'
+            }}>
+              Terminal
+            </div>
+          )}
         </div>
 
         <div style={{
+          position: 'relative',
           width: '50px',
           height: '50px',
           borderRadius: '12px',
@@ -366,8 +390,15 @@ function App() {
           transition: 'transform 0.2s ease',
           overflow: 'hidden'
         }}
-        onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'}
-        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'scale(1.1)';
+          setHoveredIcon('League of Legends');
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'scale(1)';
+          setHoveredIcon(null);
+        }}
+        onClick={openLoLModal}
         >
           <img 
             src="/LoL.svg" 
@@ -378,9 +409,27 @@ function App() {
               objectFit: 'cover'
             }}
           />
+          {hoveredIcon === 'League of Legends' && (
+            <div style={{
+              position: 'absolute',
+              bottom: '60px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              color: 'white',
+              padding: '4px 8px',
+              borderRadius: '4px',
+              fontSize: '12px',
+              whiteSpace: 'nowrap',
+              pointerEvents: 'none'
+            }}>
+              League of Legends
+            </div>
+          )}
         </div>
 
         <div style={{
+          position: 'relative',
           width: '50px',
           height: '50px',
           borderRadius: '12px',
@@ -388,8 +437,14 @@ function App() {
           transition: 'transform 0.2s ease',
           overflow: 'hidden'
         }}
-        onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'}
-        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'scale(1.1)';
+          setHoveredIcon('Notion');
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'scale(1)';
+          setHoveredIcon(null);
+        }}
         >
           <img 
             src="/Notion.svg" 
@@ -400,9 +455,27 @@ function App() {
               objectFit: 'cover'
             }}
           />
+          {hoveredIcon === 'Notion' && (
+            <div style={{
+              position: 'absolute',
+              bottom: '60px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              color: 'white',
+              padding: '4px 8px',
+              borderRadius: '4px',
+              fontSize: '12px',
+              whiteSpace: 'nowrap',
+              pointerEvents: 'none'
+            }}>
+              Notion
+            </div>
+          )}
         </div>
 
         <div style={{
+          position: 'relative',
           width: '50px',
           height: '50px',
           borderRadius: '12px',
@@ -410,8 +483,14 @@ function App() {
           transition: 'transform 0.2s ease',
           overflow: 'hidden'
         }}
-        onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'}
-        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'scale(1.1)';
+          setHoveredIcon('VS Code');
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'scale(1)';
+          setHoveredIcon(null);
+        }}
         >
           <img 
             src="/vscode.png" 
@@ -422,9 +501,27 @@ function App() {
               objectFit: 'cover'
             }}
           />
+          {hoveredIcon === 'VS Code' && (
+            <div style={{
+              position: 'absolute',
+              bottom: '60px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              color: 'white',
+              padding: '4px 8px',
+              borderRadius: '4px',
+              fontSize: '12px',
+              whiteSpace: 'nowrap',
+              pointerEvents: 'none'
+            }}>
+              VS Code
+            </div>
+          )}
         </div>
 
         <div style={{
+          position: 'relative',
           width: '50px',
           height: '50px',
           borderRadius: '12px',
@@ -432,8 +529,15 @@ function App() {
           transition: 'transform 0.2s ease',
           overflow: 'hidden'
         }}
-        onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'}
-        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'scale(1.1)';
+          setHoveredIcon('Figma');
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'scale(1)';
+          setHoveredIcon(null);
+        }}
+        onClick={openFigmaModal}
         >
           <img 
             src="/Figma.svg" 
@@ -444,9 +548,27 @@ function App() {
               objectFit: 'cover'
             }}
           />
+          {hoveredIcon === 'Figma' && (
+            <div style={{
+              position: 'absolute',
+              bottom: '60px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              color: 'white',
+              padding: '4px 8px',
+              borderRadius: '4px',
+              fontSize: '12px',
+              whiteSpace: 'nowrap',
+              pointerEvents: 'none'
+            }}>
+              Figma
+            </div>
+          )}
         </div>
 
         <div style={{
+          position: 'relative',
           width: '50px',
           height: '50px',
           borderRadius: '12px',
@@ -454,8 +576,14 @@ function App() {
           transition: 'transform 0.2s ease',
           overflow: 'hidden'
         }}
-        onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'}
-        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'scale(1.1)';
+          setHoveredIcon('Spotify');
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'scale(1)';
+          setHoveredIcon(null);
+        }}
         onClick={openSpotifyModal}
         >
           <img 
@@ -467,6 +595,115 @@ function App() {
               objectFit: 'cover'
             }}
           />
+          {hoveredIcon === 'Spotify' && (
+            <div style={{
+              position: 'absolute',
+              bottom: '60px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              color: 'white',
+              padding: '4px 8px',
+              borderRadius: '4px',
+              fontSize: '12px',
+              whiteSpace: 'nowrap',
+              pointerEvents: 'none'
+            }}>
+              Spotify
+            </div>
+          )}
+        </div>
+
+        <div style={{
+          position: 'relative',
+          width: '50px',
+          height: '50px',
+          borderRadius: '12px',
+          cursor: 'pointer',
+          transition: 'transform 0.2s ease',
+          overflow: 'hidden'
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'scale(1.1)';
+          setHoveredIcon('Discord');
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'scale(1)';
+          setHoveredIcon(null);
+        }}
+        >
+          <img 
+            src="/Discord.svg" 
+            alt="Discord"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover'
+            }}
+          />
+          {hoveredIcon === 'Discord' && (
+            <div style={{
+              position: 'absolute',
+              bottom: '60px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              color: 'white',
+              padding: '4px 8px',
+              borderRadius: '4px',
+              fontSize: '12px',
+              whiteSpace: 'nowrap',
+              pointerEvents: 'none'
+            }}>
+              Discord
+            </div>
+          )}
+        </div>
+
+        <div style={{
+          position: 'relative',
+          width: '50px',
+          height: '50px',
+          borderRadius: '12px',
+          cursor: 'pointer',
+          transition: 'transform 0.2s ease',
+          overflow: 'hidden'
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'scale(1.1)';
+          setHoveredIcon('AI Tools');
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'scale(1)';
+          setHoveredIcon(null);
+        }}
+        >
+          <img 
+            src="/Ai.svg" 
+            alt="AI Tools"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover'
+            }}
+          />
+          {hoveredIcon === 'AI Tools' && (
+            <div style={{
+              position: 'absolute',
+              bottom: '60px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              color: 'white',
+              padding: '4px 8px',
+              borderRadius: '4px',
+              fontSize: '12px',
+              whiteSpace: 'nowrap',
+              pointerEvents: 'none'
+            }}>
+              AI Tools
+            </div>
+          )}
         </div>
       </div>
 
@@ -549,6 +786,159 @@ function App() {
               }}
               onLoad={() => setIsSpotifyLoading(false)}
             ></iframe>
+
+            <p style={{ 
+              fontSize: '12px', 
+              color: '#999', 
+              marginTop: '10px', 
+              textAlign: 'center' 
+            }}>
+              Click outside to close
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Figma Modal */}
+      {showFigmaModal && (
+        <div style={{
+          position: 'fixed',
+          top: '0',
+          left: '0',
+          width: '100%',
+          height: '100%',
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: '1000'
+        }}
+        onClick={closeFigmaModal}
+        >
+          <div style={{
+            backgroundColor: '#000000',
+            borderRadius: '12px',
+            padding: '20px',
+            position: 'relative',
+            maxWidth: '800px',
+            width: '90%'
+          }}
+          onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close button */}
+            <button 
+              onClick={closeFigmaModal}
+              style={{
+                position: 'absolute',
+                top: '10px',
+                right: '15px',
+                background: 'none',
+                border: 'none',
+                fontSize: '20px',
+                cursor: 'pointer',
+                color: '#999'
+              }}
+            >
+              ✕
+            </button>
+
+            <h3 style={{ marginTop: '0', marginBottom: '20px', color: '#999' }}>
+              🎨 My Figma Design
+            </h3>
+
+            {/* Figma Design Image */}
+            <div style={{
+              width: '100%',
+              borderRadius: '12px',
+              overflow: 'hidden'
+            }}>
+              <img 
+                src="/FigmaView.png" 
+                alt="Figma Design"
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  display: 'block',
+                  borderRadius: '12px'
+                }}
+              />
+            </div>
+
+            <p style={{ 
+              fontSize: '12px', 
+              color: '#999', 
+              marginTop: '10px', 
+              textAlign: 'center' 
+            }}>
+              Click outside to close
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* League of Legends Modal */}
+      {showLoLModal && (
+        <div style={{
+          position: 'fixed',
+          top: '0',
+          left: '0',
+          width: '100%',
+          height: '100%',
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: '1000'
+        }}
+        onClick={closeLoLModal}
+        >
+          <div style={{
+            backgroundColor: '#000000',
+            borderRadius: '12px',
+            padding: '20px',
+            position: 'relative',
+            maxWidth: '900px',
+            width: '95%',
+            maxHeight: '80vh',
+            overflow: 'auto'
+          }}
+          onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close button */}
+            <button 
+              onClick={closeLoLModal}
+              style={{
+                position: 'absolute',
+                top: '10px',
+                right: '15px',
+                background: 'none',
+                border: 'none',
+                fontSize: '20px',
+                cursor: 'pointer',
+                color: '#999'
+              }}
+            >
+              ✕
+            </button>
+
+            <h3 style={{ marginTop: '0', marginBottom: '20px', color: '#999' }}>
+              ⚔️ League of Legends Profile
+            </h3>
+
+            {/* LoL Profile Content - You can recreate the homepage layout here */}
+            <div style={{
+              width: '100%',
+              minHeight: '400px',
+              backgroundColor: '#111',
+              borderRadius: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#666',
+              fontSize: '14px'
+            }}>
+              Recreate your LoL homepage/profile here
+            </div>
 
             <p style={{ 
               fontSize: '12px', 
