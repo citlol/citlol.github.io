@@ -7,6 +7,7 @@ function App() {
   const [isSpotifyLoading, setIsSpotifyLoading] = useState(true);
   const [showFigmaModal, setShowFigmaModal] = useState(false);
   const [showLoLModal, setShowLoLModal] = useState(false);
+  const [showDiscordModal, setShowDiscordModal] = useState(false);
   const [hoveredIcon, setHoveredIcon] = useState(null);
 
   const handleNavClick = (section) => {
@@ -41,6 +42,14 @@ function App() {
 
   const closeLoLModal = () => {
     setShowLoLModal(false);
+  };
+
+  const openDiscordModal = () => {
+    setShowDiscordModal(true);
+  };
+
+  const closeDiscordModal = () => {
+    setShowDiscordModal(false);
   };
 
   return (
@@ -637,6 +646,7 @@ function App() {
           e.currentTarget.style.transform = 'scale(1)';
           setHoveredIcon(null);
         }}
+        onClick={openDiscordModal}
         >
           <img 
             src="/Discord.svg" 
@@ -957,6 +967,36 @@ function App() {
               Click outside to close
             </p>
           </div>
+        </div>
+      )}
+
+      {/* Discord SVG-only Modal */}
+      {showDiscordModal && (
+        <div style={{
+          position: 'fixed',
+          top: '0',
+          left: '0',
+          width: '100%',
+          height: '100%',
+          backgroundColor: 'rgba(0, 0, 0, 0.3)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: '1000'
+        }}
+        onClick={closeDiscordModal}
+        >
+          {/* Just the SVG, no modal container */}
+          <img 
+            src="/DiscordProfile.svg" 
+            alt="Discord Profile"
+            style={{
+              maxWidth: '90%',
+              maxHeight: '90%',
+              cursor: 'pointer'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          />
         </div>
       )}
       </div>
