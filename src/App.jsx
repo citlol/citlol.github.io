@@ -12,6 +12,10 @@ function App() {
   const openSpotifyModal = () => {
     setShowSpotifyModal(true);
     setIsSpotifyLoading(true);
+    // Set a timeout to hide loading after 3 seconds regardless
+    setTimeout(() => {
+      setIsSpotifyLoading(false);
+    }, 3000);
   };
 
   const closeSpotifyModal = () => {
@@ -38,7 +42,7 @@ function App() {
         fontSize: '12px'
       }}>
         <img 
-          src="/DarkVersion.png" 
+          src="/DarkVersion.ico" 
           alt="Folder"
           style={{
             width: '48px',
@@ -58,7 +62,7 @@ function App() {
         fontSize: '12px'
       }}>
         <img 
-          src="/DarkVersion.png" 
+          src="/DarkVersion.ico" 
           alt="Folder"
           style={{
             width: '48px',
@@ -78,7 +82,7 @@ function App() {
         fontSize: '12px'
       }}>
         <img 
-          src="/DarkVersion.png" 
+          src="/DarkVersion.ico" 
           alt="Folder"
           style={{
             width: '48px',
