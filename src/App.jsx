@@ -60,7 +60,7 @@ function App() {
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: '600px',
+        width: '800px',
         backgroundColor: '#1e1e1e',
         border: '1px solid #555',
         borderRadius: '8px',
@@ -259,6 +259,117 @@ function App() {
               </button>
             </div>
           )}
+        </div>
+      </div>
+
+      {/* Bottom Dock */}
+      <div style={{
+        position: 'fixed',
+        bottom: '20px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        backdropFilter: 'blur(10px)',
+        borderRadius: '20px',
+        padding: '10px 15px',
+        display: 'flex',
+        gap: '10px',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+        border: '1px solid rgba(255, 255, 255, 0.3)'
+      }}>
+        <div style={{
+          width: '50px',
+          height: '50px',
+          backgroundColor: '#000',
+          borderRadius: '12px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          fontSize: '20px',
+          transition: 'transform 0.2s ease'
+        }}
+        onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'}
+        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+        >
+          ⚫
+        </div>
+
+        <div style={{
+          width: '50px',
+          height: '50px',
+          backgroundColor: '#C89B3C',
+          borderRadius: '12px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          fontSize: '20px',
+          fontWeight: 'bold',
+          color: '#1E2328',
+          transition: 'transform 0.2s ease'
+        }}
+        onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'}
+        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+        >
+          LoL
+        </div>
+
+        <div style={{
+          width: '50px',
+          height: '50px',
+          backgroundColor: '#fff',
+          borderRadius: '12px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          fontSize: '24px',
+          transition: 'transform 0.2s ease',
+          border: '1px solid #e0e0e0'
+        }}
+        onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'}
+        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+        >
+          📝
+        </div>
+
+        <div style={{
+          width: '50px',
+          height: '50px',
+          backgroundColor: '#007ACC',
+          borderRadius: '12px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          fontSize: '16px',
+          fontWeight: 'bold',
+          color: 'white',
+          transition: 'transform 0.2s ease'
+        }}
+        onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'}
+        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+        >
+          VS
+        </div>
+
+        <div style={{
+          width: '50px',
+          height: '50px',
+          backgroundColor: '#1DB954',
+          borderRadius: '12px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          fontSize: '20px',
+          transition: 'transform 0.2s ease'
+        }}
+        onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'}
+        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+        >
+          🎵
         </div>
       </div>
     </div>
