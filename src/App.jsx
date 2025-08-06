@@ -978,7 +978,7 @@ function App() {
           left: '0',
           width: '100%',
           height: '100%',
-          backgroundColor: 'rgba(0, 0, 0, 0.3)',
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -991,8 +991,9 @@ function App() {
             src="/DiscordProfile.svg" 
             alt="Discord Profile"
             style={{
-              maxWidth: '90%',
-              maxHeight: '90%',
+              maxWidth: '500px',
+              width: '90%',
+              height: 'auto',
               cursor: 'pointer'
             }}
             onClick={(e) => e.stopPropagation()}
