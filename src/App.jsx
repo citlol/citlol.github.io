@@ -337,39 +337,45 @@ function App() {
         <div style={{
           width: '50px',
           height: '50px',
-          backgroundColor: '#007ACC',
           borderRadius: '12px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
           cursor: 'pointer',
-          fontSize: '16px',
-          fontWeight: 'bold',
-          color: 'white',
-          transition: 'transform 0.2s ease'
+          transition: 'transform 0.2s ease',
+          overflow: 'hidden'
         }}
         onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'}
         onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
         >
-          VS
+          <img 
+            src="/vscode.png" 
+            alt="VS Code"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover'
+            }}
+          />
         </div>
 
         <div style={{
           width: '50px',
           height: '50px',
-          backgroundColor: '#1DB954',
           borderRadius: '12px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
           cursor: 'pointer',
-          fontSize: '20px',
-          transition: 'transform 0.2s ease'
+          transition: 'transform 0.2s ease',
+          overflow: 'hidden'
         }}
         onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'}
         onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
         >
-          🎵
+          <img 
+            src="/spotifyicon.png" 
+            alt="Spotify"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover'
+            }}
+          />
         </div>
       </div>
     </div>
