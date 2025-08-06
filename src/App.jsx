@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './App.css';
 
 function App() {
   const [activeSection, setActiveSection] = useState('home');
@@ -480,6 +481,7 @@ function App() {
                 <div className="loading-dot"></div>
               </div>
             )}
+
 
             {/* Spotify Embed - Replace with your playlist */}
             <iframe 
