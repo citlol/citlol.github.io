@@ -69,7 +69,7 @@ function App() {
             height: '48px'
           }}
         />
-        <span>Folder</span>
+        <span>Personal</span>
       </div>
 
       <div style={{
@@ -89,7 +89,7 @@ function App() {
             height: '48px'
           }}
         />
-        <span>Folder</span>
+        <span>School Work</span>
       </div>
 
       <div style={{
@@ -109,7 +109,7 @@ function App() {
             height: '48px'
           }}
         />
-        <span>Folder</span>
+        <span>Miel Pomodoro</span>
       </div>
 
       {/* Terminal Window */}
@@ -374,7 +374,8 @@ function App() {
               borderRadius: '4px',
               fontSize: '12px',
               whiteSpace: 'nowrap',
-              pointerEvents: 'none'
+              pointerEvents: 'none',
+              zIndex: '9999'
             }}>
               Terminal
             </div>
@@ -421,7 +422,8 @@ function App() {
               borderRadius: '4px',
               fontSize: '12px',
               whiteSpace: 'nowrap',
-              pointerEvents: 'none'
+              pointerEvents: 'none',
+              zIndex: '9999'
             }}>
               League of Legends
             </div>
@@ -467,7 +469,8 @@ function App() {
               borderRadius: '4px',
               fontSize: '12px',
               whiteSpace: 'nowrap',
-              pointerEvents: 'none'
+              pointerEvents: 'none',
+              zIndex: '9999'
             }}>
               Notion
             </div>
@@ -513,7 +516,8 @@ function App() {
               borderRadius: '4px',
               fontSize: '12px',
               whiteSpace: 'nowrap',
-              pointerEvents: 'none'
+              pointerEvents: 'none',
+              zIndex: '9999'
             }}>
               VS Code
             </div>
@@ -560,7 +564,8 @@ function App() {
               borderRadius: '4px',
               fontSize: '12px',
               whiteSpace: 'nowrap',
-              pointerEvents: 'none'
+              pointerEvents: 'none',
+              zIndex: '9999'
             }}>
               Figma
             </div>
@@ -607,7 +612,8 @@ function App() {
               borderRadius: '4px',
               fontSize: '12px',
               whiteSpace: 'nowrap',
-              pointerEvents: 'none'
+              pointerEvents: 'none',
+              zIndex: '9999'
             }}>
               Spotify
             </div>
@@ -653,7 +659,8 @@ function App() {
               borderRadius: '4px',
               fontSize: '12px',
               whiteSpace: 'nowrap',
-              pointerEvents: 'none'
+              pointerEvents: 'none',
+              zIndex: '9999'
             }}>
               Discord
             </div>
@@ -699,7 +706,8 @@ function App() {
               borderRadius: '4px',
               fontSize: '12px',
               whiteSpace: 'nowrap',
-              pointerEvents: 'none'
+              pointerEvents: 'none',
+              zIndex: '9999'
             }}>
               AI Tools
             </div>
