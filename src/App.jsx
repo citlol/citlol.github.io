@@ -14,59 +14,41 @@ function App() {
   const DesktopIcons = () => (
     <>
       {/* Top left folders */}
-      <div className="absolute top-8 left-8 flex flex-col items-center space-y-2 cursor-pointer hover:bg-blue-100 p-2 rounded">
-        <div className="text-4xl">📁</div>
-        <span className="text-sm text-gray-800">Folder</span>
+      <div className="absolute top-6 left-6 flex flex-col items-center space-y-1 cursor-pointer hover:bg-blue-200/50 p-2 rounded transition-colors">
+        <div className="text-3xl">📁</div>
+        <span className="text-xs text-gray-700 bg-white/80 px-1 rounded">Folder</span>
       </div>
       
-      {/* Top right folders */}
-      <div className="absolute top-8 right-48 flex flex-col items-center space-y-2 cursor-pointer hover:bg-blue-100 p-2 rounded">
-        <div className="text-4xl">📁</div>
-        <span className="text-sm text-gray-800">Folder</span>
+      <div className="absolute top-6 left-24 flex flex-col items-center space-y-1 cursor-pointer hover:bg-blue-200/50 p-2 rounded transition-colors">
+        <div className="text-3xl">📁</div>
+        <span className="text-xs text-gray-700 bg-white/80 px-1 rounded">Folder</span>
       </div>
       
-      <div className="absolute top-32 right-48 flex flex-col items-center space-y-2 cursor-pointer hover:bg-blue-100 p-2 rounded">
-        <div className="text-4xl">📁</div>
-        <span className="text-sm text-gray-800">Folder</span>
+      <div className="absolute top-24 left-6 flex flex-col items-center space-y-1 cursor-pointer hover:bg-blue-200/50 p-2 rounded transition-colors">
+        <div className="text-3xl">📁</div>
+        <span className="text-xs text-gray-700 bg-white/80 px-1 rounded">Folder</span>
       </div>
     </>
   );
 
-  // Widget component
-  const Widget = () => (
-    <div className="absolute top-4 right-4 w-72 h-32 bg-gray-400 rounded-2xl shadow-lg flex items-center justify-center">
-      <span className="text-white font-medium">Widget</span>
-    </div>
-  );
-
-  // Terminal Window component
+  // Terminal Window component  
   const TerminalWindow = ({ children }) => (
-    <div className="terminal-window w-full max-w-4xl mx-auto rounded-lg overflow-hidden shadow-2xl bg-gray-800 border border-gray-600">
-      {/* Terminal header with X button */}
-      <div className="px-3 py-2 bg-black flex items-center justify-between">
-        <div></div> {/* Empty space for balance */}
-        <button className="text-white hover:bg-gray-700 px-2 py-1 rounded text-sm">
+    <div className="w-full max-w-3xl mx-auto bg-white rounded-lg shadow-xl border border-gray-300">
+      {/* Terminal header */}
+      <div className="px-4 py-3 bg-gray-200 border-b border-gray-300 rounded-t-lg flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+          <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+          <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+        </div>
+        <button className="text-gray-600 hover:text-gray-800 text-sm">
           ✕
         </button>
       </div>
 
-      {/* Terminal content */}
-      <div className="p-4 min-h-[400px] text-white">
+      {/* Terminal content with dark background */}
+      <div className="p-6 bg-black text-white font-mono text-sm min-h-[300px]">
         {children}
-      </div>
-    </div>
-  );
-
-  // Bottom Dock component
-  const BottomDock = () => (
-    <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-300 rounded-2xl p-2 shadow-lg">
-      <div className="flex items-center space-x-2">
-        <div className="w-12 h-12 bg-gray-600 rounded-lg flex items-center justify-center text-white text-xs">
-          icon
-        </div>
-        <div className="w-12 h-12 bg-gray-600 rounded-lg flex items-center justify-center text-white text-xs">
-          icon
-        </div>
       </div>
     </div>
   );
@@ -471,22 +453,16 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-white font-mono relative">
+    <div className="min-h-screen bg-gray-100 font-mono relative">
       {/* Desktop Icons - scattered around */}
       <DesktopIcons />
       
-      {/* Widget area top right */}
-      <Widget />
-      
       {/* Central Terminal Window */}
-      <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="min-h-screen flex items-center justify-center p-8">
         <TerminalWindow>
           {renderSectionContent()}
         </TerminalWindow>
       </div>
-      
-      {/* Bottom Dock */}
-      <BottomDock />
     </div>
   );
 }
