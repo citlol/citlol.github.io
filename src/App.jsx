@@ -83,14 +83,34 @@ function App() {
         fontSize: '12px'
       }}>
         <img 
-          src="/DarkVersion.ico" 
-          alt="Folder"
+          src="/Discord.svg" 
+          alt="Discord"
           style={{
             width: '48px',
             height: '48px'
           }}
         />
-        <span>Folder</span>
+        <span>Discord</span>
+      </div>
+
+      <div style={{
+        position: 'absolute',
+        top: '220px',
+        left: '20px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        fontSize: '12px'
+      }}>
+        <img 
+          src="/Ai.svg" 
+          alt="AI Tools"
+          style={{
+            width: '48px',
+            height: '48px'
+          }}
+        />
+        <span>AI Tools</span>
       </div>
 
       {/* Terminal Window */}
@@ -319,58 +339,67 @@ function App() {
         <div style={{
           width: '50px',
           height: '50px',
-          backgroundColor: '#000',
           borderRadius: '12px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
           cursor: 'pointer',
-          fontSize: '20px',
-          transition: 'transform 0.2s ease'
-        }}
-        onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'}
-        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
-        >
-          ⚫
-        </div>
-
-        <div style={{
-          width: '50px',
-          height: '50px',
-          backgroundColor: '#C89B3C',
-          borderRadius: '12px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-          fontSize: '20px',
-          fontWeight: 'bold',
-          color: '#1E2328',
-          transition: 'transform 0.2s ease'
-        }}
-        onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'}
-        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
-        >
-          LoL
-        </div>
-
-        <div style={{
-          width: '50px',
-          height: '50px',
-          backgroundColor: '#fff',
-          borderRadius: '12px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-          fontSize: '24px',
           transition: 'transform 0.2s ease',
-          border: '1px solid #e0e0e0'
+          overflow: 'hidden'
         }}
         onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'}
         onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
         >
-          📝
+          <img 
+            src="/Terminal.svg" 
+            alt="Terminal"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover'
+            }}
+          />
+        </div>
+
+        <div style={{
+          width: '50px',
+          height: '50px',
+          borderRadius: '12px',
+          cursor: 'pointer',
+          transition: 'transform 0.2s ease',
+          overflow: 'hidden'
+        }}
+        onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'}
+        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+        >
+          <img 
+            src="/LoL.svg" 
+            alt="League of Legends"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover'
+            }}
+          />
+        </div>
+
+        <div style={{
+          width: '50px',
+          height: '50px',
+          borderRadius: '12px',
+          cursor: 'pointer',
+          transition: 'transform 0.2s ease',
+          overflow: 'hidden'
+        }}
+        onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'}
+        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+        >
+          <img 
+            src="/Notion.svg" 
+            alt="Notion"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover'
+            }}
+          />
         </div>
 
         <div style={{
@@ -387,6 +416,28 @@ function App() {
           <img 
             src="/vscode.png" 
             alt="VS Code"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover'
+            }}
+          />
+        </div>
+
+        <div style={{
+          width: '50px',
+          height: '50px',
+          borderRadius: '12px',
+          cursor: 'pointer',
+          transition: 'transform 0.2s ease',
+          overflow: 'hidden'
+        }}
+        onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'}
+        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+        >
+          <img 
+            src="/Figma.svg" 
+            alt="Figma"
             style={{
               width: '100%',
               height: '100%',
