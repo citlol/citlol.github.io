@@ -465,22 +465,39 @@ function App() {
               🎵 My Spotify Playlist
             </h3>
 
-            {/* Loading spinner */}
+            {/* Loading dots */}
             {isSpotifyLoading && (
               <div style={{
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
                 height: '380px',
-                marginBottom: '20px'
+                marginBottom: '20px',
+                gap: '8px'
               }}>
                 <div style={{
-                  width: '40px',
-                  height: '40px',
-                  border: '4px solid #333',
-                  borderTop: '4px solid #999',
+                  width: '8px',
+                  height: '8px',
+                  backgroundColor: '#999',
                   borderRadius: '50%',
-                  animation: 'spin 1s linear infinite'
+                  animation: 'dot-bounce 1.4s infinite ease-in-out both',
+                  animationDelay: '0s'
+                }}></div>
+                <div style={{
+                  width: '8px',
+                  height: '8px',
+                  backgroundColor: '#999',
+                  borderRadius: '50%',
+                  animation: 'dot-bounce 1.4s infinite ease-in-out both',
+                  animationDelay: '0.16s'
+                }}></div>
+                <div style={{
+                  width: '8px',
+                  height: '8px',
+                  backgroundColor: '#999',
+                  borderRadius: '50%',
+                  animation: 'dot-bounce 1.4s infinite ease-in-out both',
+                  animationDelay: '0.32s'
                 }}></div>
               </div>
             )}
