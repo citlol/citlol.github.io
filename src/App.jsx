@@ -230,8 +230,8 @@ function App() {
               </div>
               <div style={{ marginBottom: '20px' }}>
                 <h3 style={{ color: 'white', marginBottom: '8px' }}># About Me</h3>
-                <p>Computer science student passionate about creating accessible digital experiences.</p>
-                <p>I focus on building inclusive technology that works for everyone.</p>
+                <p>Computer science student</p>
+                <p>I am Co-Founder of a budgeting app, Pancake.</p>
               </div>
               <button 
                 onClick={() => handleNavClick('home')}
@@ -307,9 +307,9 @@ function App() {
                 citlol@portfolio ~/skills % cat skills.config
               </div>
               <div style={{ marginBottom: '20px' }}>
-                <p>🔧 Frontend: React, HTML, CSS, JavaScript</p>
-                <p>🛠️ Backend: Node.js, MongoDB</p>
-                <p>⚡ Tools: Git, Figma, Accessibility Testing</p>
+                <p>🔧 Frontend: React, HTML, CSS, JavaScript, Swift</p>
+                <p>🛠️ Backend: Node.js, MongoDB, Firebase</p>
+                <p>⚡ Tools: Git, Figma, Canva, Excel</p>
               </div>
               <button 
                 onClick={() => handleNavClick('home')}
