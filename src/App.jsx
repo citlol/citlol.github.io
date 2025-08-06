@@ -172,7 +172,7 @@ function App() {
                     fontFamily: 'monospace'
                   }}
                 >
-                  about.html
+                  about.md
                 </button>
                 <button 
                   onClick={() => handleNavClick('projects')}
@@ -186,7 +186,7 @@ function App() {
                     fontFamily: 'monospace'
                   }}
                 >
-                  projects.js
+                  projects
                 </button>
                 <button 
                   onClick={() => handleNavClick('contact')}
@@ -200,7 +200,7 @@ function App() {
                     fontFamily: 'monospace'
                   }}
                 >
-                  contact.txt
+                  contact.sh
                 </button>
                 <button 
                   onClick={() => handleNavClick('skills')}
