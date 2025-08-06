@@ -2,18 +2,28 @@ import React, { useState } from 'react';
 
 function App() {
   const [activeSection, setActiveSection] = useState('home');
+  const [showSpotifyModal, setShowSpotifyModal] = useState(false);
 
   const handleNavClick = (section) => {
     setActiveSection(section);
   };
 
+  const openSpotifyModal = () => {
+    setShowSpotifyModal(true);
+  };
+
+  const closeSpotifyModal = () => {
+    setShowSpotifyModal(false);
+  };
+
   return (
-    <div style={{
-      minHeight: '100vh',
-      backgroundColor: '#f0f0f0',
-      fontFamily: 'monospace',
-      position: 'relative'
-    }}>
+    <>
+      <div style={{
+        minHeight: '100vh',
+        backgroundColor: '#f0f0f0',
+        fontFamily: 'monospace',
+        position: 'relative'
+      }}>
       {/* Desktop Folders */}
       <div style={{
         position: 'absolute',
@@ -366,6 +376,7 @@ function App() {
         }}
         onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'}
         onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+        onClick={openSpotifyModal}
         >
           <img 
             src="/spotifyicon.png" 
@@ -378,7 +389,79 @@ function App() {
           />
         </div>
       </div>
-    </div>
+
+      {/* Spotify Modal */}
+      {showSpotifyModal && (
+        <div style={{
+          position: 'fixed',
+          top: '0',
+          left: '0',
+          width: '100%',
+          height: '100%',
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: '1000'
+        }}
+        onClick={closeSpotifyModal}
+        >
+          <div style={{
+            backgroundColor: 'white',
+            borderRadius: '12px',
+            padding: '20px',
+            position: 'relative',
+            maxWidth: '500px',
+            width: '90%'
+          }}
+          onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close button */}
+            <button 
+              onClick={closeSpotifyModal}
+              style={{
+                position: 'absolute',
+                top: '10px',
+                right: '15px',
+                background: 'none',
+                border: 'none',
+                fontSize: '20px',
+                cursor: 'pointer',
+                color: '#666'
+              }}
+            >
+              ✕
+            </button>
+
+            <h3 style={{ marginTop: '0', marginBottom: '20px', color: '#1DB954' }}>
+              🎵 My Spotify Playlist
+            </h3>
+
+            {/* Spotify Embed - Replace with your playlist */}
+            <iframe 
+              src="https://open.spotify.com/embed/playlist/3zDiyeiXDga7ZeSspF85mn?utm_source=generator&theme=0" 
+              width="100%" 
+              height="380" 
+              frameBorder="0" 
+              allowTransparency="true" 
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+              loading="lazy"
+              style={{ borderRadius: '12px' }}
+            ></iframe>
+
+            <p style={{ 
+              fontSize: '12px', 
+              color: '#666', 
+              marginTop: '10px', 
+              textAlign: 'center' 
+            }}>
+              Click outside to close
+            </p>
+          </div>
+        </div>
+      )}
+      </div>
+    </>
   );
 }
 
