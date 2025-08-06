@@ -986,18 +986,44 @@ function App() {
         }}
         onClick={closeDiscordModal}
         >
-          {/* Just the SVG, no modal container */}
-          <img 
-            src="/DiscordProfile.svg" 
-            alt="Discord Profile"
-            style={{
-              maxWidth: '500px',
-              width: '90%',
-              height: 'auto',
-              cursor: 'pointer'
-            }}
-            onClick={(e) => e.stopPropagation()}
-          />
+          <div style={{ position: 'relative' }}>
+            {/* Close button */}
+            <button 
+              onClick={closeDiscordModal}
+              style={{
+                position: 'absolute',
+                top: '-10px',
+                right: '-10px',
+                background: 'rgba(0, 0, 0, 0.8)',
+                border: 'none',
+                borderRadius: '50%',
+                width: '30px',
+                height: '30px',
+                fontSize: '16px',
+                cursor: 'pointer',
+                color: '#999',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: '10001'
+              }}
+            >
+              ✕
+            </button>
+
+            {/* Just the SVG, no modal container */}
+            <img 
+              src="/DiscordProfile.svg" 
+              alt="Discord Profile"
+              style={{
+                maxWidth: '500px',
+                width: '90%',
+                height: 'auto',
+                cursor: 'pointer'
+              }}
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
         </div>
       )}
       </div>
