@@ -1,68 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './App.css';
-import Typewriter from 'typewriter-effect';
 
 function App() {
   const [activeSection, setActiveSection] = useState('home');
-  const [currentTime, setCurrentTime] = useState(new Date());
-  
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      return savedTheme === 'dark';
-    }
-    return true; // Default to dark mode
-  });
-
-  // Update theme when isDarkMode changes
-  useEffect(() => {
-    const html = document.documentElement;
-    
-    if (isDarkMode) {
-      html.classList.add('dark');
-      html.classList.remove('light');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      html.classList.remove('dark');
-      html.classList.add('light');
-      localStorage.setItem('theme', 'light');
-    }
-  }, [isDarkMode]);
-
-  // Initialize theme on first load
-  useEffect(() => {
-    const html = document.documentElement;
-    if (isDarkMode) {
-      html.classList.add('dark');
-    } else {
-      html.classList.add('light');
-    }
-  }, []);
-
-  // Update time every minute
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 60000);
-    return () => clearInterval(timer);
-  }, []);
-
-  // Toggle theme function
-  const toggleTheme = () => {
-    setIsDarkMode(prev => !prev);
-  };
 
   // Handle navigation clicks
   const handleNavClick = (section) => {
     setActiveSection(section);
-  };
-
-  // Handle keyboard navigation
-  const handleKeyPress = (e, section) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      handleNavClick(section);
-    }
   };
 
 
