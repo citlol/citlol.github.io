@@ -428,7 +428,7 @@ function App() {
         onClick={closeSpotifyModal}
         >
           <div style={{
-            backgroundColor: 'white',
+            backgroundColor: '#000000',
             borderRadius: '12px',
             padding: '20px',
             position: 'relative',
@@ -448,13 +448,13 @@ function App() {
                 border: 'none',
                 fontSize: '20px',
                 cursor: 'pointer',
-                color: '#666'
+                color: '#999'
               }}
             >
               ✕
             </button>
 
-            <h3 style={{ marginTop: '0', marginBottom: '20px', color: '#1DB954' }}>
+            <h3 style={{ marginTop: '0', marginBottom: '20px', color: '#999' }}>
               🎵 My Spotify Playlist
             </h3>
 
@@ -472,7 +472,7 @@ function App() {
 
             <p style={{ 
               fontSize: '12px', 
-              color: 'white', 
+              color: '#999', 
               marginTop: '10px', 
               textAlign: 'center' 
             }}>
