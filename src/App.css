@@ -422,7 +422,52 @@ html.light .bg-grid {
   background: #9ca3af;
 }
 
-/* Responsive design */
+/* Mobile-first responsive design */
+@media (max-width: 768px) {
+  /* Hide desktop folders on mobile */
+  .desktop-folder {
+    display: none !important;
+  }
+  
+  /* Adjust terminal window for mobile */
+  .terminal-window-mobile {
+    width: 95% !important;
+    max-width: 400px !important;
+    margin: 20px auto !important;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+  }
+  
+  /* Mobile dock adjustments */
+  .mobile-dock {
+    bottom: 10px !important;
+    padding: 8px 12px !important;
+    gap: 8px !important;
+    max-width: 90% !important;
+  }
+  
+  .mobile-dock-icon {
+    width: 40px !important;
+    height: 40px !important;
+  }
+  
+  /* Mobile modal adjustments */
+  .mobile-modal {
+    padding: 15px !important;
+    margin: 20px !important;
+    max-width: calc(100% - 40px) !important;
+    max-height: calc(100vh - 40px) !important;
+    overflow-y: auto !important;
+  }
+  
+  /* Mobile tooltips - hide on mobile since hover doesn't work well */
+  .tooltip-mobile {
+    display: none !important;
+  }
+}
+
 @media (max-width: 640px) {
   .ascii-art {
     font-size: 0.4rem;
@@ -434,6 +479,16 @@ html.light .bg-grid {
   
   .project-card:hover {
     transform: translateY(-3px);
+  }
+  
+  /* Extra small mobile adjustments */
+  .mobile-dock {
+    gap: 6px !important;
+  }
+  
+  .mobile-dock-icon {
+    width: 35px !important;
+    height: 35px !important;
   }
 }
 

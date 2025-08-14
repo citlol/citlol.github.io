@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
@@ -9,6 +9,7 @@ function App() {
   const [showLoLModal, setShowLoLModal] = useState(false);
   const [showDiscordModal, setShowDiscordModal] = useState(false);
   const [hoveredIcon, setHoveredIcon] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   const handleNavClick = (section) => {
     setActiveSection(section);
@@ -52,6 +53,18 @@ function App() {
     setShowDiscordModal(false);
   };
 
+  // Mobile detection
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
     <>
       <div style={{
@@ -61,7 +74,7 @@ function App() {
         position: 'relative'
       }}>
       {/* Desktop Folders */}
-      <div style={{
+      <div className={isMobile ? 'desktop-folder' : ''} style={{
         position: 'absolute',
         top: '20px',
         left: '20px',
@@ -81,7 +94,7 @@ function App() {
         <span>Personal</span>
       </div>
 
-      <div style={{
+      <div className={isMobile ? 'desktop-folder' : ''} style={{
         position: 'absolute',
         top: '20px',
         left: '120px',
@@ -101,7 +114,7 @@ function App() {
         <span>School Work</span>
       </div>
 
-      <div style={{
+      <div className={isMobile ? 'desktop-folder' : ''} style={{
         position: 'absolute',
         top: '120px',
         left: '20px',
@@ -122,12 +135,13 @@ function App() {
       </div>
 
       {/* Terminal Window */}
-      <div style={{
+      <div className={isMobile ? 'terminal-window-mobile' : ''} style={{
         position: 'absolute',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: '800px',
+        width: isMobile ? '95%' : '800px',
+        maxWidth: isMobile ? '400px' : 'none',
         backgroundColor: '#1e1e1e',
         border: '1px solid #555',
         borderRadius: '8px',
@@ -330,24 +344,25 @@ function App() {
       </div>
 
       {/* Bottom Dock */}
-      <div style={{
+      <div className={isMobile ? 'mobile-dock' : ''} style={{
         position: 'fixed',
-        bottom: '20px',
+        bottom: isMobile ? '10px' : '20px',
         left: '50%',
         transform: 'translateX(-50%)',
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
         backdropFilter: 'blur(10px)',
         borderRadius: '20px',
-        padding: '10px 15px',
+        padding: isMobile ? '8px 12px' : '10px 15px',
         display: 'flex',
-        gap: '10px',
+        gap: isMobile ? '8px' : '10px',
         boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
-        border: '1px solid rgba(255, 255, 255, 0.3)'
+        border: '1px solid rgba(255, 255, 255, 0.3)',
+        maxWidth: isMobile ? '90%' : 'none'
       }}>
-        <div style={{
+        <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
           position: 'relative',
-          width: '50px',
-          height: '50px',
+          width: isMobile ? '40px' : '50px',
+          height: isMobile ? '40px' : '50px',
           borderRadius: '12px',
           cursor: 'pointer',
           transition: 'transform 0.2s ease',
@@ -371,8 +386,8 @@ function App() {
               objectFit: 'cover'
             }}
           />
-          {hoveredIcon === 'Terminal' && (
-            <div style={{
+          {hoveredIcon === 'Terminal' && !isMobile && (
+            <div className={isMobile ? 'tooltip-mobile' : ''} style={{
               position: 'absolute',
               bottom: '60px',
               left: '50%',
@@ -391,10 +406,10 @@ function App() {
           )}
         </div>
 
-        <div style={{
+        <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
           position: 'relative',
-          width: '50px',
-          height: '50px',
+          width: isMobile ? '40px' : '50px',
+          height: isMobile ? '40px' : '50px',
           borderRadius: '12px',
           cursor: 'pointer',
           transition: 'transform 0.2s ease',
@@ -419,7 +434,7 @@ function App() {
               objectFit: 'cover'
             }}
           />
-          {hoveredIcon === 'League of Legends' && (
+          {hoveredIcon === 'League of Legends' && !isMobile && (
             <div style={{
               position: 'absolute',
               bottom: '60px',
@@ -439,10 +454,10 @@ function App() {
           )}
         </div>
 
-        <div style={{
+        <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
           position: 'relative',
-          width: '50px',
-          height: '50px',
+          width: isMobile ? '40px' : '50px',
+          height: isMobile ? '40px' : '50px',
           borderRadius: '12px',
           cursor: 'pointer',
           transition: 'transform 0.2s ease',
@@ -466,7 +481,7 @@ function App() {
               objectFit: 'cover'
             }}
           />
-          {hoveredIcon === 'Notion' && (
+          {hoveredIcon === 'Notion' && !isMobile && (
             <div style={{
               position: 'absolute',
               bottom: '60px',
@@ -486,10 +501,10 @@ function App() {
           )}
         </div>
 
-        <div style={{
+        <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
           position: 'relative',
-          width: '50px',
-          height: '50px',
+          width: isMobile ? '40px' : '50px',
+          height: isMobile ? '40px' : '50px',
           borderRadius: '12px',
           cursor: 'pointer',
           transition: 'transform 0.2s ease',
@@ -513,7 +528,7 @@ function App() {
               objectFit: 'cover'
             }}
           />
-          {hoveredIcon === 'VS Code' && (
+          {hoveredIcon === 'VS Code' && !isMobile && (
             <div style={{
               position: 'absolute',
               bottom: '60px',
@@ -533,10 +548,10 @@ function App() {
           )}
         </div>
 
-        <div style={{
+        <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
           position: 'relative',
-          width: '50px',
-          height: '50px',
+          width: isMobile ? '40px' : '50px',
+          height: isMobile ? '40px' : '50px',
           borderRadius: '12px',
           cursor: 'pointer',
           transition: 'transform 0.2s ease',
@@ -561,7 +576,7 @@ function App() {
               objectFit: 'cover'
             }}
           />
-          {hoveredIcon === 'Figma' && (
+          {hoveredIcon === 'Figma' && !isMobile && (
             <div style={{
               position: 'absolute',
               bottom: '60px',
@@ -581,10 +596,10 @@ function App() {
           )}
         </div>
 
-        <div style={{
+        <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
           position: 'relative',
-          width: '50px',
-          height: '50px',
+          width: isMobile ? '40px' : '50px',
+          height: isMobile ? '40px' : '50px',
           borderRadius: '12px',
           cursor: 'pointer',
           transition: 'transform 0.2s ease',
@@ -609,7 +624,7 @@ function App() {
               objectFit: 'cover'
             }}
           />
-          {hoveredIcon === 'Spotify' && (
+          {hoveredIcon === 'Spotify' && !isMobile && (
             <div style={{
               position: 'absolute',
               bottom: '60px',
@@ -629,10 +644,10 @@ function App() {
           )}
         </div>
 
-        <div style={{
+        <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
           position: 'relative',
-          width: '50px',
-          height: '50px',
+          width: isMobile ? '40px' : '50px',
+          height: isMobile ? '40px' : '50px',
           borderRadius: '12px',
           cursor: 'pointer',
           transition: 'transform 0.2s ease',
@@ -657,7 +672,7 @@ function App() {
               objectFit: 'cover'
             }}
           />
-          {hoveredIcon === 'Discord' && (
+          {hoveredIcon === 'Discord' && !isMobile && (
             <div style={{
               position: 'absolute',
               bottom: '60px',
@@ -677,10 +692,10 @@ function App() {
           )}
         </div>
 
-        <div style={{
+        <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
           position: 'relative',
-          width: '50px',
-          height: '50px',
+          width: isMobile ? '40px' : '50px',
+          height: isMobile ? '40px' : '50px',
           borderRadius: '12px',
           cursor: 'pointer',
           transition: 'transform 0.2s ease',
@@ -704,7 +719,7 @@ function App() {
               objectFit: 'cover'
             }}
           />
-          {hoveredIcon === 'AI Tools' && (
+          {hoveredIcon === 'AI Tools' && !isMobile && (
             <div style={{
               position: 'absolute',
               bottom: '60px',
@@ -741,13 +756,16 @@ function App() {
         }}
         onClick={closeSpotifyModal}
         >
-          <div style={{
+          <div className={isMobile ? 'mobile-modal' : ''} style={{
             backgroundColor: '#000000',
             borderRadius: '12px',
-            padding: '20px',
+            padding: isMobile ? '15px' : '20px',
             position: 'relative',
-            maxWidth: '500px',
-            width: '90%'
+            maxWidth: isMobile ? 'calc(100% - 40px)' : '500px',
+            width: '90%',
+            margin: isMobile ? '20px' : '0',
+            maxHeight: isMobile ? 'calc(100vh - 40px)' : 'none',
+            overflow: isMobile ? 'auto' : 'visible'
           }}
           onClick={(e) => e.stopPropagation()}
           >
