@@ -492,6 +492,18 @@ html.light .bg-grid {
   }
 }
 
+/* Twinkling stars animation */
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
 /* Animation delays for staggered effects */
 .delay-100 { animation-delay: 0.1s; }
 .delay-200 { animation-delay: 0.2s; }
@@ -501,6 +513,15 @@ html.light .bg-grid {
 .delay-1000 { animation-delay: 1s; }
 
 /* Fade in animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;

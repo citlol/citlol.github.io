@@ -1,6 +1,244 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
+const Stars = () => {
+  const [stars, setStars] = useState([]);
+
+  useEffect(() => {
+    const generateStars = () => {
+      const starArray = [];
+      for (let i = 0; i < 100; i++) {
+        starArray.push({
+          id: i,
+          x: Math.random() * 100,
+          y: Math.random() * 100,
+          size: Math.random() * 3 + 1,
+          opacity: Math.random() * 0.8 + 0.2,
+          animationDelay: Math.random() * 4,
+          animationDuration: Math.random() * 3 + 2
+        });
+      }
+      setStars(starArray);
+    };
+
+    generateStars();
+  }, []);
+
+  return (
+    <div style={{
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      pointerEvents: 'none',
+      zIndex: 1
+    }}>
+      {stars.map(star => (
+        <div
+          key={star.id}
+          style={{
+            position: 'absolute',
+            left: `${star.x}%`,
+            top: `${star.y}%`,
+            width: `${star.size}px`,
+            height: `${star.size}px`,
+            backgroundColor: 'white',
+            borderRadius: '50%',
+            opacity: star.opacity,
+            animation: `twinkle ${star.animationDuration}s ease-in-out infinite`,
+            animationDelay: `${star.animationDelay}s`
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+const Tooltip = ({ text, show }) => {
+  if (!show) return null;
+
+  return (
+    <div style={{
+      position: 'absolute',
+      bottom: '65px',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      backgroundColor: 'rgba(255, 255, 255, 0.95)',
+      color: 'black',
+      padding: '6px 10px',
+      borderRadius: '6px',
+      fontSize: '12px',
+      fontWeight: '500',
+      whiteSpace: 'nowrap',
+      pointerEvents: 'none',
+      zIndex: '99999',
+      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+      border: '1px solid rgba(0, 0, 0, 0.1)',
+      opacity: 1
+    }}>
+      {text}
+      <div style={{
+        position: 'absolute',
+        top: '100%',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: '0',
+        height: '0',
+        borderLeft: '4px solid transparent',
+        borderRight: '4px solid transparent',
+        borderTop: '4px solid rgba(255, 255, 255, 0.95)'
+      }}></div>
+    </div>
+  );
+};
+
+const DraggableFolder = ({ name, initialX, initialY, isMobile }) => {
+  const [position, setPosition] = useState({ x: initialX, y: initialY });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+
+  const handleMouseDown = (e) => {
+    if (isMobile) return;
+    setIsDragging(true);
+    setDragStart({
+      x: e.clientX - position.x,
+      y: e.clientY - position.y
+    });
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    setPosition({
+      x: e.clientX - dragStart.x,
+      y: e.clientY - dragStart.y
+    });
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  useEffect(() => {
+    if (isDragging) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+      return () => {
+        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('mouseup', handleMouseUp);
+      };
+    }
+  }, [isDragging, dragStart]);
+
+  return (
+    <div
+      className={isMobile ? 'desktop-folder' : ''}
+      style={{
+        position: 'absolute',
+        left: `${position.x}px`,
+        top: `${position.y}px`,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        fontSize: '12px',
+        cursor: isDragging ? 'grabbing' : 'grab',
+        userSelect: 'none',
+        zIndex: isDragging ? 1000 : 10,
+        transition: isDragging ? 'none' : 'transform 0.2s ease'
+      }}
+      onMouseDown={handleMouseDown}
+      onMouseEnter={(e) => {
+        if (!isDragging) e.currentTarget.style.transform = 'scale(1.05)';
+      }}
+      onMouseLeave={(e) => {
+        if (!isDragging) e.currentTarget.style.transform = 'scale(1)';
+      }}
+    >
+      <img
+        src="/DarkVersion.ico"
+        alt="Folder"
+        style={{
+          width: '48px',
+          height: '48px',
+          pointerEvents: 'none'
+        }}
+      />
+      <span style={{
+        color: 'white',
+        textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
+        pointerEvents: 'none'
+      }}>
+        {name}
+      </span>
+    </div>
+  );
+};
+
+const DesktopClock = ({ isMobile }) => {
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatTime = (date) => {
+    return date.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true
+    });
+  };
+
+  const formatDate = (date) => {
+    return date.toLocaleDateString([], {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
+
+  if (isMobile) return null;
+
+  return (
+    <div style={{
+      position: 'absolute',
+      top: '20px',
+      right: '20px',
+      backgroundColor: 'rgba(0, 0, 0, 0.7)',
+      backdropFilter: 'blur(10px)',
+      border: '1px solid rgba(255, 255, 255, 0.1)',
+      borderRadius: '8px',
+      padding: '12px 16px',
+      color: 'white',
+      textAlign: 'center',
+      fontFamily: 'monospace',
+      userSelect: 'none',
+      zIndex: 20
+    }}>
+      <div style={{
+        fontSize: '16px',
+        fontWeight: 'bold',
+        marginBottom: '4px',
+        textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
+      }}>
+        {formatTime(time)}
+      </div>
+      <div style={{
+        fontSize: '12px',
+        opacity: 0.8,
+        textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
+      }}>
+        {formatDate(time)}
+      </div>
+    </div>
+  );
+};
+
 function App() {
   const [activeSection, setActiveSection] = useState('home');
   const [showSpotifyModal, setShowSpotifyModal] = useState(false);
@@ -69,70 +307,18 @@ function App() {
     <>
       <div style={{
         minHeight: '100vh',
-        backgroundColor: '#f0f0f0',
+        background: 'linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2a2a2a 100%)',
         fontFamily: 'monospace',
-        position: 'relative'
+        position: 'relative',
+        overflow: 'hidden'
       }}>
+      <Stars />
+      {/* Desktop Clock */}
+      <DesktopClock isMobile={isMobile} />
       {/* Desktop Folders */}
-      <div className={isMobile ? 'desktop-folder' : ''} style={{
-        position: 'absolute',
-        top: '20px',
-        left: '20px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        fontSize: '12px'
-      }}>
-        <img 
-          src="/DarkVersion.ico" 
-          alt="Folder"
-          style={{
-            width: '48px',
-            height: '48px'
-          }}
-        />
-        <span>Personal</span>
-      </div>
-
-      <div className={isMobile ? 'desktop-folder' : ''} style={{
-        position: 'absolute',
-        top: '20px',
-        left: '120px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        fontSize: '12px'
-      }}>
-        <img 
-          src="/DarkVersion.ico" 
-          alt="Folder"
-          style={{
-            width: '48px',
-            height: '48px'
-          }}
-        />
-        <span>School Work</span>
-      </div>
-
-      <div className={isMobile ? 'desktop-folder' : ''} style={{
-        position: 'absolute',
-        top: '120px',
-        left: '20px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        fontSize: '12px'
-      }}>
-        <img 
-          src="/DarkVersion.ico" 
-          alt="Folder"
-          style={{
-            width: '48px',
-            height: '48px'
-          }}
-        />
-        <span>Miel Pomodoro</span>
-      </div>
+      <DraggableFolder name="Personal" initialX={20} initialY={20} isMobile={isMobile} />
+      <DraggableFolder name="School Work" initialX={120} initialY={20} isMobile={isMobile} />
+      <DraggableFolder name="Miel Pomodoro" initialX={20} initialY={120} isMobile={isMobile} />
 
       {/* Terminal Window */}
       <div className={isMobile ? 'terminal-window-mobile' : ''} style={{
@@ -140,32 +326,40 @@ function App() {
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: isMobile ? '95%' : '800px',
+        width: isMobile ? '95%' : '900px',
         maxWidth: isMobile ? '400px' : 'none',
-        backgroundColor: '#1e1e1e',
-        border: '1px solid #555',
-        borderRadius: '8px',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.3)'
+        backgroundColor: 'rgba(0, 0, 0, 0.85)',
+        border: '1px solid rgba(255, 255, 255, 0.15)',
+        borderRadius: '12px',
+        boxShadow: '0 20px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1) inset',
+        backdropFilter: 'blur(20px)'
       }}>
         {/* Terminal Header */}
         <div style={{
-          backgroundColor: '#333',
-          padding: '8px 12px',
-          borderTopLeftRadius: '8px',
-          borderTopRightRadius: '8px',
+          backgroundColor: 'rgba(51, 51, 51, 0.8)',
+          padding: '12px 16px',
+          borderTopLeftRadius: '12px',
+          borderTopRightRadius: '12px',
           display: 'flex',
-          justifyContent: 'flex-end',
-          alignItems: 'center'
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
         }}>
-          <span style={{ color: '#fff', fontSize: '12px', cursor: 'pointer' }}>✕</span>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ff5f57' }}></div>
+            <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ffbd2e' }}></div>
+            <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#28ca42' }}></div>
+          </div>
+          <span style={{ color: '#888', fontSize: '12px' }}>citlol@portfolio</span>
         </div>
 
         {/* Terminal Content */}
         <div style={{
-          padding: '20px',
+          padding: '24px',
           color: 'white',
           fontSize: '14px',
-          minHeight: '300px'
+          minHeight: '400px',
+          lineHeight: '1.6'
         }}>
           <div style={{ color: '#888', marginBottom: '16px' }}>
             citlol@portfolio ~ %
@@ -243,9 +437,19 @@ function App() {
                 citlol@portfolio ~/about % cat about.md
               </div>
               <div style={{ marginBottom: '20px' }}>
-                <h3 style={{ color: 'white', marginBottom: '8px' }}># About Me</h3>
-                <p>Computer science student</p>
-                <p>I am Co-Founder of a budgeting app, Pancake.</p>
+                <h3 style={{ color: '#4ade80', marginBottom: '16px', fontSize: '18px' }}># About Me</h3>
+                <div style={{ marginBottom: '12px' }}>
+                  <span style={{ color: '#60a5fa' }}>👨‍💻</span> Computer Science Student & Full-Stack Developer
+                </div>
+                <div style={{ marginBottom: '12px' }}>
+                  <span style={{ color: '#f59e0b' }}>🚀</span> Co-Founder of Pancake - A modern budgeting app
+                </div>
+                <div style={{ marginBottom: '12px' }}>
+                  <span style={{ color: '#8b5cf6' }}>💡</span> Passionate about creating intuitive user experiences
+                </div>
+                <div style={{ color: '#6b7280', fontSize: '13px', marginTop: '16px' }}>
+                  Currently seeking software engineering opportunities to contribute to innovative projects
+                </div>
               </div>
               <button 
                 onClick={() => handleNavClick('home')}
@@ -269,9 +473,36 @@ function App() {
                 citlol@portfolio ~/projects % ls -la
               </div>
               <div style={{ marginBottom: '20px' }}>
-                <p>📁 Pancake/</p>
-                <p>📁 Miel-Pomodoro/</p>
-                <p>📁 Star-Wars-All-In-Game/</p>
+                <div style={{
+                  padding: '12px',
+                  backgroundColor: 'rgba(74, 222, 128, 0.1)',
+                  borderRadius: '8px',
+                  marginBottom: '12px',
+                  border: '1px solid rgba(74, 222, 128, 0.2)'
+                }}>
+                  <div style={{ color: '#4ade80', fontWeight: 'bold', marginBottom: '4px' }}>📁 Pancake</div>
+                  <div style={{ color: '#9ca3af', fontSize: '12px' }}>Budgeting app - React, Node.js, MongoDB</div>
+                </div>
+                <div style={{
+                  padding: '12px',
+                  backgroundColor: 'rgba(96, 165, 250, 0.1)',
+                  borderRadius: '8px',
+                  marginBottom: '12px',
+                  border: '1px solid rgba(96, 165, 250, 0.2)'
+                }}>
+                  <div style={{ color: '#60a5fa', fontWeight: 'bold', marginBottom: '4px' }}>📁 Miel-Pomodoro</div>
+                  <div style={{ color: '#9ca3af', fontSize: '12px' }}>Productivity timer - JavaScript, CSS</div>
+                </div>
+                <div style={{
+                  padding: '12px',
+                  backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                  borderRadius: '8px',
+                  marginBottom: '12px',
+                  border: '1px solid rgba(245, 158, 11, 0.2)'
+                }}>
+                  <div style={{ color: '#f59e0b', fontWeight: 'bold', marginBottom: '4px' }}>📁 Star-Wars-All-In-Game</div>
+                  <div style={{ color: '#9ca3af', fontSize: '12px' }}>Interactive game - HTML5, Canvas</div>
+                </div>
               </div>
               <button 
                 onClick={() => handleNavClick('home')}
@@ -295,9 +526,94 @@ function App() {
                 citlol@portfolio ~/contact % ./contact.sh
               </div>
               <div style={{ marginBottom: '20px' }}>
-                <p>📧 <a href="mailto:citlalli.tdr@gmail.com" style={{ color: '#4a9eff' }}>citlalli.tdr@gmail.com</a></p>
-                <p>🔗 <a href="https://linkedin.com/in/citlalli-trejo-del-rio" target="_blank" rel="noopener noreferrer" style={{ color: '#4a9eff' }}>linkedin.com/in/citlalli-trejo-del-rio</a></p>
-                <p>🐙 <a href="https://github.com/citlol" target="_blank" rel="noopener noreferrer" style={{ color: '#4a9eff' }}>github.com/citlol</a></p>
+                <div style={{
+                  display: 'grid',
+                  gap: '12px',
+                  gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(250px, 1fr))'
+                }}>
+                  <a
+                    href="mailto:citlalli.tdr@gmail.com"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      padding: '12px',
+                      backgroundColor: 'rgba(74, 222, 128, 0.1)',
+                      borderRadius: '8px',
+                      border: '1px solid rgba(74, 222, 128, 0.2)',
+                      color: '#4ade80',
+                      textDecoration: 'none',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = 'rgba(74, 222, 128, 0.2)';
+                      e.target.style.transform = 'translateY(-2px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = 'rgba(74, 222, 128, 0.1)';
+                      e.target.style.transform = 'translateY(0)';
+                    }}
+                  >
+                    <span style={{ fontSize: '18px' }}>📧</span>
+                    <span>citlalli.tdr@gmail.com</span>
+                  </a>
+                  <a
+                    href="https://linkedin.com/in/citlalli-trejo-del-rio"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      padding: '12px',
+                      backgroundColor: 'rgba(96, 165, 250, 0.1)',
+                      borderRadius: '8px',
+                      border: '1px solid rgba(96, 165, 250, 0.2)',
+                      color: '#60a5fa',
+                      textDecoration: 'none',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = 'rgba(96, 165, 250, 0.2)';
+                      e.target.style.transform = 'translateY(-2px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = 'rgba(96, 165, 250, 0.1)';
+                      e.target.style.transform = 'translateY(0)';
+                    }}
+                  >
+                    <span style={{ fontSize: '18px' }}>🔗</span>
+                    <span>LinkedIn</span>
+                  </a>
+                  <a
+                    href="https://github.com/citlol"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      padding: '12px',
+                      backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                      borderRadius: '8px',
+                      border: '1px solid rgba(139, 92, 246, 0.2)',
+                      color: '#8b5cf6',
+                      textDecoration: 'none',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = 'rgba(139, 92, 246, 0.2)';
+                      e.target.style.transform = 'translateY(-2px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = 'rgba(139, 92, 246, 0.1)';
+                      e.target.style.transform = 'translateY(0)';
+                    }}
+                  >
+                    <span style={{ fontSize: '18px' }}>🐙</span>
+                    <span>GitHub</span>
+                  </a>
+                </div>
               </div>
               <button 
                 onClick={() => handleNavClick('home')}
@@ -321,9 +637,57 @@ function App() {
                 citlol@portfolio ~/skills % cat skills.config
               </div>
               <div style={{ marginBottom: '20px' }}>
-                <p>🔧 Frontend: React, HTML, CSS, JavaScript, Swift</p>
-                <p>🛠️ Backend: Node.js, MongoDB, Firebase</p>
-                <p>⚡ Tools: Git, Figma, Canva, Excel</p>
+                <div style={{ marginBottom: '16px' }}>
+                  <h4 style={{ color: '#4ade80', marginBottom: '8px' }}>Frontend</h4>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                    {['React', 'JavaScript', 'HTML/CSS', 'Swift'].map(skill => (
+                      <span key={skill} style={{
+                        backgroundColor: 'rgba(74, 222, 128, 0.2)',
+                        color: '#4ade80',
+                        padding: '4px 8px',
+                        borderRadius: '4px',
+                        fontSize: '12px',
+                        border: '1px solid rgba(74, 222, 128, 0.3)'
+                      }}>
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div style={{ marginBottom: '16px' }}>
+                  <h4 style={{ color: '#60a5fa', marginBottom: '8px' }}>Backend</h4>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                    {['Node.js', 'MongoDB', 'Firebase'].map(skill => (
+                      <span key={skill} style={{
+                        backgroundColor: 'rgba(96, 165, 250, 0.2)',
+                        color: '#60a5fa',
+                        padding: '4px 8px',
+                        borderRadius: '4px',
+                        fontSize: '12px',
+                        border: '1px solid rgba(96, 165, 250, 0.3)'
+                      }}>
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div style={{ marginBottom: '16px' }}>
+                  <h4 style={{ color: '#f59e0b', marginBottom: '8px' }}>Tools</h4>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                    {['Git', 'Figma', 'VS Code', 'Canva'].map(skill => (
+                      <span key={skill} style={{
+                        backgroundColor: 'rgba(245, 158, 11, 0.2)',
+                        color: '#f59e0b',
+                        padding: '4px 8px',
+                        borderRadius: '4px',
+                        fontSize: '12px',
+                        border: '1px solid rgba(245, 158, 11, 0.3)'
+                      }}>
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </div>
               <button 
                 onClick={() => handleNavClick('home')}
@@ -349,14 +713,14 @@ function App() {
         bottom: isMobile ? '10px' : '20px',
         left: '50%',
         transform: 'translateX(-50%)',
-        backgroundColor: 'rgba(255, 255, 255, 0.8)',
-        backdropFilter: 'blur(10px)',
-        borderRadius: '20px',
-        padding: isMobile ? '8px 12px' : '10px 15px',
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        backdropFilter: 'blur(20px)',
+        borderRadius: '24px',
+        padding: isMobile ? '10px 14px' : '12px 18px',
         display: 'flex',
-        gap: isMobile ? '8px' : '10px',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
-        border: '1px solid rgba(255, 255, 255, 0.3)',
+        gap: isMobile ? '10px' : '12px',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+        border: '1px solid rgba(255, 255, 255, 0.8)',
         maxWidth: isMobile ? '90%' : 'none'
       }}>
         <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
@@ -366,7 +730,7 @@ function App() {
           borderRadius: '12px',
           cursor: 'pointer',
           transition: 'transform 0.2s ease',
-          overflow: 'hidden'
+          overflow: 'visible'
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = 'scale(1.1)';
@@ -386,24 +750,7 @@ function App() {
               objectFit: 'cover'
             }}
           />
-          {hoveredIcon === 'Terminal' && !isMobile && (
-            <div className={isMobile ? 'tooltip-mobile' : ''} style={{
-              position: 'absolute',
-              bottom: '60px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              color: 'white',
-              padding: '4px 8px',
-              borderRadius: '4px',
-              fontSize: '12px',
-              whiteSpace: 'nowrap',
-              pointerEvents: 'none',
-              zIndex: '9999'
-            }}>
-              Terminal
-            </div>
-          )}
+          <Tooltip text="Terminal" show={hoveredIcon === 'Terminal' && !isMobile} />
         </div>
 
         <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
@@ -413,7 +760,7 @@ function App() {
           borderRadius: '12px',
           cursor: 'pointer',
           transition: 'transform 0.2s ease',
-          overflow: 'hidden'
+          overflow: 'visible'
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = 'scale(1.1)';
@@ -434,24 +781,7 @@ function App() {
               objectFit: 'cover'
             }}
           />
-          {hoveredIcon === 'League of Legends' && !isMobile && (
-            <div style={{
-              position: 'absolute',
-              bottom: '60px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              color: 'white',
-              padding: '4px 8px',
-              borderRadius: '4px',
-              fontSize: '12px',
-              whiteSpace: 'nowrap',
-              pointerEvents: 'none',
-              zIndex: '9999'
-            }}>
-              League of Legends
-            </div>
-          )}
+          <Tooltip text="League of Legends" show={hoveredIcon === 'League of Legends' && !isMobile} />
         </div>
 
         <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
@@ -461,7 +791,7 @@ function App() {
           borderRadius: '12px',
           cursor: 'pointer',
           transition: 'transform 0.2s ease',
-          overflow: 'hidden'
+          overflow: 'visible'
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = 'scale(1.1)';
@@ -481,24 +811,7 @@ function App() {
               objectFit: 'cover'
             }}
           />
-          {hoveredIcon === 'Notion' && !isMobile && (
-            <div style={{
-              position: 'absolute',
-              bottom: '60px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              color: 'white',
-              padding: '4px 8px',
-              borderRadius: '4px',
-              fontSize: '12px',
-              whiteSpace: 'nowrap',
-              pointerEvents: 'none',
-              zIndex: '9999'
-            }}>
-              Notion
-            </div>
-          )}
+          <Tooltip text="Notion" show={hoveredIcon === 'Notion' && !isMobile} />
         </div>
 
         <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
@@ -508,7 +821,7 @@ function App() {
           borderRadius: '12px',
           cursor: 'pointer',
           transition: 'transform 0.2s ease',
-          overflow: 'hidden'
+          overflow: 'visible'
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = 'scale(1.1)';
@@ -528,24 +841,7 @@ function App() {
               objectFit: 'cover'
             }}
           />
-          {hoveredIcon === 'VS Code' && !isMobile && (
-            <div style={{
-              position: 'absolute',
-              bottom: '60px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              color: 'white',
-              padding: '4px 8px',
-              borderRadius: '4px',
-              fontSize: '12px',
-              whiteSpace: 'nowrap',
-              pointerEvents: 'none',
-              zIndex: '9999'
-            }}>
-              VS Code
-            </div>
-          )}
+          <Tooltip text="VS Code" show={hoveredIcon === 'VS Code' && !isMobile} />
         </div>
 
         <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
@@ -555,7 +851,7 @@ function App() {
           borderRadius: '12px',
           cursor: 'pointer',
           transition: 'transform 0.2s ease',
-          overflow: 'hidden'
+          overflow: 'visible'
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = 'scale(1.1)';
@@ -576,24 +872,7 @@ function App() {
               objectFit: 'cover'
             }}
           />
-          {hoveredIcon === 'Figma' && !isMobile && (
-            <div style={{
-              position: 'absolute',
-              bottom: '60px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              color: 'white',
-              padding: '4px 8px',
-              borderRadius: '4px',
-              fontSize: '12px',
-              whiteSpace: 'nowrap',
-              pointerEvents: 'none',
-              zIndex: '9999'
-            }}>
-              Figma
-            </div>
-          )}
+          <Tooltip text="Figma" show={hoveredIcon === 'Figma' && !isMobile} />
         </div>
 
         <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
@@ -603,7 +882,7 @@ function App() {
           borderRadius: '12px',
           cursor: 'pointer',
           transition: 'transform 0.2s ease',
-          overflow: 'hidden'
+          overflow: 'visible'
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = 'scale(1.1)';
@@ -624,24 +903,7 @@ function App() {
               objectFit: 'cover'
             }}
           />
-          {hoveredIcon === 'Spotify' && !isMobile && (
-            <div style={{
-              position: 'absolute',
-              bottom: '60px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              color: 'white',
-              padding: '4px 8px',
-              borderRadius: '4px',
-              fontSize: '12px',
-              whiteSpace: 'nowrap',
-              pointerEvents: 'none',
-              zIndex: '9999'
-            }}>
-              Spotify
-            </div>
-          )}
+          <Tooltip text="Spotify" show={hoveredIcon === 'Spotify' && !isMobile} />
         </div>
 
         <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
@@ -651,7 +913,7 @@ function App() {
           borderRadius: '12px',
           cursor: 'pointer',
           transition: 'transform 0.2s ease',
-          overflow: 'hidden'
+          overflow: 'visible'
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = 'scale(1.1)';
@@ -672,24 +934,7 @@ function App() {
               objectFit: 'cover'
             }}
           />
-          {hoveredIcon === 'Discord' && !isMobile && (
-            <div style={{
-              position: 'absolute',
-              bottom: '60px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              color: 'white',
-              padding: '4px 8px',
-              borderRadius: '4px',
-              fontSize: '12px',
-              whiteSpace: 'nowrap',
-              pointerEvents: 'none',
-              zIndex: '9999'
-            }}>
-              Discord
-            </div>
-          )}
+          <Tooltip text="Discord" show={hoveredIcon === 'Discord' && !isMobile} />
         </div>
 
         <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
@@ -699,7 +944,7 @@ function App() {
           borderRadius: '12px',
           cursor: 'pointer',
           transition: 'transform 0.2s ease',
-          overflow: 'hidden'
+          overflow: 'visible'
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = 'scale(1.1)';
@@ -719,24 +964,7 @@ function App() {
               objectFit: 'cover'
             }}
           />
-          {hoveredIcon === 'AI Tools' && !isMobile && (
-            <div style={{
-              position: 'absolute',
-              bottom: '60px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              color: 'white',
-              padding: '4px 8px',
-              borderRadius: '4px',
-              fontSize: '12px',
-              whiteSpace: 'nowrap',
-              pointerEvents: 'none',
-              zIndex: '9999'
-            }}>
-              AI Tools
-            </div>
-          )}
+          <Tooltip text="AI Tools" show={hoveredIcon === 'AI Tools' && !isMobile} />
         </div>
       </div>
 
@@ -886,7 +1114,7 @@ function App() {
             <div style={{
               width: '100%',
               borderRadius: '12px',
-              overflow: 'hidden'
+              overflow: 'visible'
             }}>
               <img 
                 src="/FigmaView.png" 
