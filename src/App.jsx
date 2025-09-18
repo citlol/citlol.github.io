@@ -207,13 +207,13 @@ const DesktopClock = ({ isMobile }) => {
   return (
     <div style={{
       position: 'absolute',
-      top: '20px',
-      right: '20px',
+      top: '10px',
+      right: '10px',
       backgroundColor: 'rgba(0, 0, 0, 0.7)',
       backdropFilter: 'blur(10px)',
       border: '1px solid rgba(255, 255, 255, 0.1)',
       borderRadius: '8px',
-      padding: '12px 16px',
+      padding: window.innerWidth <= 768 ? '8px 12px' : '12px 16px',
       color: 'white',
       textAlign: 'center',
       fontFamily: 'monospace',
@@ -221,7 +221,7 @@ const DesktopClock = ({ isMobile }) => {
       zIndex: 20
     }}>
       <div style={{
-        fontSize: '16px',
+        fontSize: window.innerWidth <= 768 ? '14px' : '16px',
         fontWeight: 'bold',
         marginBottom: '4px',
         textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
@@ -229,7 +229,7 @@ const DesktopClock = ({ isMobile }) => {
         {formatTime(time)}
       </div>
       <div style={{
-        fontSize: '12px',
+        fontSize: window.innerWidth <= 768 ? '10px' : '12px',
         opacity: 0.8,
         textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
       }}>
@@ -310,7 +310,8 @@ function App() {
         background: 'linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2a2a2a 100%)',
         fontFamily: 'monospace',
         position: 'relative',
-        overflow: 'hidden'
+        overflow: isMobile ? 'auto' : 'hidden',
+        padding: isMobile ? '10px' : '0'
       }}>
       <Stars />
       {/* Desktop Clock */}
@@ -326,13 +327,15 @@ function App() {
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: isMobile ? '95%' : '900px',
-        maxWidth: isMobile ? '400px' : 'none',
+        width: isMobile ? '95vw' : 'min(900px, 90vw)',
+        maxWidth: isMobile ? '100vw' : '95vw',
+        maxHeight: isMobile ? '80vh' : '85vh',
         backgroundColor: 'rgba(0, 0, 0, 0.85)',
         border: '1px solid rgba(255, 255, 255, 0.15)',
         borderRadius: '12px',
         boxShadow: '0 20px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1) inset',
-        backdropFilter: 'blur(20px)'
+        backdropFilter: 'blur(20px)',
+        overflow: 'hidden'
       }}>
         {/* Terminal Header */}
         <div style={{
@@ -355,11 +358,13 @@ function App() {
 
         {/* Terminal Content */}
         <div style={{
-          padding: '24px',
+          padding: isMobile ? '16px' : '24px',
           color: 'white',
-          fontSize: '14px',
-          minHeight: '400px',
-          lineHeight: '1.6'
+          fontSize: isMobile ? '13px' : '14px',
+          minHeight: isMobile ? '300px' : '400px',
+          maxHeight: isMobile ? '60vh' : '70vh',
+          lineHeight: '1.6',
+          overflowY: 'auto'
         }}>
           <div style={{ color: '#888', marginBottom: '16px' }}>
             citlol@portfolio ~ %
