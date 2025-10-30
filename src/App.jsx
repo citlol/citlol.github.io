@@ -93,14 +93,16 @@ const Tooltip = ({ text, show }) => {
   );
 };
 
-const DraggableFolder = ({ name, initialX, initialY, isMobile }) => {
+const DraggableFolder = ({ name, initialX, initialY, isMobile, onDoubleClick }) => {
   const [position, setPosition] = useState({ x: initialX, y: initialY });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [dragMoved, setDragMoved] = useState(false);
 
   const handleMouseDown = (e) => {
     if (isMobile) return;
     setIsDragging(true);
+    setDragMoved(false);
     setDragStart({
       x: e.clientX - position.x,
       y: e.clientY - position.y
@@ -109,6 +111,7 @@ const DraggableFolder = ({ name, initialX, initialY, isMobile }) => {
 
   const handleMouseMove = (e) => {
     if (!isDragging) return;
+    setDragMoved(true);
     setPosition({
       x: e.clientX - dragStart.x,
       y: e.clientY - dragStart.y
@@ -117,6 +120,12 @@ const DraggableFolder = ({ name, initialX, initialY, isMobile }) => {
 
   const handleMouseUp = () => {
     setIsDragging(false);
+  };
+
+  const handleDoubleClick = () => {
+    if (!dragMoved && onDoubleClick) {
+      onDoubleClick();
+    }
   };
 
   useEffect(() => {
@@ -147,6 +156,7 @@ const DraggableFolder = ({ name, initialX, initialY, isMobile }) => {
         transition: isDragging ? 'none' : 'transform 0.2s ease'
       }}
       onMouseDown={handleMouseDown}
+      onDoubleClick={handleDoubleClick}
       onMouseEnter={(e) => {
         if (!isDragging) e.currentTarget.style.transform = 'scale(1.05)';
       }}
@@ -253,6 +263,11 @@ function App() {
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [showTerminal, setShowTerminal] = useState(true);
   const [isInitializing, setIsInitializing] = useState(true);
+  const [openFolders, setOpenFolders] = useState({
+    personal: false,
+    schoolWork: false,
+    mielPomodoro: false
+  });
 
   const handleNavClick = (section) => {
     setActiveSection(section);
@@ -337,6 +352,15 @@ function App() {
     }, 100);
   };
 
+  // Folder handlers
+  const openFolder = (folderName) => {
+    setOpenFolders(prev => ({ ...prev, [folderName]: true }));
+  };
+
+  const closeFolder = (folderName) => {
+    setOpenFolders(prev => ({ ...prev, [folderName]: false }));
+  };
+
   // Initialization timer
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -383,9 +407,27 @@ function App() {
       {/* Desktop Clock */}
       <DesktopClock isMobile={isMobile} />
       {/* Desktop Folders */}
-      <DraggableFolder name="Personal" initialX={20} initialY={20} isMobile={isMobile} />
-      <DraggableFolder name="School Work" initialX={120} initialY={20} isMobile={isMobile} />
-      <DraggableFolder name="Miel Pomodoro" initialX={20} initialY={120} isMobile={isMobile} />
+      <DraggableFolder
+        name="Personal"
+        initialX={20}
+        initialY={20}
+        isMobile={isMobile}
+        onDoubleClick={() => openFolder('personal')}
+      />
+      <DraggableFolder
+        name="School Work"
+        initialX={120}
+        initialY={20}
+        isMobile={isMobile}
+        onDoubleClick={() => openFolder('schoolWork')}
+      />
+      <DraggableFolder
+        name="Miel Pomodoro"
+        initialX={20}
+        initialY={120}
+        isMobile={isMobile}
+        onDoubleClick={() => openFolder('mielPomodoro')}
+      />
 
       {/* Terminal Window */}
       {showTerminal && (
@@ -1332,7 +1374,7 @@ function App() {
         >
           <div style={{ position: 'relative' }}>
             {/* Close button */}
-            <button 
+            <button
               onClick={closeDiscordModal}
               style={{
                 position: 'absolute',
@@ -1356,8 +1398,8 @@ function App() {
             </button>
 
             {/* Just the SVG, no modal container */}
-            <img 
-              src="/DiscordProfile.svg" 
+            <img
+              src="/DiscordProfile.svg"
               alt="Discord Profile"
               style={{
                 maxWidth: '500px',
@@ -1367,6 +1409,184 @@ function App() {
               }}
               onClick={(e) => e.stopPropagation()}
             />
+          </div>
+        </div>
+      )}
+
+      {/* Folder Windows */}
+      {openFolders.personal && (
+        <div style={{
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: isMobile ? '95vw' : '600px',
+          maxHeight: isMobile ? '80vh' : '70vh',
+          backgroundColor: 'rgba(0, 0, 0, 0.95)',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          borderRadius: '12px',
+          boxShadow: '0 20px 40px rgba(0,0,0,0.7)',
+          backdropFilter: 'blur(20px)',
+          overflow: 'hidden',
+          zIndex: 200
+        }}>
+          {/* Folder Header */}
+          <div style={{
+            backgroundColor: 'rgba(51, 51, 51, 0.9)',
+            padding: '12px 16px',
+            borderTopLeftRadius: '12px',
+            borderTopRightRadius: '12px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+          }}>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <div
+                onClick={() => closeFolder('personal')}
+                style={{
+                  width: '12px',
+                  height: '12px',
+                  borderRadius: '50%',
+                  backgroundColor: '#ff5f57',
+                  cursor: 'pointer',
+                  transition: 'transform 0.2s ease'
+                }}
+                onMouseEnter={(e) => e.target.style.transform = 'scale(1.2)'}
+                onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+              ></div>
+              <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ffbd2e' }}></div>
+              <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#28ca42' }}></div>
+            </div>
+            <span style={{ color: '#888', fontSize: '12px' }}>Personal</span>
+          </div>
+
+          {/* Folder Content */}
+          <div style={{
+            padding: '24px',
+            color: 'white',
+            overflowY: 'auto',
+            maxHeight: isMobile ? 'calc(80vh - 60px)' : 'calc(70vh - 60px)'
+          }}>
+            {/* Your content here - no placeholder text */}
+          </div>
+        </div>
+      )}
+
+      {openFolders.schoolWork && (
+        <div style={{
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: isMobile ? '95vw' : '600px',
+          maxHeight: isMobile ? '80vh' : '70vh',
+          backgroundColor: 'rgba(0, 0, 0, 0.95)',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          borderRadius: '12px',
+          boxShadow: '0 20px 40px rgba(0,0,0,0.7)',
+          backdropFilter: 'blur(20px)',
+          overflow: 'hidden',
+          zIndex: 200
+        }}>
+          {/* Folder Header */}
+          <div style={{
+            backgroundColor: 'rgba(51, 51, 51, 0.9)',
+            padding: '12px 16px',
+            borderTopLeftRadius: '12px',
+            borderTopRightRadius: '12px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+          }}>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <div
+                onClick={() => closeFolder('schoolWork')}
+                style={{
+                  width: '12px',
+                  height: '12px',
+                  borderRadius: '50%',
+                  backgroundColor: '#ff5f57',
+                  cursor: 'pointer',
+                  transition: 'transform 0.2s ease'
+                }}
+                onMouseEnter={(e) => e.target.style.transform = 'scale(1.2)'}
+                onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+              ></div>
+              <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ffbd2e' }}></div>
+              <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#28ca42' }}></div>
+            </div>
+            <span style={{ color: '#888', fontSize: '12px' }}>School Work</span>
+          </div>
+
+          {/* Folder Content */}
+          <div style={{
+            padding: '24px',
+            color: 'white',
+            overflowY: 'auto',
+            maxHeight: isMobile ? 'calc(80vh - 60px)' : 'calc(70vh - 60px)'
+          }}>
+            {/* Your content here - no placeholder text */}
+          </div>
+        </div>
+      )}
+
+      {openFolders.mielPomodoro && (
+        <div style={{
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: isMobile ? '95vw' : '600px',
+          maxHeight: isMobile ? '80vh' : '70vh',
+          backgroundColor: 'rgba(0, 0, 0, 0.95)',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          borderRadius: '12px',
+          boxShadow: '0 20px 40px rgba(0,0,0,0.7)',
+          backdropFilter: 'blur(20px)',
+          overflow: 'hidden',
+          zIndex: 200
+        }}>
+          {/* Folder Header */}
+          <div style={{
+            backgroundColor: 'rgba(51, 51, 51, 0.9)',
+            padding: '12px 16px',
+            borderTopLeftRadius: '12px',
+            borderTopRightRadius: '12px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+          }}>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <div
+                onClick={() => closeFolder('mielPomodoro')}
+                style={{
+                  width: '12px',
+                  height: '12px',
+                  borderRadius: '50%',
+                  backgroundColor: '#ff5f57',
+                  cursor: 'pointer',
+                  transition: 'transform 0.2s ease'
+                }}
+                onMouseEnter={(e) => e.target.style.transform = 'scale(1.2)'}
+                onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+              ></div>
+              <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ffbd2e' }}></div>
+              <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#28ca42' }}></div>
+            </div>
+            <span style={{ color: '#888', fontSize: '12px' }}>Miel Pomodoro</span>
+          </div>
+
+          {/* Folder Content */}
+          <div style={{
+            padding: '24px',
+            color: 'white',
+            overflowY: 'auto',
+            maxHeight: isMobile ? 'calc(80vh - 60px)' : 'calc(70vh - 60px)'
+          }}>
+            {/* Your content here - no placeholder text */}
           </div>
         </div>
       )}
