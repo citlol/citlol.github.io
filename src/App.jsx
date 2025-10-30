@@ -248,6 +248,11 @@ function App() {
   const [showDiscordModal, setShowDiscordModal] = useState(false);
   const [hoveredIcon, setHoveredIcon] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [terminalPosition, setTerminalPosition] = useState({ x: 0, y: 0 });
+  const [isDraggingTerminal, setIsDraggingTerminal] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [showTerminal, setShowTerminal] = useState(true);
+  const [isInitializing, setIsInitializing] = useState(true);
 
   const handleNavClick = (section) => {
     setActiveSection(section);
@@ -291,15 +296,76 @@ function App() {
     setShowDiscordModal(false);
   };
 
+  // Terminal drag handlers
+  const handleTerminalMouseDown = (e) => {
+    if (isMobile) return;
+    // Only drag if clicking on the header area
+    if (e.target.closest('.terminal-header')) {
+      setIsDraggingTerminal(true);
+      setDragStart({
+        x: e.clientX - terminalPosition.x,
+        y: e.clientY - terminalPosition.y
+      });
+    }
+  };
+
+  const handleTerminalMouseMove = (e) => {
+    if (!isDraggingTerminal) return;
+    setTerminalPosition({
+      x: e.clientX - dragStart.x,
+      y: e.clientY - dragStart.y
+    });
+  };
+
+  const handleTerminalMouseUp = () => {
+    setIsDraggingTerminal(false);
+  };
+
+  // Close terminal handler
+  const closeTerminal = () => {
+    setShowTerminal(false);
+    // Reset and reopen after a brief moment
+    setTimeout(() => {
+      setShowTerminal(true);
+      setIsInitializing(true);
+      setActiveSection('home');
+      setTerminalPosition({ x: 0, y: 0 });
+      // Hide initializing text after 2 seconds
+      setTimeout(() => {
+        setIsInitializing(false);
+      }, 2000);
+    }, 100);
+  };
+
+  // Initialization timer
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsInitializing(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [showTerminal]);
+
+  // Terminal dragging effect
+  useEffect(() => {
+    if (isDraggingTerminal) {
+      window.addEventListener('mousemove', handleTerminalMouseMove);
+      window.addEventListener('mouseup', handleTerminalMouseUp);
+      return () => {
+        window.removeEventListener('mousemove', handleTerminalMouseMove);
+        window.removeEventListener('mouseup', handleTerminalMouseUp);
+      };
+    }
+  }, [isDraggingTerminal, dragStart]);
+
   // Mobile detection
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    
+
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
@@ -322,34 +388,58 @@ function App() {
       <DraggableFolder name="Miel Pomodoro" initialX={20} initialY={120} isMobile={isMobile} />
 
       {/* Terminal Window */}
-      <div className={isMobile ? 'terminal-window-mobile' : ''} style={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: isMobile ? '95vw' : 'min(900px, 90vw)',
-        maxWidth: isMobile ? '100vw' : '95vw',
-        maxHeight: isMobile ? '80vh' : '85vh',
-        backgroundColor: 'rgba(0, 0, 0, 0.85)',
-        border: '1px solid rgba(255, 255, 255, 0.15)',
-        borderRadius: '12px',
-        boxShadow: '0 20px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1) inset',
-        backdropFilter: 'blur(20px)',
-        overflow: 'hidden'
-      }}>
+      {showTerminal && (
+      <div
+        className={isMobile ? 'terminal-window-mobile' : ''}
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: `translate(calc(-50% + ${terminalPosition.x}px), calc(-50% + ${terminalPosition.y}px))`,
+          width: isMobile ? '95vw' : 'min(900px, 90vw)',
+          maxWidth: isMobile ? '100vw' : '95vw',
+          maxHeight: isMobile ? '80vh' : '85vh',
+          backgroundColor: 'rgba(0, 0, 0, 0.85)',
+          border: '1px solid rgba(255, 255, 255, 0.15)',
+          borderRadius: '12px',
+          boxShadow: '0 20px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1) inset',
+          backdropFilter: 'blur(20px)',
+          overflow: 'hidden',
+          zIndex: 100,
+          cursor: isDraggingTerminal ? 'grabbing' : 'default'
+        }}
+        onMouseDown={handleTerminalMouseDown}
+      >
         {/* Terminal Header */}
-        <div style={{
-          backgroundColor: 'rgba(51, 51, 51, 0.8)',
-          padding: '12px 16px',
-          borderTopLeftRadius: '12px',
-          borderTopRightRadius: '12px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
-        }}>
+        <div
+          className="terminal-header"
+          style={{
+            backgroundColor: 'rgba(51, 51, 51, 0.8)',
+            padding: '12px 16px',
+            borderTopLeftRadius: '12px',
+            borderTopRightRadius: '12px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+            cursor: isDraggingTerminal ? 'grabbing' : 'grab',
+            userSelect: 'none'
+          }}
+        >
           <div style={{ display: 'flex', gap: '8px' }}>
-            <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ff5f57' }}></div>
+            <div
+              onClick={closeTerminal}
+              style={{
+                width: '12px',
+                height: '12px',
+                borderRadius: '50%',
+                backgroundColor: '#ff5f57',
+                cursor: 'pointer',
+                transition: 'transform 0.2s ease'
+              }}
+              onMouseEnter={(e) => e.target.style.transform = 'scale(1.2)'}
+              onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+            ></div>
             <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ffbd2e' }}></div>
             <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#28ca42' }}></div>
           </div>
@@ -366,11 +456,17 @@ function App() {
           lineHeight: '1.6',
           overflowY: 'auto'
         }}>
-          <div style={{ color: '#888', marginBottom: '16px' }}>
-            citlol@portfolio ~ %
-          </div>
-          
-          {activeSection === 'home' && (
+          {isInitializing ? (
+            <div style={{ color: '#4ade80', marginBottom: '16px' }}>
+              Initializing<span className="typing-dots">...</span>
+            </div>
+          ) : (
+            <>
+              <div style={{ color: '#888', marginBottom: '16px' }}>
+                citlol@portfolio ~ %
+              </div>
+
+              {activeSection === 'home' && (
             <div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
                 <button 
@@ -694,12 +790,12 @@ function App() {
                   </div>
                 </div>
               </div>
-              <button 
+              <button
                 onClick={() => handleNavClick('home')}
-                style={{ 
-                  background: 'none', 
-                  border: 'none', 
-                  color: '#4a9eff', 
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#4a9eff',
                   cursor: 'pointer',
                   fontSize: '12px',
                   fontFamily: 'monospace'
@@ -709,8 +805,11 @@ function App() {
               </button>
             </div>
           )}
+            </>
+          )}
         </div>
       </div>
+      )}
 
       {/* Bottom Dock */}
       <div className={isMobile ? 'mobile-dock' : ''} style={{
@@ -1194,26 +1293,20 @@ function App() {
               ⚔️ League of Legends Profile
             </h3>
 
-            {/* LoL Profile Content - You can recreate the homepage layout here */}
+            {/* LoL Profile Content */}
             <div style={{
               width: '100%',
               minHeight: '400px',
               backgroundColor: '#111',
-              borderRadius: '12px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#666',
-              fontSize: '14px'
+              borderRadius: '12px'
             }}>
-              Recreate your LoL homepage/profile here
             </div>
 
-            <p style={{ 
-              fontSize: '12px', 
-              color: '#999', 
-              marginTop: '10px', 
-              textAlign: 'center' 
+            <p style={{
+              fontSize: '12px',
+              color: '#999',
+              marginTop: '10px',
+              textAlign: 'center'
             }}>
               Click outside to close
             </p>

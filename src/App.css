@@ -657,3 +657,20 @@ section[role="button"]:focus {
   outline: 2px solid rgba(255, 255, 255, 0.3);
   outline-offset: -2px;
 }
+
+/* Typing dots animation for initializing */
+.typing-dots {
+  animation: typing-dots 1.5s infinite;
+}
+
+@keyframes typing-dots {
+  0%, 20% {
+    content: '.';
+  }
+  40% {
+    content: '..';
+  }
+  60%, 100% {
+    content: '...';
+  }
+}
