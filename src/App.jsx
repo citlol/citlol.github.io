@@ -1183,7 +1183,7 @@ function App() {
 
             {/* Spotify Embed - Replace with your playlist */}
             <iframe 
-              src="https://open.spotify.com/embed/playlist/3zDiyeiXDga7ZeSspF85mn?utm_source=generator&theme=0" 
+              src="https://embed.music.apple.com/us/playlist/%EC%B2%AD%EC%B6%98%EC%9D%80-%EB%B0%94%EB%A1%9C-%EC%A7%80%EA%B8%88/pl.u-JPAZZlGtJa55XR" 
               width="100%" 
               height="380" 
               frameBorder="0" 
