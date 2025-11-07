@@ -251,8 +251,8 @@ const DesktopClock = ({ isMobile }) => {
 
 function App() {
   const [activeSection, setActiveSection] = useState('home');
-  const [showSpotifyModal, setShowSpotifyModal] = useState(false);
-  const [isSpotifyLoading, setIsSpotifyLoading] = useState(true);
+  const [showAppleMusicModal, setShowAppleMusicModal] = useState(false);
+  const [isAppleMusicLoading, setIsAppleMusicLoading] = useState(true);
   const [showFigmaModal, setShowFigmaModal] = useState(false);
   const [showLoLModal, setShowLoLModal] = useState(false);
   const [showDiscordModal, setShowDiscordModal] = useState(false);
@@ -273,18 +273,18 @@ function App() {
     setActiveSection(section);
   };
 
-  const openSpotifyModal = () => {
-    setShowSpotifyModal(true);
-    setIsSpotifyLoading(true);
+  const openAppleMusicModal = () => {
+    setShowAppleMusicModal(true);
+    setIsAppleMusicLoading(true);
     // Set a timeout to hide loading after 3 seconds regardless
     setTimeout(() => {
-      setIsSpotifyLoading(false);
+      setIsAppleMusicLoading(false);
     }, 3000);
   };
 
-  const closeSpotifyModal = () => {
-    setShowSpotifyModal(false);
-    setIsSpotifyLoading(true);
+  const closeAppleMusicModal = () => {
+    setShowAppleMusicModal(false);
+    setIsAppleMusicLoading(true);
   };
 
   const openFigmaModal = () => {
@@ -1032,24 +1032,24 @@ function App() {
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = 'scale(1.1)';
-          setHoveredIcon('Spotify');
+          setHoveredIcon('Apple Music');
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.transform = 'scale(1)';
           setHoveredIcon(null);
         }}
-        onClick={openSpotifyModal}
+        onClick={openAppleMusicModal}
         >
-          <img 
-            src="/spotifyicon.png" 
-            alt="Spotify"
+          <img
+            src="/Apple_Music_Icon_blk_sm_073120.svg"
+            alt="Apple Music"
             style={{
               width: '100%',
               height: '100%',
               objectFit: 'cover'
             }}
           />
-          <Tooltip text="Spotify" show={hoveredIcon === 'Spotify' && !isMobile} />
+          <Tooltip text="Apple Music" show={hoveredIcon === 'Apple Music' && !isMobile} />
         </div>
 
         <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
@@ -1114,8 +1114,8 @@ function App() {
         </div>
       </div>
 
-      {/* Spotify Modal */}
-      {showSpotifyModal && (
+      {/* Apple Music Modal */}
+      {showAppleMusicModal && (
         <div style={{
           position: 'fixed',
           top: '0',
@@ -1128,7 +1128,7 @@ function App() {
           justifyContent: 'center',
           zIndex: '1000'
         }}
-        onClick={closeSpotifyModal}
+        onClick={closeAppleMusicModal}
         >
           <div className={isMobile ? 'mobile-modal' : ''} style={{
             backgroundColor: '#000000',
@@ -1144,8 +1144,8 @@ function App() {
           onClick={(e) => e.stopPropagation()}
           >
             {/* Close button */}
-            <button 
-              onClick={closeSpotifyModal}
+            <button
+              onClick={closeAppleMusicModal}
               style={{
                 position: 'absolute',
                 top: '10px',
@@ -1161,11 +1161,11 @@ function App() {
             </button>
 
             <h3 style={{ marginTop: '0', marginBottom: '20px', color: '#999' }}>
-              🎵 My Spotify Playlist
+              🎵 My Apple Music Playlist
             </h3>
 
             {/* Loading dots */}
-            {isSpotifyLoading && (
+            {isAppleMusicLoading && (
               <div style={{
                 display: 'flex',
                 justifyContent: 'center',
@@ -1181,27 +1181,27 @@ function App() {
             )}
 
 
-            {/* Spotify Embed - Replace with your playlist */}
-            <iframe 
-              src="https://embed.music.apple.com/us/playlist/%EC%B2%AD%EC%B6%98%EC%9D%80-%EB%B0%94%EB%A1%9C-%EC%A7%80%EA%B8%88/pl.u-JPAZZlGtJa55XR" 
-              width="100%" 
-              height="380" 
-              frameBorder="0" 
-              allowTransparency="true" 
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+            {/* Apple Music Embed */}
+            <iframe
+              src="https://embed.music.apple.com/us/playlist/%EC%B2%AD%EC%B6%98%EC%9D%80-%EB%B0%94%EB%A1%9C-%EC%A7%80%EA%B8%88/pl.u-JPAZZlGtJa55XR"
+              width="100%"
+              height="380"
+              frameBorder="0"
+              allowTransparency="true"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
               loading="lazy"
-              style={{ 
+              style={{
                 borderRadius: '12px',
-                display: isSpotifyLoading ? 'none' : 'block'
+                display: isAppleMusicLoading ? 'none' : 'block'
               }}
-              onLoad={() => setIsSpotifyLoading(false)}
+              onLoad={() => setIsAppleMusicLoading(false)}
             ></iframe>
 
-            <p style={{ 
-              fontSize: '12px', 
-              color: '#999', 
-              marginTop: '10px', 
-              textAlign: 'center' 
+            <p style={{
+              fontSize: '12px',
+              color: '#999',
+              marginTop: '10px',
+              textAlign: 'center'
             }}>
               Click outside to close
             </p>
