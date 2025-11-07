@@ -624,7 +624,7 @@ function App() {
                   border: '1px solid rgba(74, 222, 128, 0.2)'
                 }}>
                   <div style={{ color: '#4ade80', fontWeight: 'bold', marginBottom: '4px' }}>📁 Pancake</div>
-                  <div style={{ color: '#9ca3af', fontSize: '12px' }}>Budgeting app - React, Node.js, MongoDB</div>
+                  <div style={{ color: '#9ca3af', fontSize: '12px' }}>Budgeting app - Swift</div>
                 </div>
                 <div style={{
                   padding: '12px',
@@ -634,7 +634,7 @@ function App() {
                   border: '1px solid rgba(96, 165, 250, 0.2)'
                 }}>
                   <div style={{ color: '#60a5fa', fontWeight: 'bold', marginBottom: '4px' }}>📁 Miel-Pomodoro</div>
-                  <div style={{ color: '#9ca3af', fontSize: '12px' }}>Productivity timer - JavaScript, CSS</div>
+                  <div style={{ color: '#9ca3af', fontSize: '12px' }}>Productivity timer - Swift, SwitfUI</div>
                 </div>
                 <div style={{
                   padding: '12px',
@@ -644,7 +644,7 @@ function App() {
                   border: '1px solid rgba(245, 158, 11, 0.2)'
                 }}>
                   <div style={{ color: '#f59e0b', fontWeight: 'bold', marginBottom: '4px' }}>📁 Star-Wars-All-In-Game</div>
-                  <div style={{ color: '#9ca3af', fontSize: '12px' }}>Interactive game - HTML5, Canvas</div>
+                  <div style={{ color: '#9ca3af', fontSize: '12px' }}>Interactive game - Java</div>
                 </div>
               </div>
               <button 
