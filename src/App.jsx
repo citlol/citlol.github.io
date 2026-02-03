@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
-const Stars = () => {
+const Stars = ({ theme }) => {
   const [stars, setStars] = useState([]);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const Stars = () => {
             top: `${star.y}%`,
             width: `${star.size}px`,
             height: `${star.size}px`,
-            backgroundColor: 'white',
+            backgroundColor: theme === 'dark' ? 'white' : '#94a3b8',
             borderRadius: '50%',
             opacity: star.opacity,
             animation: `twinkle ${star.animationDuration}s ease-in-out infinite`,
@@ -93,7 +93,7 @@ const Tooltip = ({ text, show }) => {
   );
 };
 
-const DraggableFolder = ({ name, initialX, initialY, isMobile, onDoubleClick }) => {
+const DraggableFolder = ({ name, initialX, initialY, isMobile, onDoubleClick, theme }) => {
   const [position, setPosition] = useState({ x: initialX, y: initialY });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
@@ -174,8 +174,8 @@ const DraggableFolder = ({ name, initialX, initialY, isMobile, onDoubleClick }) 
         }}
       />
       <span style={{
-        color: 'white',
-        textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
+        color: theme === 'dark' ? 'white' : '#1f2937',
+        textShadow: theme === 'dark' ? '1px 1px 2px rgba(0,0,0,0.8)' : '1px 1px 2px rgba(255,255,255,0.8)',
         pointerEvents: 'none'
       }}>
         {name}
@@ -184,7 +184,7 @@ const DraggableFolder = ({ name, initialX, initialY, isMobile, onDoubleClick }) 
   );
 };
 
-const DesktopClock = ({ isMobile }) => {
+const DesktopClock = ({ isMobile, theme }) => {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -219,29 +219,30 @@ const DesktopClock = ({ isMobile }) => {
       position: 'absolute',
       top: '10px',
       right: '10px',
-      backgroundColor: 'rgba(0, 0, 0, 0.7)',
+      backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.7)' : 'rgba(255, 255, 255, 0.9)',
       backdropFilter: 'blur(10px)',
-      border: '1px solid rgba(255, 255, 255, 0.1)',
+      border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)',
       borderRadius: '8px',
       padding: window.innerWidth <= 768 ? '8px 12px' : '12px 16px',
-      color: 'white',
+      color: theme === 'dark' ? 'white' : '#1f2937',
       textAlign: 'center',
       fontFamily: 'monospace',
       userSelect: 'none',
-      zIndex: 20
+      zIndex: 20,
+      transition: 'all 0.3s ease'
     }}>
       <div style={{
         fontSize: window.innerWidth <= 768 ? '14px' : '16px',
         fontWeight: 'bold',
         marginBottom: '4px',
-        textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
+        textShadow: theme === 'dark' ? '1px 1px 2px rgba(0,0,0,0.8)' : 'none'
       }}>
         {formatTime(time)}
       </div>
       <div style={{
         fontSize: window.innerWidth <= 768 ? '10px' : '12px',
         opacity: 0.8,
-        textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
+        textShadow: theme === 'dark' ? '1px 1px 2px rgba(0,0,0,0.8)' : 'none'
       }}>
         {formatDate(time)}
       </div>
@@ -263,11 +264,23 @@ function App() {
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [showTerminal, setShowTerminal] = useState(true);
   const [isInitializing, setIsInitializing] = useState(true);
+  const [theme, setTheme] = useState('dark');
   const [openFolders, setOpenFolders] = useState({
     personal: false,
     schoolWork: false,
     mielPomodoro: false
   });
+
+  // Theme toggle handler
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
+
+  // Apply theme to HTML element
+  useEffect(() => {
+    document.documentElement.classList.remove('dark', 'light');
+    document.documentElement.classList.add(theme);
+  }, [theme]);
 
   const handleNavClick = (section) => {
     setActiveSection(section);
@@ -397,15 +410,18 @@ function App() {
     <>
       <div style={{
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2a2a2a 100%)',
+        background: theme === 'dark'
+          ? 'linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2a2a2a 100%)'
+          : 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%)',
         fontFamily: 'monospace',
         position: 'relative',
         overflow: isMobile ? 'auto' : 'hidden',
-        padding: isMobile ? '10px' : '0'
+        padding: isMobile ? '10px' : '0',
+        transition: 'background 0.3s ease'
       }}>
-      <Stars />
+      <Stars theme={theme} />
       {/* Desktop Clock */}
-      <DesktopClock isMobile={isMobile} />
+      <DesktopClock isMobile={isMobile} theme={theme} />
       {/* Desktop Folders */}
       <DraggableFolder
         name="Personal"
@@ -413,6 +429,7 @@ function App() {
         initialY={20}
         isMobile={isMobile}
         onDoubleClick={() => openFolder('personal')}
+        theme={theme}
       />
       <DraggableFolder
         name="School Work"
@@ -420,6 +437,7 @@ function App() {
         initialY={20}
         isMobile={isMobile}
         onDoubleClick={() => openFolder('schoolWork')}
+        theme={theme}
       />
       <DraggableFolder
         name="Miel Pomodoro"
@@ -427,6 +445,7 @@ function App() {
         initialY={120}
         isMobile={isMobile}
         onDoubleClick={() => openFolder('mielPomodoro')}
+        theme={theme}
       />
 
       {/* Terminal Window */}
@@ -441,10 +460,12 @@ function App() {
           width: isMobile ? '95vw' : 'min(900px, 90vw)',
           maxWidth: isMobile ? '100vw' : '95vw',
           maxHeight: isMobile ? '80vh' : '85vh',
-          backgroundColor: 'rgba(0, 0, 0, 0.85)',
-          border: '1px solid rgba(255, 255, 255, 0.15)',
+          backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.85)' : 'rgba(255, 255, 255, 0.95)',
+          border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.1)',
           borderRadius: '12px',
-          boxShadow: '0 20px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1) inset',
+          boxShadow: theme === 'dark'
+            ? '0 20px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1) inset'
+            : '0 20px 40px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05) inset',
           backdropFilter: 'blur(20px)',
           overflow: 'hidden',
           zIndex: 100,
@@ -456,14 +477,14 @@ function App() {
         <div
           className="terminal-header"
           style={{
-            backgroundColor: 'rgba(51, 51, 51, 0.8)',
+            backgroundColor: theme === 'dark' ? 'rgba(51, 51, 51, 0.8)' : 'rgba(229, 231, 235, 0.9)',
             padding: '12px 16px',
             borderTopLeftRadius: '12px',
             borderTopRightRadius: '12px',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+            borderBottom: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)',
             cursor: isDraggingTerminal ? 'grabbing' : 'grab',
             userSelect: 'none'
           }}
@@ -485,13 +506,39 @@ function App() {
             <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ffbd2e' }}></div>
             <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#28ca42' }}></div>
           </div>
-          <span style={{ color: '#888', fontSize: '12px' }}>citlol@portfolio</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ color: '#888', fontSize: '12px' }}>citlol@portfolio</span>
+            <button
+              onClick={toggleTheme}
+              style={{
+                background: 'none',
+                border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid rgba(0, 0, 0, 0.2)',
+                borderRadius: '6px',
+                padding: '4px 8px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                fontSize: '12px',
+                color: theme === 'dark' ? '#fbbf24' : '#6366f1',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = 'transparent';
+              }}
+            >
+              {theme === 'dark' ? '☀️' : '🌙'}
+            </button>
+          </div>
         </div>
 
         {/* Terminal Content */}
         <div style={{
           padding: isMobile ? '16px' : '24px',
-          color: 'white',
+          color: theme === 'dark' ? 'white' : '#1f2937',
           fontSize: isMobile ? '13px' : '14px',
           minHeight: isMobile ? '300px' : '400px',
           maxHeight: isMobile ? '60vh' : '70vh',
@@ -499,24 +546,24 @@ function App() {
           overflowY: 'auto'
         }}>
           {isInitializing ? (
-            <div style={{ color: '#4ade80', marginBottom: '16px' }}>
+            <div style={{ color: theme === 'dark' ? '#4ade80' : '#16a34a', marginBottom: '16px' }}>
               Initializing<span className="typing-dots">...</span>
             </div>
           ) : (
             <>
-              <div style={{ color: '#888', marginBottom: '16px' }}>
+              <div style={{ color: theme === 'dark' ? '#888' : '#6b7280', marginBottom: '16px' }}>
                 citlol@portfolio ~ %
               </div>
 
               {activeSection === 'home' && (
             <div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
-                <button 
+                <button
                   onClick={() => handleNavClick('about')}
-                  style={{ 
-                    background: 'none', 
-                    border: 'none', 
-                    color: 'white', 
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: theme === 'dark' ? 'white' : '#1f2937',
                     cursor: 'pointer',
                     textAlign: 'left',
                     fontSize: '14px',
@@ -525,12 +572,12 @@ function App() {
                 >
                   about.md
                 </button>
-                <button 
+                <button
                   onClick={() => handleNavClick('projects')}
-                  style={{ 
-                    background: 'none', 
-                    border: 'none', 
-                    color: 'white', 
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: theme === 'dark' ? 'white' : '#1f2937',
                     cursor: 'pointer',
                     textAlign: 'left',
                     fontSize: '14px',
@@ -539,12 +586,12 @@ function App() {
                 >
                   projects
                 </button>
-                <button 
+                <button
                   onClick={() => handleNavClick('contact')}
-                  style={{ 
-                    background: 'none', 
-                    border: 'none', 
-                    color: 'white', 
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: theme === 'dark' ? 'white' : '#1f2937',
                     cursor: 'pointer',
                     textAlign: 'left',
                     fontSize: '14px',
@@ -553,12 +600,12 @@ function App() {
                 >
                   contact.sh
                 </button>
-                <button 
+                <button
                   onClick={() => handleNavClick('skills')}
-                  style={{ 
-                    background: 'none', 
-                    border: 'none', 
-                    color: 'white', 
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: theme === 'dark' ? 'white' : '#1f2937',
                     cursor: 'pointer',
                     textAlign: 'left',
                     fontSize: '14px',
@@ -568,7 +615,7 @@ function App() {
                   skills.config
                 </button>
               </div>
-              <div style={{ color: '#888' }}>
+              <div style={{ color: theme === 'dark' ? '#888' : '#6b7280' }}>
                 citlol@portfolio ~ % ■
               </div>
             </div>
@@ -576,11 +623,11 @@ function App() {
 
           {activeSection === 'about' && (
             <div>
-              <div style={{ color: '#888', marginBottom: '16px' }}>
+              <div style={{ color: theme === 'dark' ? '#888' : '#6b7280', marginBottom: '16px' }}>
                 citlol@portfolio ~/about % cat about.md
               </div>
               <div style={{ marginBottom: '20px' }}>
-                <h3 style={{ color: '#4ade80', marginBottom: '16px', fontSize: '18px' }}># About Me</h3>
+                <h3 style={{ color: theme === 'dark' ? '#4ade80' : '#16a34a', marginBottom: '16px', fontSize: '18px' }}># About Me</h3>
                 <div style={{ marginBottom: '12px' }}>
                   <span style={{ color: '#60a5fa' }}>👨‍💻</span> Computer Science Student & Full-Stack Developer
                 </div>
@@ -612,7 +659,7 @@ function App() {
 
           {activeSection === 'projects' && (
             <div>
-              <div style={{ color: '#888', marginBottom: '16px' }}>
+              <div style={{ color: theme === 'dark' ? '#888' : '#6b7280', marginBottom: '16px' }}>
                 citlol@portfolio ~/projects % ls -la
               </div>
               <div style={{ marginBottom: '20px' }}>
@@ -665,7 +712,7 @@ function App() {
 
           {activeSection === 'contact' && (
             <div>
-              <div style={{ color: '#888', marginBottom: '16px' }}>
+              <div style={{ color: theme === 'dark' ? '#888' : '#6b7280', marginBottom: '16px' }}>
                 citlol@portfolio ~/contact % ./contact.sh
               </div>
               <div style={{ marginBottom: '20px' }}>
@@ -776,7 +823,7 @@ function App() {
 
           {activeSection === 'skills' && (
             <div>
-              <div style={{ color: '#888', marginBottom: '16px' }}>
+              <div style={{ color: theme === 'dark' ? '#888' : '#6b7280', marginBottom: '16px' }}>
                 citlol@portfolio ~/skills % cat skills.config
               </div>
               <div style={{ marginBottom: '20px' }}>
@@ -859,15 +906,16 @@ function App() {
         bottom: isMobile ? '10px' : '20px',
         left: '50%',
         transform: 'translateX(-50%)',
-        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        backgroundColor: theme === 'dark' ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.95)',
         backdropFilter: 'blur(20px)',
         borderRadius: '24px',
         padding: isMobile ? '10px 14px' : '12px 18px',
         display: 'flex',
         gap: isMobile ? '10px' : '12px',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
-        border: '1px solid rgba(255, 255, 255, 0.8)',
-        maxWidth: isMobile ? '90%' : 'none'
+        boxShadow: theme === 'dark' ? '0 8px 32px rgba(0,0,0,0.5)' : '0 8px 32px rgba(0,0,0,0.15)',
+        border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)',
+        maxWidth: isMobile ? '90%' : 'none',
+        transition: 'all 0.3s ease'
       }}>
         <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
           position: 'relative',
@@ -1422,24 +1470,24 @@ function App() {
           transform: 'translate(-50%, -50%)',
           width: isMobile ? '95vw' : '600px',
           maxHeight: isMobile ? '80vh' : '70vh',
-          backgroundColor: 'rgba(0, 0, 0, 0.95)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
+          backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.95)' : 'rgba(255, 255, 255, 0.98)',
+          border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid rgba(0, 0, 0, 0.1)',
           borderRadius: '12px',
-          boxShadow: '0 20px 40px rgba(0,0,0,0.7)',
+          boxShadow: theme === 'dark' ? '0 20px 40px rgba(0,0,0,0.7)' : '0 20px 40px rgba(0,0,0,0.15)',
           backdropFilter: 'blur(20px)',
           overflow: 'hidden',
           zIndex: 200
         }}>
           {/* Folder Header */}
           <div style={{
-            backgroundColor: 'rgba(51, 51, 51, 0.9)',
+            backgroundColor: theme === 'dark' ? 'rgba(51, 51, 51, 0.9)' : 'rgba(229, 231, 235, 0.95)',
             padding: '12px 16px',
             borderTopLeftRadius: '12px',
             borderTopRightRadius: '12px',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+            borderBottom: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)'
           }}>
             <div style={{ display: 'flex', gap: '8px' }}>
               <div
@@ -1458,13 +1506,13 @@ function App() {
               <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ffbd2e' }}></div>
               <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#28ca42' }}></div>
             </div>
-            <span style={{ color: '#888', fontSize: '12px' }}>Personal</span>
+            <span style={{ color: theme === 'dark' ? '#888' : '#6b7280', fontSize: '12px' }}>Personal</span>
           </div>
 
           {/* Folder Content */}
           <div style={{
             padding: '24px',
-            color: 'white',
+            color: theme === 'dark' ? 'white' : '#1f2937',
             overflowY: 'auto',
             maxHeight: isMobile ? 'calc(80vh - 60px)' : 'calc(70vh - 60px)'
           }}>
@@ -1481,24 +1529,24 @@ function App() {
           transform: 'translate(-50%, -50%)',
           width: isMobile ? '95vw' : '600px',
           maxHeight: isMobile ? '80vh' : '70vh',
-          backgroundColor: 'rgba(0, 0, 0, 0.95)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
+          backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.95)' : 'rgba(255, 255, 255, 0.98)',
+          border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid rgba(0, 0, 0, 0.1)',
           borderRadius: '12px',
-          boxShadow: '0 20px 40px rgba(0,0,0,0.7)',
+          boxShadow: theme === 'dark' ? '0 20px 40px rgba(0,0,0,0.7)' : '0 20px 40px rgba(0,0,0,0.15)',
           backdropFilter: 'blur(20px)',
           overflow: 'hidden',
           zIndex: 200
         }}>
           {/* Folder Header */}
           <div style={{
-            backgroundColor: 'rgba(51, 51, 51, 0.9)',
+            backgroundColor: theme === 'dark' ? 'rgba(51, 51, 51, 0.9)' : 'rgba(229, 231, 235, 0.95)',
             padding: '12px 16px',
             borderTopLeftRadius: '12px',
             borderTopRightRadius: '12px',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+            borderBottom: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)'
           }}>
             <div style={{ display: 'flex', gap: '8px' }}>
               <div
@@ -1517,13 +1565,13 @@ function App() {
               <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ffbd2e' }}></div>
               <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#28ca42' }}></div>
             </div>
-            <span style={{ color: '#888', fontSize: '12px' }}>School Work</span>
+            <span style={{ color: theme === 'dark' ? '#888' : '#6b7280', fontSize: '12px' }}>School Work</span>
           </div>
 
           {/* Folder Content */}
           <div style={{
             padding: '24px',
-            color: 'white',
+            color: theme === 'dark' ? 'white' : '#1f2937',
             overflowY: 'auto',
             maxHeight: isMobile ? 'calc(80vh - 60px)' : 'calc(70vh - 60px)'
           }}>
@@ -1540,24 +1588,24 @@ function App() {
           transform: 'translate(-50%, -50%)',
           width: isMobile ? '95vw' : '600px',
           maxHeight: isMobile ? '80vh' : '70vh',
-          backgroundColor: 'rgba(0, 0, 0, 0.95)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
+          backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.95)' : 'rgba(255, 255, 255, 0.98)',
+          border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid rgba(0, 0, 0, 0.1)',
           borderRadius: '12px',
-          boxShadow: '0 20px 40px rgba(0,0,0,0.7)',
+          boxShadow: theme === 'dark' ? '0 20px 40px rgba(0,0,0,0.7)' : '0 20px 40px rgba(0,0,0,0.15)',
           backdropFilter: 'blur(20px)',
           overflow: 'hidden',
           zIndex: 200
         }}>
           {/* Folder Header */}
           <div style={{
-            backgroundColor: 'rgba(51, 51, 51, 0.9)',
+            backgroundColor: theme === 'dark' ? 'rgba(51, 51, 51, 0.9)' : 'rgba(229, 231, 235, 0.95)',
             padding: '12px 16px',
             borderTopLeftRadius: '12px',
             borderTopRightRadius: '12px',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+            borderBottom: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)'
           }}>
             <div style={{ display: 'flex', gap: '8px' }}>
               <div
@@ -1576,13 +1624,13 @@ function App() {
               <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ffbd2e' }}></div>
               <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#28ca42' }}></div>
             </div>
-            <span style={{ color: '#888', fontSize: '12px' }}>Miel Pomodoro</span>
+            <span style={{ color: theme === 'dark' ? '#888' : '#6b7280', fontSize: '12px' }}>Miel Pomodoro</span>
           </div>
 
           {/* Folder Content */}
           <div style={{
             padding: '24px',
-            color: 'white',
+            color: theme === 'dark' ? 'white' : '#1f2937',
             overflowY: 'auto',
             maxHeight: isMobile ? 'calc(80vh - 60px)' : 'calc(70vh - 60px)'
           }}>
