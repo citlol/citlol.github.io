@@ -423,13 +423,12 @@ function App() {
       id: 'pancake',
       name: 'Pancake',
       description: 'A modern budgeting app that helps users track expenses and manage finances',
-      tech: ['Swift', 'SwiftUI', 'CoreData', 'CloudKit'],
-      role: 'Co-Founder & Lead Developer',
+      tech: ['Swift', 'SwiftUI', 'Python'],
+      role: 'Co-Founder & Frontend Developer',
       color: '#ec4899',
       highlights: [
         'Built intuitive expense tracking with smart categorization',
-        'Implemented real-time sync across devices',
-        'Designed minimal, user-friendly interface'
+        'PLaid integration for up-to-date budget tracking',
       ],
       github: 'https://github.com/citlol/pancake',
       status: 'In Development'
@@ -437,17 +436,17 @@ function App() {
     {
       id: 'miel-pomodoro',
       name: 'Miel-Pomodoro',
-      description: 'A productivity timer app with a sweet twist - gamified focus sessions',
-      tech: ['Swift', 'SwiftUI', 'UserNotifications'],
+      description: 'A productivity timer app with an animal pal - pomodoro focus sessions',
+      tech: ['Swift', 'SwiftUI', 'UserNotifications', 'macOS'],
       role: 'Solo Developer',
       color: '#f472b6',
       highlights: [
         'Custom timer with ambient sounds',
-        'Progress tracking and statistics',
-        'Beautiful animations and haptic feedback'
+        'Progress tracking and statistics on desktop widget',
+        'Animal pals for companionship and haptic feedback'
       ],
       github: 'https://github.com/citlol/miel-pomodoro',
-      status: 'Released'
+      status: 'WIP'
     },
     {
       id: 'star-wars-game',
@@ -457,8 +456,7 @@ function App() {
       role: 'Developer',
       color: '#fb7185',
       highlights: [
-        'Multiple branching storylines',
-        'Character progression system',
+        'Fighting infamous Star Wars villains',
         'Save/load game functionality'
       ],
       github: 'https://github.com/citlol/star-wars-game',
@@ -493,11 +491,12 @@ function App() {
         break;
       case 'whoami':
         output = [
-          { type: 'success', text: '👋 Hi! I\'m Citlalli Trejo Del Rio' },
+          { type: 'success', text: 'Hi! I\'m Citlalli Trejo Del Rio' },
           { type: 'text', text: '   Computer Science Student & Full-Stack Developer' },
           { type: 'text', text: '   Co-Founder of Pancake - A modern budgeting app' },
           { type: 'text', text: '   Passionate about creating intuitive user experiences' },
-          { type: 'info', text: '   📍 Currently seeking software engineering opportunities' },
+          { type: 'info', text: '   Currently seeking software engineering opportunities' },
+          { type: 'info', text: '   Graduating May 2026!!'}
         ];
         break;
       case 'ls':
@@ -512,7 +511,7 @@ function App() {
       case 'cat':
         if (args[1] === 'resume' || args[1] === 'resume.pdf') {
           output = [
-            { type: 'success', text: '📄 Opening resume...' },
+            { type: 'success', text: 'Opening resume...' },
             { type: 'link', text: 'Click here to download resume', url: '/resume.pdf' },
           ];
           // Trigger download
@@ -531,6 +530,7 @@ function App() {
           { type: 'info', text: ' GitHub: github.com/citlol' },
           { type: 'text', text: githubStats ? `   Public repos: ${githubStats.public_repos}` : '   Loading stats...' },
           { type: 'text', text: githubStats ? `   Followers: ${githubStats.followers}` : '' },
+          { type: 'text', text: githubStats ? `   Commits: ${githubStats.}`}
           { type: 'link', text: '   View profile →', url: 'https://github.com/citlol' },
         ];
         break;
@@ -548,7 +548,7 @@ function App() {
         output = [
           { type: 'success', text: '💻 Frontend: React, JavaScript, HTML/CSS, Swift' },
           { type: 'info', text: '🔧 Backend: Node.js, MongoDB, Firebase' },
-          { type: 'warning', text: '🛠️ Tools: Git, Figma, VS Code, Canva' },
+          { type: 'warning', text: '🛠️ Tools: Git, Figma, VS Code, Adobe Illustrator' },
         ];
         break;
       case 'contact':
@@ -562,7 +562,7 @@ function App() {
         output = [
           { type: 'success', text: ' Currently Building:' },
           { type: 'text', text: '   • Pancake - Finalizing budget tracking features' },
-          { type: 'text', text: '   • This portfolio - Adding new interactive features' },
+          { type: 'text', text: '   • Miel Pomodoro - Character animation' },
           { type: 'info', text: ' Learning:' },
           { type: 'text', text: '   • Advanced SwiftUI animations' },
           { type: 'text', text: '   • Cloud architecture patterns' },
@@ -1303,7 +1303,7 @@ function App() {
                   onMouseEnter={(e) => e.target.style.opacity = '0.8'}
                   onMouseLeave={(e) => e.target.style.opacity = '1'}
                 >
-                  🐙 View on GitHub
+                  View on GitHub
                 </a>
               </div>
 
