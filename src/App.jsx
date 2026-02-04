@@ -196,7 +196,7 @@ const OpenToWorkBadge = ({ theme }) => {
       gap: '8px',
       backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.7)' : 'rgba(255, 255, 255, 0.9)',
       backdropFilter: 'blur(10px)',
-      border: theme === 'dark' ? '1px solid rgba(74, 222, 128, 0.3)' : '1px solid rgba(22, 163, 74, 0.3)',
+      border: theme === 'dark' ? '1px solid rgba(236, 72, 153, 0.3)' : '1px solid rgba(22, 163, 74, 0.3)',
       borderRadius: '20px',
       padding: '8px 14px',
       zIndex: 20,
@@ -206,14 +206,14 @@ const OpenToWorkBadge = ({ theme }) => {
         width: '8px',
         height: '8px',
         borderRadius: '50%',
-        backgroundColor: '#4ade80',
+        backgroundColor: '#ec4899',
         animation: 'pulse-badge 2s ease-in-out infinite',
-        boxShadow: '0 0 8px #4ade80'
+        boxShadow: '0 0 8px #ec4899'
       }} />
       <span style={{
         fontSize: '12px',
         fontWeight: '600',
-        color: theme === 'dark' ? '#4ade80' : '#16a34a',
+        color: theme === 'dark' ? '#ec4899' : '#db2777',
         fontFamily: 'monospace'
       }}>
         Open to Work
@@ -425,7 +425,7 @@ function App() {
       description: 'A modern budgeting app that helps users track expenses and manage finances',
       tech: ['Swift', 'SwiftUI', 'CoreData', 'CloudKit'],
       role: 'Co-Founder & Lead Developer',
-      color: '#4ade80',
+      color: '#ec4899',
       highlights: [
         'Built intuitive expense tracking with smart categorization',
         'Implemented real-time sync across devices',
@@ -440,7 +440,7 @@ function App() {
       description: 'A productivity timer app with a sweet twist - gamified focus sessions',
       tech: ['Swift', 'SwiftUI', 'UserNotifications'],
       role: 'Solo Developer',
-      color: '#60a5fa',
+      color: '#f472b6',
       highlights: [
         'Custom timer with ambient sounds',
         'Progress tracking and statistics',
@@ -455,7 +455,7 @@ function App() {
       description: 'An interactive text-based adventure game set in the Star Wars universe',
       tech: ['Java', 'OOP', 'File I/O'],
       role: 'Developer',
-      color: '#f59e0b',
+      color: '#fb7185',
       highlights: [
         'Multiple branching storylines',
         'Character progression system',
@@ -908,7 +908,7 @@ function App() {
           overflowY: 'auto'
         }}>
           {isInitializing ? (
-            <div style={{ color: theme === 'dark' ? '#4ade80' : '#16a34a', marginBottom: '16px' }}>
+            <div style={{ color: theme === 'dark' ? '#ec4899' : '#db2777', marginBottom: '16px' }}>
               Initializing<span className="typing-dots">...</span>
             </div>
           ) : (
@@ -920,8 +920,8 @@ function App() {
               {activeSection === 'home' && (
             <div>
               {/* Welcome message */}
-              <div style={{ marginBottom: '16px', color: theme === 'dark' ? '#4ade80' : '#16a34a' }}>
-                Welcome! Type <span style={{ color: '#60a5fa' }}>help</span> for commands or click a file below.
+              <div style={{ marginBottom: '16px', color: theme === 'dark' ? '#ec4899' : '#db2777' }}>
+                Welcome! Type <span style={{ color: '#f472b6' }}>help</span> for commands or click a file below.
               </div>
 
               {/* File navigation */}
@@ -938,7 +938,7 @@ function App() {
                     fontFamily: 'monospace',
                     padding: '4px 0'
                   }}
-                  onMouseEnter={(e) => e.target.style.color = '#4ade80'}
+                  onMouseEnter={(e) => e.target.style.color = '#ec4899'}
                   onMouseLeave={(e) => e.target.style.color = theme === 'dark' ? 'white' : '#1f2937'}
                 >
                   📄 about.md
@@ -955,7 +955,7 @@ function App() {
                     fontFamily: 'monospace',
                     padding: '4px 0'
                   }}
-                  onMouseEnter={(e) => e.target.style.color = '#60a5fa'}
+                  onMouseEnter={(e) => e.target.style.color = '#f472b6'}
                   onMouseLeave={(e) => e.target.style.color = theme === 'dark' ? 'white' : '#1f2937'}
                 >
                   📁 projects/
@@ -972,7 +972,7 @@ function App() {
                     fontFamily: 'monospace',
                     padding: '4px 0'
                   }}
-                  onMouseEnter={(e) => e.target.style.color = '#8b5cf6'}
+                  onMouseEnter={(e) => e.target.style.color = '#d946ef'}
                   onMouseLeave={(e) => e.target.style.color = theme === 'dark' ? 'white' : '#1f2937'}
                 >
                   ⚡ contact.sh
@@ -989,7 +989,7 @@ function App() {
                     fontFamily: 'monospace',
                     padding: '4px 0'
                   }}
-                  onMouseEnter={(e) => e.target.style.color = '#f59e0b'}
+                  onMouseEnter={(e) => e.target.style.color = '#fb7185'}
                   onMouseLeave={(e) => e.target.style.color = theme === 'dark' ? 'white' : '#1f2937'}
                 >
                   ⚙️ skills.config
@@ -1001,13 +1001,13 @@ function App() {
                 {terminalOutput.map((line, idx) => (
                   <div key={idx} style={{
                     color: line.type === 'error' ? '#ef4444' :
-                           line.type === 'success' ? '#4ade80' :
-                           line.type === 'info' ? '#60a5fa' :
-                           line.type === 'warning' ? '#f59e0b' :
+                           line.type === 'success' ? '#ec4899' :
+                           line.type === 'info' ? '#f472b6' :
+                           line.type === 'warning' ? '#fb7185' :
                            line.type === 'input' ? (theme === 'dark' ? '#888' : '#6b7280') :
                            line.type === 'command' ? (theme === 'dark' ? '#9ca3af' : '#6b7280') :
                            line.type === 'project' ? line.color :
-                           line.type === 'link' ? '#60a5fa' :
+                           line.type === 'link' ? '#f472b6' :
                            (theme === 'dark' ? 'white' : '#1f2937'),
                     marginBottom: '4px',
                     cursor: line.type === 'link' ? 'pointer' : 'default',
@@ -1036,11 +1036,11 @@ function App() {
                     background: 'none',
                     border: 'none',
                     outline: 'none',
-                    color: theme === 'dark' ? '#4ade80' : '#16a34a',
+                    color: theme === 'dark' ? '#ec4899' : '#db2777',
                     fontFamily: 'monospace',
                     fontSize: '14px',
                     flex: 1,
-                    caretColor: '#4ade80'
+                    caretColor: '#ec4899'
                   }}
                   placeholder="type a command..."
                   autoFocus
@@ -1055,26 +1055,26 @@ function App() {
                 citlol@portfolio ~/about % cat about.md
               </div>
               <div style={{ marginBottom: '20px' }}>
-                <h3 style={{ color: theme === 'dark' ? '#4ade80' : '#16a34a', marginBottom: '16px', fontSize: '18px' }}># About Me</h3>
+                <h3 style={{ color: theme === 'dark' ? '#ec4899' : '#db2777', marginBottom: '16px', fontSize: '18px' }}># About Me</h3>
                 <div style={{ marginBottom: '12px' }}>
-                  <span style={{ color: '#60a5fa' }}>👨‍💻</span> Computer Science Student & Full-Stack Developer
+                  <span style={{ color: '#f472b6' }}>👨‍💻</span> Computer Science Student & Full-Stack Developer
                 </div>
                 <div style={{ marginBottom: '12px' }}>
-                  <span style={{ color: '#f59e0b' }}>🚀</span> Co-Founder of Pancake - A modern budgeting app
+                  <span style={{ color: '#fb7185' }}>🚀</span> Co-Founder of Pancake - A modern budgeting app
                 </div>
                 <div style={{ marginBottom: '12px' }}>
-                  <span style={{ color: '#8b5cf6' }}>💡</span> Passionate about creating intuitive user experiences
+                  <span style={{ color: '#d946ef' }}>💡</span> Passionate about creating intuitive user experiences
                 </div>
 
                 {/* Currently Building Section */}
                 <div style={{
                   marginTop: '24px',
                   padding: '16px',
-                  backgroundColor: theme === 'dark' ? 'rgba(96, 165, 250, 0.1)' : 'rgba(59, 130, 246, 0.1)',
+                  backgroundColor: theme === 'dark' ? 'rgba(244, 114, 182, 0.1)' : 'rgba(59, 130, 246, 0.1)',
                   borderRadius: '8px',
-                  border: '1px solid rgba(96, 165, 250, 0.2)'
+                  border: '1px solid rgba(244, 114, 182, 0.2)'
                 }}>
-                  <h4 style={{ color: '#60a5fa', marginBottom: '12px', fontSize: '14px' }}>🔨 Currently Building</h4>
+                  <h4 style={{ color: '#f472b6', marginBottom: '12px', fontSize: '14px' }}>🔨 Currently Building</h4>
                   <div style={{ color: theme === 'dark' ? '#d1d5db' : '#4b5563', fontSize: '13px' }}>
                     <div style={{ marginBottom: '6px' }}>• Pancake - Finalizing budget tracking features</div>
                     <div style={{ marginBottom: '6px' }}>• This portfolio - Adding interactive terminal commands</div>
@@ -1086,35 +1086,35 @@ function App() {
                   <div style={{
                     marginTop: '16px',
                     padding: '16px',
-                    backgroundColor: theme === 'dark' ? 'rgba(139, 92, 246, 0.1)' : 'rgba(124, 58, 237, 0.1)',
+                    backgroundColor: theme === 'dark' ? 'rgba(217, 70, 239, 0.1)' : 'rgba(124, 58, 237, 0.1)',
                     borderRadius: '8px',
-                    border: '1px solid rgba(139, 92, 246, 0.2)'
+                    border: '1px solid rgba(217, 70, 239, 0.2)'
                   }}>
-                    <h4 style={{ color: '#8b5cf6', marginBottom: '12px', fontSize: '14px' }}>🐙 GitHub Stats</h4>
+                    <h4 style={{ color: '#d946ef', marginBottom: '12px', fontSize: '14px' }}>🐙 GitHub Stats</h4>
                     <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', color: theme === 'dark' ? '#d1d5db' : '#4b5563', fontSize: '13px' }}>
                       <div>
-                        <span style={{ color: '#8b5cf6', fontWeight: 'bold' }}>{githubStats.public_repos}</span> repos
+                        <span style={{ color: '#d946ef', fontWeight: 'bold' }}>{githubStats.public_repos}</span> repos
                       </div>
                       <div>
-                        <span style={{ color: '#8b5cf6', fontWeight: 'bold' }}>{githubStats.followers}</span> followers
+                        <span style={{ color: '#d946ef', fontWeight: 'bold' }}>{githubStats.followers}</span> followers
                       </div>
                       <div>
-                        <span style={{ color: '#8b5cf6', fontWeight: 'bold' }}>{githubStats.following}</span> following
+                        <span style={{ color: '#d946ef', fontWeight: 'bold' }}>{githubStats.following}</span> following
                       </div>
                     </div>
                     <a
                       href="https://github.com/citlol"
                       target="_blank"
                       rel="noopener noreferrer"
-                      style={{ color: '#8b5cf6', fontSize: '12px', marginTop: '8px', display: 'inline-block' }}
+                      style={{ color: '#d946ef', fontSize: '12px', marginTop: '8px', display: 'inline-block' }}
                     >
                       View profile →
                     </a>
                   </div>
                 )}
 
-                <div style={{ color: '#6b7280', fontSize: '13px', marginTop: '16px', padding: '12px', backgroundColor: theme === 'dark' ? 'rgba(74, 222, 128, 0.1)' : 'rgba(22, 163, 74, 0.1)', borderRadius: '8px', border: '1px solid rgba(74, 222, 128, 0.2)' }}>
-                  <span style={{ color: '#4ade80' }}>✨</span> Currently seeking software engineering opportunities to contribute to innovative projects
+                <div style={{ color: '#6b7280', fontSize: '13px', marginTop: '16px', padding: '12px', backgroundColor: theme === 'dark' ? 'rgba(236, 72, 153, 0.1)' : 'rgba(22, 163, 74, 0.1)', borderRadius: '8px', border: '1px solid rgba(236, 72, 153, 0.2)' }}>
+                  <span style={{ color: '#ec4899' }}>✨</span> Currently seeking software engineering opportunities to contribute to innovative projects
                 </div>
               </div>
               <button
@@ -1169,11 +1169,11 @@ function App() {
                         fontSize: '10px',
                         padding: '2px 8px',
                         borderRadius: '12px',
-                        backgroundColor: project.status === 'Released' ? 'rgba(74, 222, 128, 0.2)' :
-                                        project.status === 'In Development' ? 'rgba(96, 165, 250, 0.2)' :
+                        backgroundColor: project.status === 'Released' ? 'rgba(236, 72, 153, 0.2)' :
+                                        project.status === 'In Development' ? 'rgba(244, 114, 182, 0.2)' :
                                         'rgba(156, 163, 175, 0.2)',
-                        color: project.status === 'Released' ? '#4ade80' :
-                               project.status === 'In Development' ? '#60a5fa' : '#9ca3af'
+                        color: project.status === 'Released' ? '#ec4899' :
+                               project.status === 'In Development' ? '#f472b6' : '#9ca3af'
                       }}>
                         {project.status}
                       </span>
@@ -1237,11 +1237,11 @@ function App() {
                   fontSize: '11px',
                   padding: '3px 10px',
                   borderRadius: '12px',
-                  backgroundColor: selectedProject.status === 'Released' ? 'rgba(74, 222, 128, 0.2)' :
-                                  selectedProject.status === 'In Development' ? 'rgba(96, 165, 250, 0.2)' :
+                  backgroundColor: selectedProject.status === 'Released' ? 'rgba(236, 72, 153, 0.2)' :
+                                  selectedProject.status === 'In Development' ? 'rgba(244, 114, 182, 0.2)' :
                                   'rgba(156, 163, 175, 0.2)',
-                  color: selectedProject.status === 'Released' ? '#4ade80' :
-                         selectedProject.status === 'In Development' ? '#60a5fa' : '#9ca3af',
+                  color: selectedProject.status === 'Released' ? '#ec4899' :
+                         selectedProject.status === 'In Development' ? '#f472b6' : '#9ca3af',
                   marginBottom: '12px'
                 }}>
                   {selectedProject.status}
@@ -1355,19 +1355,19 @@ function App() {
                       alignItems: 'center',
                       gap: '12px',
                       padding: '12px',
-                      backgroundColor: 'rgba(74, 222, 128, 0.1)',
+                      backgroundColor: 'rgba(236, 72, 153, 0.1)',
                       borderRadius: '8px',
-                      border: '1px solid rgba(74, 222, 128, 0.2)',
-                      color: '#4ade80',
+                      border: '1px solid rgba(236, 72, 153, 0.2)',
+                      color: '#ec4899',
                       textDecoration: 'none',
                       transition: 'all 0.2s ease'
                     }}
                     onMouseEnter={(e) => {
-                      e.target.style.backgroundColor = 'rgba(74, 222, 128, 0.2)';
+                      e.target.style.backgroundColor = 'rgba(236, 72, 153, 0.2)';
                       e.target.style.transform = 'translateY(-2px)';
                     }}
                     onMouseLeave={(e) => {
-                      e.target.style.backgroundColor = 'rgba(74, 222, 128, 0.1)';
+                      e.target.style.backgroundColor = 'rgba(236, 72, 153, 0.1)';
                       e.target.style.transform = 'translateY(0)';
                     }}
                   >
@@ -1383,19 +1383,19 @@ function App() {
                       alignItems: 'center',
                       gap: '12px',
                       padding: '12px',
-                      backgroundColor: 'rgba(96, 165, 250, 0.1)',
+                      backgroundColor: 'rgba(244, 114, 182, 0.1)',
                       borderRadius: '8px',
-                      border: '1px solid rgba(96, 165, 250, 0.2)',
-                      color: '#60a5fa',
+                      border: '1px solid rgba(244, 114, 182, 0.2)',
+                      color: '#f472b6',
                       textDecoration: 'none',
                       transition: 'all 0.2s ease'
                     }}
                     onMouseEnter={(e) => {
-                      e.target.style.backgroundColor = 'rgba(96, 165, 250, 0.2)';
+                      e.target.style.backgroundColor = 'rgba(244, 114, 182, 0.2)';
                       e.target.style.transform = 'translateY(-2px)';
                     }}
                     onMouseLeave={(e) => {
-                      e.target.style.backgroundColor = 'rgba(96, 165, 250, 0.1)';
+                      e.target.style.backgroundColor = 'rgba(244, 114, 182, 0.1)';
                       e.target.style.transform = 'translateY(0)';
                     }}
                   >
@@ -1411,19 +1411,19 @@ function App() {
                       alignItems: 'center',
                       gap: '12px',
                       padding: '12px',
-                      backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                      backgroundColor: 'rgba(217, 70, 239, 0.1)',
                       borderRadius: '8px',
-                      border: '1px solid rgba(139, 92, 246, 0.2)',
-                      color: '#8b5cf6',
+                      border: '1px solid rgba(217, 70, 239, 0.2)',
+                      color: '#d946ef',
                       textDecoration: 'none',
                       transition: 'all 0.2s ease'
                     }}
                     onMouseEnter={(e) => {
-                      e.target.style.backgroundColor = 'rgba(139, 92, 246, 0.2)';
+                      e.target.style.backgroundColor = 'rgba(217, 70, 239, 0.2)';
                       e.target.style.transform = 'translateY(-2px)';
                     }}
                     onMouseLeave={(e) => {
-                      e.target.style.backgroundColor = 'rgba(139, 92, 246, 0.1)';
+                      e.target.style.backgroundColor = 'rgba(217, 70, 239, 0.1)';
                       e.target.style.transform = 'translateY(0)';
                     }}
                   >
@@ -1455,16 +1455,16 @@ function App() {
               </div>
               <div style={{ marginBottom: '20px' }}>
                 <div style={{ marginBottom: '16px' }}>
-                  <h4 style={{ color: '#4ade80', marginBottom: '8px' }}>Frontend</h4>
+                  <h4 style={{ color: '#ec4899', marginBottom: '8px' }}>Frontend</h4>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                     {['React', 'JavaScript', 'HTML/CSS', 'Swift'].map(skill => (
                       <span key={skill} style={{
-                        backgroundColor: 'rgba(74, 222, 128, 0.2)',
-                        color: '#4ade80',
+                        backgroundColor: 'rgba(236, 72, 153, 0.2)',
+                        color: '#ec4899',
                         padding: '4px 8px',
                         borderRadius: '4px',
                         fontSize: '12px',
-                        border: '1px solid rgba(74, 222, 128, 0.3)'
+                        border: '1px solid rgba(236, 72, 153, 0.3)'
                       }}>
                         {skill}
                       </span>
@@ -1472,16 +1472,16 @@ function App() {
                   </div>
                 </div>
                 <div style={{ marginBottom: '16px' }}>
-                  <h4 style={{ color: '#60a5fa', marginBottom: '8px' }}>Backend</h4>
+                  <h4 style={{ color: '#f472b6', marginBottom: '8px' }}>Backend</h4>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                     {['Node.js', 'MongoDB', 'Firebase'].map(skill => (
                       <span key={skill} style={{
-                        backgroundColor: 'rgba(96, 165, 250, 0.2)',
-                        color: '#60a5fa',
+                        backgroundColor: 'rgba(244, 114, 182, 0.2)',
+                        color: '#f472b6',
                         padding: '4px 8px',
                         borderRadius: '4px',
                         fontSize: '12px',
-                        border: '1px solid rgba(96, 165, 250, 0.3)'
+                        border: '1px solid rgba(244, 114, 182, 0.3)'
                       }}>
                         {skill}
                       </span>
@@ -1489,16 +1489,16 @@ function App() {
                   </div>
                 </div>
                 <div style={{ marginBottom: '16px' }}>
-                  <h4 style={{ color: '#f59e0b', marginBottom: '8px' }}>Tools</h4>
+                  <h4 style={{ color: '#fb7185', marginBottom: '8px' }}>Tools</h4>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                     {['Git', 'Figma', 'VS Code', 'Canva'].map(skill => (
                       <span key={skill} style={{
-                        backgroundColor: 'rgba(245, 158, 11, 0.2)',
-                        color: '#f59e0b',
+                        backgroundColor: 'rgba(251, 113, 133, 0.2)',
+                        color: '#fb7185',
                         padding: '4px 8px',
                         borderRadius: '4px',
                         fontSize: '12px',
-                        border: '1px solid rgba(245, 158, 11, 0.3)'
+                        border: '1px solid rgba(251, 113, 133, 0.3)'
                       }}>
                         {skill}
                       </span>
