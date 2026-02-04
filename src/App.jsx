@@ -1533,7 +1533,7 @@ function App() {
         bottom: isMobile ? '10px' : '20px',
         left: '50%',
         transform: 'translateX(-50%)',
-        backgroundColor: theme === 'dark' ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.95)',
+        backgroundColor: theme === 'dark' ? 'rgba(80, 80, 80, 0.75)' : 'rgba(255, 255, 255, 0.95)',
         backdropFilter: 'blur(20px)',
         borderRadius: '24px',
         padding: isMobile ? '10px 14px' : '12px 18px',
