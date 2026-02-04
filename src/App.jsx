@@ -488,7 +488,7 @@ function App() {
           { type: 'command', text: '  contact       - Contact info' },
           { type: 'command', text: '  now           - What I\'m currently working on' },
           { type: 'command', text: '  clear         - Clear terminal' },
-          { type: 'command', text: '  sudo hire-me  - Easter egg ;)' },
+          { type: 'command', text: '  sudo hire me  - Easter egg' },
         ];
         break;
       case 'whoami':
@@ -528,7 +528,7 @@ function App() {
         break;
       case 'github':
         output = [
-          { type: 'info', text: '🐙 GitHub: github.com/citlol' },
+          { type: 'info', text: ' GitHub: github.com/citlol' },
           { type: 'text', text: githubStats ? `   Public repos: ${githubStats.public_repos}` : '   Loading stats...' },
           { type: 'text', text: githubStats ? `   Followers: ${githubStats.followers}` : '' },
           { type: 'link', text: '   View profile →', url: 'https://github.com/citlol' },
@@ -553,17 +553,17 @@ function App() {
         break;
       case 'contact':
         output = [
-          { type: 'info', text: '📧 Email: citlalli.tdr@gmail.com' },
-          { type: 'link', text: '🔗 LinkedIn: linkedin.com/in/citlalli-trejo-del-rio', url: 'https://linkedin.com/in/citlalli-trejo-del-rio' },
-          { type: 'link', text: '🐙 GitHub: github.com/citlol', url: 'https://github.com/citlol' },
+          { type: 'info', text: ' Email: citlalli.tdr@gmail.com' },
+          { type: 'link', text: ' LinkedIn: linkedin.com/in/citlalli-trejo-del-rio', url: 'https://linkedin.com/in/citlalli-trejo-del-rio' },
+          { type: 'link', text: ' GitHub: github.com/citlol', url: 'https://github.com/citlol' },
         ];
         break;
       case 'now':
         output = [
-          { type: 'success', text: '🚀 Currently Building:' },
+          { type: 'success', text: ' Currently Building:' },
           { type: 'text', text: '   • Pancake - Finalizing budget tracking features' },
           { type: 'text', text: '   • This portfolio - Adding new interactive features' },
-          { type: 'info', text: '📚 Learning:' },
+          { type: 'info', text: ' Learning:' },
           { type: 'text', text: '   • Advanced SwiftUI animations' },
           { type: 'text', text: '   • Cloud architecture patterns' },
         ];
@@ -576,7 +576,7 @@ function App() {
           output = [
             { type: 'success', text: '✨ HIRE MODE ACTIVATED ✨' },
             { type: 'text', text: '   Ready to bring creativity and dedication to your team!' },
-            { type: 'text', text: '   📧 Let\'s talk: citlalli.tdr@gmail.com' },
+            { type: 'text', text: '    Let\'s talk: citlalli.tdr@gmail.com' },
             { type: 'info', text: '   [Process completed with exit code: EXCITED_TO_WORK]' },
           ];
         } else {
@@ -914,7 +914,7 @@ function App() {
           ) : (
             <>
               <div style={{ color: theme === 'dark' ? '#888' : '#6b7280', marginBottom: '16px' }}>
-                citlol@portfolio ~ %
+                citlol@portfolio ~ % 
               </div>
 
               {activeSection === 'home' && (
@@ -1057,13 +1057,13 @@ function App() {
               <div style={{ marginBottom: '20px' }}>
                 <h3 style={{ color: theme === 'dark' ? '#ec4899' : '#db2777', marginBottom: '16px', fontSize: '18px' }}># About Me</h3>
                 <div style={{ marginBottom: '12px' }}>
-                  <span style={{ color: '#f472b6' }}>👨‍💻</span> Computer Science Student & Full-Stack Developer
+                  <span style={{ color: '#f472b6' }}></span> Computer Science Student & Full-Stack Developer
                 </div>
                 <div style={{ marginBottom: '12px' }}>
-                  <span style={{ color: '#fb7185' }}>🚀</span> Co-Founder of Pancake - A modern budgeting app
+                  <span style={{ color: '#fb7185' }}></span> Co-Founder of Pancake - A modern budgeting app
                 </div>
                 <div style={{ marginBottom: '12px' }}>
-                  <span style={{ color: '#d946ef' }}>💡</span> Passionate about creating intuitive user experiences
+                  <span style={{ color: '#d946ef' }}></span> Passionate about creating intuitive user experiences
                 </div>
 
                 {/* Currently Building Section */}
@@ -1077,7 +1077,7 @@ function App() {
                   <h4 style={{ color: '#f472b6', marginBottom: '12px', fontSize: '14px' }}>🔨 Currently Building</h4>
                   <div style={{ color: theme === 'dark' ? '#d1d5db' : '#4b5563', fontSize: '13px' }}>
                     <div style={{ marginBottom: '6px' }}>• Pancake - Finalizing budget tracking features</div>
-                    <div style={{ marginBottom: '6px' }}>• This portfolio - Adding interactive terminal commands</div>
+                    <div style={{ marginBottom: '6px' }}>• lightdal - Wishlist website with item tracking</div>
                   </div>
                 </div>
 
@@ -1090,7 +1090,7 @@ function App() {
                     borderRadius: '8px',
                     border: '1px solid rgba(217, 70, 239, 0.2)'
                   }}>
-                    <h4 style={{ color: '#d946ef', marginBottom: '12px', fontSize: '14px' }}>🐙 GitHub Stats</h4>
+                    <h4 style={{ color: '#d946ef', marginBottom: '12px', fontSize: '14px' }}>GitHub Stats</h4>
                     <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', color: theme === 'dark' ? '#d1d5db' : '#4b5563', fontSize: '13px' }}>
                       <div>
                         <span style={{ color: '#d946ef', fontWeight: 'bold' }}>{githubStats.public_repos}</span> repos
@@ -1399,7 +1399,7 @@ function App() {
                       e.target.style.transform = 'translateY(0)';
                     }}
                   >
-                    <span style={{ fontSize: '18px' }}>🔗</span>
+                    <span style={{ fontSize: '18px' }}></span>
                     <span>LinkedIn</span>
                   </a>
                   <a
@@ -1427,7 +1427,7 @@ function App() {
                       e.target.style.transform = 'translateY(0)';
                     }}
                   >
-                    <span style={{ fontSize: '18px' }}>🐙</span>
+                    <span style={{ fontSize: '18px' }}></span>
                     <span>GitHub</span>
                   </a>
                 </div>
@@ -1491,7 +1491,7 @@ function App() {
                 <div style={{ marginBottom: '16px' }}>
                   <h4 style={{ color: '#fb7185', marginBottom: '8px' }}>Tools</h4>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                    {['Git', 'Figma', 'VS Code', 'Canva'].map(skill => (
+                    {['Git', 'Figma', 'VS Code', 'XCode', 'Adobe Illustrator'].map(skill => (
                       <span key={skill} style={{
                         backgroundColor: 'rgba(251, 113, 133, 0.2)',
                         color: '#fb7185',
