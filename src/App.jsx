@@ -184,6 +184,44 @@ const DraggableFolder = ({ name, initialX, initialY, isMobile, onDoubleClick, th
   );
 };
 
+// Open to Work Badge Component
+const OpenToWorkBadge = ({ theme }) => {
+  return (
+    <div style={{
+      position: 'absolute',
+      top: '10px',
+      left: '10px',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px',
+      backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.7)' : 'rgba(255, 255, 255, 0.9)',
+      backdropFilter: 'blur(10px)',
+      border: theme === 'dark' ? '1px solid rgba(74, 222, 128, 0.3)' : '1px solid rgba(22, 163, 74, 0.3)',
+      borderRadius: '20px',
+      padding: '8px 14px',
+      zIndex: 20,
+      transition: 'all 0.3s ease'
+    }}>
+      <div style={{
+        width: '8px',
+        height: '8px',
+        borderRadius: '50%',
+        backgroundColor: '#4ade80',
+        animation: 'pulse-badge 2s ease-in-out infinite',
+        boxShadow: '0 0 8px #4ade80'
+      }} />
+      <span style={{
+        fontSize: '12px',
+        fontWeight: '600',
+        color: theme === 'dark' ? '#4ade80' : '#16a34a',
+        fontFamily: 'monospace'
+      }}>
+        Open to Work
+      </span>
+    </div>
+  );
+};
+
 const DesktopClock = ({ isMobile, theme }) => {
   const [time, setTime] = useState(new Date());
 
@@ -250,6 +288,102 @@ const DesktopClock = ({ isMobile, theme }) => {
   );
 };
 
+// Helper function to generate random folder positions
+const generateRandomFolderPositions = () => {
+  const folderSize = 70; // approximate folder width/height including text
+  const padding = 20; // minimum distance between folders
+
+  // Define forbidden zones (areas to avoid)
+  const getForbiddenZones = () => {
+    const width = typeof window !== 'undefined' ? window.innerWidth : 1200;
+    const height = typeof window !== 'undefined' ? window.innerHeight : 800;
+
+    return [
+      // Open to Work badge (top-left)
+      { x: 0, y: 0, width: 180, height: 60 },
+      // Clock (top-right)
+      { x: width - 160, y: 0, width: 160, height: 80 },
+      // Terminal window (center) - larger zone to be safe
+      { x: width / 2 - 500, y: height / 2 - 350, width: 1000, height: 700 },
+      // Bottom dock
+      { x: width / 2 - 300, y: height - 100, width: 600, height: 100 },
+    ];
+  };
+
+  const isInForbiddenZone = (x, y, forbiddenZones) => {
+    for (const zone of forbiddenZones) {
+      if (
+        x < zone.x + zone.width + padding &&
+        x + folderSize > zone.x - padding &&
+        y < zone.y + zone.height + padding &&
+        y + folderSize > zone.y - padding
+      ) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const overlapsWithOther = (x, y, existingPositions) => {
+    for (const pos of existingPositions) {
+      const distance = Math.sqrt(Math.pow(x - pos.x, 2) + Math.pow(y - pos.y, 2));
+      if (distance < folderSize + padding) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const width = typeof window !== 'undefined' ? window.innerWidth : 1200;
+  const height = typeof window !== 'undefined' ? window.innerHeight : 800;
+  const forbiddenZones = getForbiddenZones();
+
+  const positions = [];
+  const folderNames = ['Personal', 'School Work', 'Miel Pomodoro'];
+
+  for (let i = 0; i < folderNames.length; i++) {
+    let attempts = 0;
+    let x, y;
+
+    // Try to find a valid position
+    do {
+      // Generate random position in safe areas (edges of screen)
+      const side = Math.floor(Math.random() * 4); // 0=top, 1=right, 2=bottom-ish, 3=left
+
+      switch (side) {
+        case 0: // Top area (but not corners)
+          x = 180 + Math.random() * (width - 400);
+          y = 70 + Math.random() * 80;
+          break;
+        case 1: // Right side
+          x = width - 100 - Math.random() * 80;
+          y = 100 + Math.random() * (height - 300);
+          break;
+        case 2: // Left side lower
+          x = 20 + Math.random() * 100;
+          y = 80 + Math.random() * (height - 300);
+          break;
+        case 3: // Left side
+          x = 20 + Math.random() * 150;
+          y = 150 + Math.random() * (height - 400);
+          break;
+        default:
+          x = 20 + Math.random() * 150;
+          y = 80 + Math.random() * 200;
+      }
+
+      attempts++;
+    } while (
+      (isInForbiddenZone(x, y, forbiddenZones) || overlapsWithOther(x, y, positions)) &&
+      attempts < 100
+    );
+
+    positions.push({ x, y, name: folderNames[i] });
+  }
+
+  return positions;
+};
+
 function App() {
   const [activeSection, setActiveSection] = useState('home');
   const [showAppleMusicModal, setShowAppleMusicModal] = useState(false);
@@ -262,6 +396,8 @@ function App() {
   const [terminalPosition, setTerminalPosition] = useState({ x: 0, y: 0 });
   const [isDraggingTerminal, setIsDraggingTerminal] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  // Random folder positions
+  const [folderPositions, setFolderPositions] = useState(() => generateRandomFolderPositions());
   const [showTerminal, setShowTerminal] = useState(true);
   const [isInitializing, setIsInitializing] = useState(true);
   const [theme, setTheme] = useState('dark');
@@ -270,6 +406,230 @@ function App() {
     schoolWork: false,
     mielPomodoro: false
   });
+  // Interactive terminal state
+  const [commandInput, setCommandInput] = useState('');
+  const [commandHistory, setCommandHistory] = useState([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
+  const [terminalOutput, setTerminalOutput] = useState([]);
+  const [showCommandLine, setShowCommandLine] = useState(false);
+  // GitHub stats state
+  const [githubStats, setGithubStats] = useState(null);
+  // Project detail state
+  const [selectedProject, setSelectedProject] = useState(null);
+
+  // Project data with case studies
+  const projects = [
+    {
+      id: 'pancake',
+      name: 'Pancake',
+      description: 'A modern budgeting app that helps users track expenses and manage finances',
+      tech: ['Swift', 'SwiftUI', 'CoreData', 'CloudKit'],
+      role: 'Co-Founder & Lead Developer',
+      color: '#4ade80',
+      highlights: [
+        'Built intuitive expense tracking with smart categorization',
+        'Implemented real-time sync across devices',
+        'Designed minimal, user-friendly interface'
+      ],
+      github: 'https://github.com/citlol/pancake',
+      status: 'In Development'
+    },
+    {
+      id: 'miel-pomodoro',
+      name: 'Miel-Pomodoro',
+      description: 'A productivity timer app with a sweet twist - gamified focus sessions',
+      tech: ['Swift', 'SwiftUI', 'UserNotifications'],
+      role: 'Solo Developer',
+      color: '#60a5fa',
+      highlights: [
+        'Custom timer with ambient sounds',
+        'Progress tracking and statistics',
+        'Beautiful animations and haptic feedback'
+      ],
+      github: 'https://github.com/citlol/miel-pomodoro',
+      status: 'Released'
+    },
+    {
+      id: 'star-wars-game',
+      name: 'Star-Wars-All-In-Game',
+      description: 'An interactive text-based adventure game set in the Star Wars universe',
+      tech: ['Java', 'OOP', 'File I/O'],
+      role: 'Developer',
+      color: '#f59e0b',
+      highlights: [
+        'Multiple branching storylines',
+        'Character progression system',
+        'Save/load game functionality'
+      ],
+      github: 'https://github.com/citlol/star-wars-game',
+      status: 'Completed'
+    }
+  ];
+
+  // Terminal commands handler
+  const handleCommand = (cmd) => {
+    const trimmedCmd = cmd.trim().toLowerCase();
+    const args = trimmedCmd.split(' ');
+    const command = args[0];
+
+    let output = [];
+
+    switch (command) {
+      case 'help':
+        output = [
+          { type: 'info', text: 'Available commands:' },
+          { type: 'command', text: '  help          - Show this help message' },
+          { type: 'command', text: '  whoami        - About me' },
+          { type: 'command', text: '  ls            - List sections' },
+          { type: 'command', text: '  cat resume    - View/download resume' },
+          { type: 'command', text: '  github        - View GitHub stats' },
+          { type: 'command', text: '  projects      - List projects' },
+          { type: 'command', text: '  skills        - Show skills' },
+          { type: 'command', text: '  contact       - Contact info' },
+          { type: 'command', text: '  now           - What I\'m currently working on' },
+          { type: 'command', text: '  clear         - Clear terminal' },
+          { type: 'command', text: '  sudo hire-me  - Easter egg ;)' },
+        ];
+        break;
+      case 'whoami':
+        output = [
+          { type: 'success', text: '👋 Hi! I\'m Citlalli Trejo Del Rio' },
+          { type: 'text', text: '   Computer Science Student & Full-Stack Developer' },
+          { type: 'text', text: '   Co-Founder of Pancake - A modern budgeting app' },
+          { type: 'text', text: '   Passionate about creating intuitive user experiences' },
+          { type: 'info', text: '   📍 Currently seeking software engineering opportunities' },
+        ];
+        break;
+      case 'ls':
+        output = [
+          { type: 'text', text: 'drwxr-xr-x  about.md' },
+          { type: 'text', text: 'drwxr-xr-x  projects/' },
+          { type: 'text', text: 'drwxr-xr-x  skills.config' },
+          { type: 'text', text: '-rwxr-xr-x  contact.sh' },
+          { type: 'text', text: '-rw-r--r--  resume.pdf' },
+        ];
+        break;
+      case 'cat':
+        if (args[1] === 'resume' || args[1] === 'resume.pdf') {
+          output = [
+            { type: 'success', text: '📄 Opening resume...' },
+            { type: 'link', text: 'Click here to download resume', url: '/resume.pdf' },
+          ];
+          // Trigger download
+          setTimeout(() => {
+            const link = document.createElement('a');
+            link.href = '/resume.pdf';
+            link.download = 'Citlalli_Trejo_Resume.pdf';
+            link.click();
+          }, 500);
+        } else {
+          output = [{ type: 'error', text: `cat: ${args[1] || ''}: No such file` }];
+        }
+        break;
+      case 'github':
+        output = [
+          { type: 'info', text: '🐙 GitHub: github.com/citlol' },
+          { type: 'text', text: githubStats ? `   Public repos: ${githubStats.public_repos}` : '   Loading stats...' },
+          { type: 'text', text: githubStats ? `   Followers: ${githubStats.followers}` : '' },
+          { type: 'link', text: '   View profile →', url: 'https://github.com/citlol' },
+        ];
+        break;
+      case 'projects':
+        output = [
+          { type: 'info', text: '📁 My Projects:' },
+          ...projects.map(p => ({
+            type: 'project',
+            text: `   ${p.name} - ${p.tech.join(', ')} [${p.status}]`,
+            color: p.color
+          }))
+        ];
+        break;
+      case 'skills':
+        output = [
+          { type: 'success', text: '💻 Frontend: React, JavaScript, HTML/CSS, Swift' },
+          { type: 'info', text: '🔧 Backend: Node.js, MongoDB, Firebase' },
+          { type: 'warning', text: '🛠️ Tools: Git, Figma, VS Code, Canva' },
+        ];
+        break;
+      case 'contact':
+        output = [
+          { type: 'info', text: '📧 Email: citlalli.tdr@gmail.com' },
+          { type: 'link', text: '🔗 LinkedIn: linkedin.com/in/citlalli-trejo-del-rio', url: 'https://linkedin.com/in/citlalli-trejo-del-rio' },
+          { type: 'link', text: '🐙 GitHub: github.com/citlol', url: 'https://github.com/citlol' },
+        ];
+        break;
+      case 'now':
+        output = [
+          { type: 'success', text: '🚀 Currently Building:' },
+          { type: 'text', text: '   • Pancake - Finalizing budget tracking features' },
+          { type: 'text', text: '   • This portfolio - Adding new interactive features' },
+          { type: 'info', text: '📚 Learning:' },
+          { type: 'text', text: '   • Advanced SwiftUI animations' },
+          { type: 'text', text: '   • Cloud architecture patterns' },
+        ];
+        break;
+      case 'clear':
+        setTerminalOutput([]);
+        return;
+      case 'sudo':
+        if (args.slice(1).join(' ') === 'hire-me') {
+          output = [
+            { type: 'success', text: '✨ HIRE MODE ACTIVATED ✨' },
+            { type: 'text', text: '   Ready to bring creativity and dedication to your team!' },
+            { type: 'text', text: '   📧 Let\'s talk: citlalli.tdr@gmail.com' },
+            { type: 'info', text: '   [Process completed with exit code: EXCITED_TO_WORK]' },
+          ];
+        } else {
+          output = [{ type: 'error', text: 'sudo: command not found' }];
+        }
+        break;
+      case '':
+        return;
+      default:
+        output = [{ type: 'error', text: `command not found: ${command}. Type 'help' for available commands.` }];
+    }
+
+    setTerminalOutput(prev => [
+      ...prev,
+      { type: 'input', text: `citlol@portfolio ~ % ${cmd}` },
+      ...output
+    ]);
+  };
+
+  // Handle keyboard input for terminal
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleCommand(commandInput);
+      setCommandHistory(prev => [...prev, commandInput]);
+      setHistoryIndex(-1);
+      setCommandInput('');
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (commandHistory.length > 0) {
+        const newIndex = historyIndex < commandHistory.length - 1 ? historyIndex + 1 : historyIndex;
+        setHistoryIndex(newIndex);
+        setCommandInput(commandHistory[commandHistory.length - 1 - newIndex] || '');
+      }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (historyIndex > 0) {
+        const newIndex = historyIndex - 1;
+        setHistoryIndex(newIndex);
+        setCommandInput(commandHistory[commandHistory.length - 1 - newIndex] || '');
+      } else {
+        setHistoryIndex(-1);
+        setCommandInput('');
+      }
+    }
+  };
+
+  // Fetch GitHub stats
+  useEffect(() => {
+    fetch('https://api.github.com/users/citlol')
+      .then(res => res.json())
+      .then(data => setGithubStats(data))
+      .catch(() => setGithubStats(null));
+  }, []);
 
   // Theme toggle handler
   const toggleTheme = () => {
@@ -420,29 +780,31 @@ function App() {
         transition: 'background 0.3s ease'
       }}>
       <Stars theme={theme} />
+      {/* Open to Work Badge */}
+      {!isMobile && <OpenToWorkBadge theme={theme} />}
       {/* Desktop Clock */}
       <DesktopClock isMobile={isMobile} theme={theme} />
-      {/* Desktop Folders */}
+      {/* Desktop Folders - Random positions */}
       <DraggableFolder
         name="Personal"
-        initialX={20}
-        initialY={20}
+        initialX={folderPositions[0]?.x || 20}
+        initialY={folderPositions[0]?.y || 80}
         isMobile={isMobile}
         onDoubleClick={() => openFolder('personal')}
         theme={theme}
       />
       <DraggableFolder
         name="School Work"
-        initialX={120}
-        initialY={20}
+        initialX={folderPositions[1]?.x || 120}
+        initialY={folderPositions[1]?.y || 80}
         isMobile={isMobile}
         onDoubleClick={() => openFolder('schoolWork')}
         theme={theme}
       />
       <DraggableFolder
         name="Miel Pomodoro"
-        initialX={20}
-        initialY={120}
+        initialX={folderPositions[2]?.x || 220}
+        initialY={folderPositions[2]?.y || 80}
         isMobile={isMobile}
         onDoubleClick={() => openFolder('mielPomodoro')}
         theme={theme}
@@ -557,7 +919,13 @@ function App() {
 
               {activeSection === 'home' && (
             <div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+              {/* Welcome message */}
+              <div style={{ marginBottom: '16px', color: theme === 'dark' ? '#4ade80' : '#16a34a' }}>
+                Welcome! Type <span style={{ color: '#60a5fa' }}>help</span> for commands or click a file below.
+              </div>
+
+              {/* File navigation */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '20px' }}>
                 <button
                   onClick={() => handleNavClick('about')}
                   style={{
@@ -567,10 +935,13 @@ function App() {
                     cursor: 'pointer',
                     textAlign: 'left',
                     fontSize: '14px',
-                    fontFamily: 'monospace'
+                    fontFamily: 'monospace',
+                    padding: '4px 0'
                   }}
+                  onMouseEnter={(e) => e.target.style.color = '#4ade80'}
+                  onMouseLeave={(e) => e.target.style.color = theme === 'dark' ? 'white' : '#1f2937'}
                 >
-                  about.md
+                  📄 about.md
                 </button>
                 <button
                   onClick={() => handleNavClick('projects')}
@@ -581,10 +952,13 @@ function App() {
                     cursor: 'pointer',
                     textAlign: 'left',
                     fontSize: '14px',
-                    fontFamily: 'monospace'
+                    fontFamily: 'monospace',
+                    padding: '4px 0'
                   }}
+                  onMouseEnter={(e) => e.target.style.color = '#60a5fa'}
+                  onMouseLeave={(e) => e.target.style.color = theme === 'dark' ? 'white' : '#1f2937'}
                 >
-                  projects
+                  📁 projects/
                 </button>
                 <button
                   onClick={() => handleNavClick('contact')}
@@ -595,10 +969,13 @@ function App() {
                     cursor: 'pointer',
                     textAlign: 'left',
                     fontSize: '14px',
-                    fontFamily: 'monospace'
+                    fontFamily: 'monospace',
+                    padding: '4px 0'
                   }}
+                  onMouseEnter={(e) => e.target.style.color = '#8b5cf6'}
+                  onMouseLeave={(e) => e.target.style.color = theme === 'dark' ? 'white' : '#1f2937'}
                 >
-                  contact.sh
+                  ⚡ contact.sh
                 </button>
                 <button
                   onClick={() => handleNavClick('skills')}
@@ -609,14 +986,65 @@ function App() {
                     cursor: 'pointer',
                     textAlign: 'left',
                     fontSize: '14px',
-                    fontFamily: 'monospace'
+                    fontFamily: 'monospace',
+                    padding: '4px 0'
                   }}
+                  onMouseEnter={(e) => e.target.style.color = '#f59e0b'}
+                  onMouseLeave={(e) => e.target.style.color = theme === 'dark' ? 'white' : '#1f2937'}
                 >
-                  skills.config
+                  ⚙️ skills.config
                 </button>
               </div>
-              <div style={{ color: theme === 'dark' ? '#888' : '#6b7280' }}>
-                citlol@portfolio ~ % ■
+
+              {/* Terminal output history */}
+              <div style={{ marginBottom: '12px' }}>
+                {terminalOutput.map((line, idx) => (
+                  <div key={idx} style={{
+                    color: line.type === 'error' ? '#ef4444' :
+                           line.type === 'success' ? '#4ade80' :
+                           line.type === 'info' ? '#60a5fa' :
+                           line.type === 'warning' ? '#f59e0b' :
+                           line.type === 'input' ? (theme === 'dark' ? '#888' : '#6b7280') :
+                           line.type === 'command' ? (theme === 'dark' ? '#9ca3af' : '#6b7280') :
+                           line.type === 'project' ? line.color :
+                           line.type === 'link' ? '#60a5fa' :
+                           (theme === 'dark' ? 'white' : '#1f2937'),
+                    marginBottom: '4px',
+                    cursor: line.type === 'link' ? 'pointer' : 'default',
+                    textDecoration: line.type === 'link' ? 'underline' : 'none'
+                  }}
+                  onClick={() => line.url && window.open(line.url, '_blank')}
+                  >
+                    {line.text}
+                  </div>
+                ))}
+              </div>
+
+              {/* Command input line */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                color: theme === 'dark' ? '#888' : '#6b7280'
+              }}>
+                <span>citlol@portfolio ~ % </span>
+                <input
+                  type="text"
+                  value={commandInput}
+                  onChange={(e) => setCommandInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    outline: 'none',
+                    color: theme === 'dark' ? '#4ade80' : '#16a34a',
+                    fontFamily: 'monospace',
+                    fontSize: '14px',
+                    flex: 1,
+                    caretColor: '#4ade80'
+                  }}
+                  placeholder="type a command..."
+                  autoFocus
+                />
               </div>
             </div>
           )}
@@ -637,16 +1065,64 @@ function App() {
                 <div style={{ marginBottom: '12px' }}>
                   <span style={{ color: '#8b5cf6' }}>💡</span> Passionate about creating intuitive user experiences
                 </div>
-                <div style={{ color: '#6b7280', fontSize: '13px', marginTop: '16px' }}>
-                  Currently seeking software engineering opportunities to contribute to innovative projects
+
+                {/* Currently Building Section */}
+                <div style={{
+                  marginTop: '24px',
+                  padding: '16px',
+                  backgroundColor: theme === 'dark' ? 'rgba(96, 165, 250, 0.1)' : 'rgba(59, 130, 246, 0.1)',
+                  borderRadius: '8px',
+                  border: '1px solid rgba(96, 165, 250, 0.2)'
+                }}>
+                  <h4 style={{ color: '#60a5fa', marginBottom: '12px', fontSize: '14px' }}>🔨 Currently Building</h4>
+                  <div style={{ color: theme === 'dark' ? '#d1d5db' : '#4b5563', fontSize: '13px' }}>
+                    <div style={{ marginBottom: '6px' }}>• Pancake - Finalizing budget tracking features</div>
+                    <div style={{ marginBottom: '6px' }}>• This portfolio - Adding interactive terminal commands</div>
+                  </div>
+                </div>
+
+                {/* GitHub Stats */}
+                {githubStats && (
+                  <div style={{
+                    marginTop: '16px',
+                    padding: '16px',
+                    backgroundColor: theme === 'dark' ? 'rgba(139, 92, 246, 0.1)' : 'rgba(124, 58, 237, 0.1)',
+                    borderRadius: '8px',
+                    border: '1px solid rgba(139, 92, 246, 0.2)'
+                  }}>
+                    <h4 style={{ color: '#8b5cf6', marginBottom: '12px', fontSize: '14px' }}>🐙 GitHub Stats</h4>
+                    <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', color: theme === 'dark' ? '#d1d5db' : '#4b5563', fontSize: '13px' }}>
+                      <div>
+                        <span style={{ color: '#8b5cf6', fontWeight: 'bold' }}>{githubStats.public_repos}</span> repos
+                      </div>
+                      <div>
+                        <span style={{ color: '#8b5cf6', fontWeight: 'bold' }}>{githubStats.followers}</span> followers
+                      </div>
+                      <div>
+                        <span style={{ color: '#8b5cf6', fontWeight: 'bold' }}>{githubStats.following}</span> following
+                      </div>
+                    </div>
+                    <a
+                      href="https://github.com/citlol"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: '#8b5cf6', fontSize: '12px', marginTop: '8px', display: 'inline-block' }}
+                    >
+                      View profile →
+                    </a>
+                  </div>
+                )}
+
+                <div style={{ color: '#6b7280', fontSize: '13px', marginTop: '16px', padding: '12px', backgroundColor: theme === 'dark' ? 'rgba(74, 222, 128, 0.1)' : 'rgba(22, 163, 74, 0.1)', borderRadius: '8px', border: '1px solid rgba(74, 222, 128, 0.2)' }}>
+                  <span style={{ color: '#4ade80' }}>✨</span> Currently seeking software engineering opportunities to contribute to innovative projects
                 </div>
               </div>
-              <button 
+              <button
                 onClick={() => handleNavClick('home')}
-                style={{ 
-                  background: 'none', 
-                  border: 'none', 
-                  color: '#4a9eff', 
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#4a9eff',
                   cursor: 'pointer',
                   fontSize: '12px',
                   fontFamily: 'monospace'
@@ -657,49 +1133,200 @@ function App() {
             </div>
           )}
 
-          {activeSection === 'projects' && (
+          {activeSection === 'projects' && !selectedProject && (
             <div>
               <div style={{ color: theme === 'dark' ? '#888' : '#6b7280', marginBottom: '16px' }}>
                 citlol@portfolio ~/projects % ls -la
               </div>
               <div style={{ marginBottom: '20px' }}>
-                <div style={{
-                  padding: '12px',
-                  backgroundColor: 'rgba(74, 222, 128, 0.1)',
-                  borderRadius: '8px',
-                  marginBottom: '12px',
-                  border: '1px solid rgba(74, 222, 128, 0.2)'
-                }}>
-                  <div style={{ color: '#4ade80', fontWeight: 'bold', marginBottom: '4px' }}>📁 Pancake</div>
-                  <div style={{ color: '#9ca3af', fontSize: '12px' }}>Budgeting app - Swift</div>
-                </div>
-                <div style={{
-                  padding: '12px',
-                  backgroundColor: 'rgba(96, 165, 250, 0.1)',
-                  borderRadius: '8px',
-                  marginBottom: '12px',
-                  border: '1px solid rgba(96, 165, 250, 0.2)'
-                }}>
-                  <div style={{ color: '#60a5fa', fontWeight: 'bold', marginBottom: '4px' }}>📁 Miel-Pomodoro</div>
-                  <div style={{ color: '#9ca3af', fontSize: '12px' }}>Productivity timer - Swift, SwitfUI</div>
-                </div>
-                <div style={{
-                  padding: '12px',
-                  backgroundColor: 'rgba(245, 158, 11, 0.1)',
-                  borderRadius: '8px',
-                  marginBottom: '12px',
-                  border: '1px solid rgba(245, 158, 11, 0.2)'
-                }}>
-                  <div style={{ color: '#f59e0b', fontWeight: 'bold', marginBottom: '4px' }}>📁 Star-Wars-All-In-Game</div>
-                  <div style={{ color: '#9ca3af', fontSize: '12px' }}>Interactive game - Java</div>
-                </div>
+                {projects.map((project) => (
+                  <div
+                    key={project.id}
+                    onClick={() => setSelectedProject(project)}
+                    style={{
+                      padding: '16px',
+                      backgroundColor: `${project.color}15`,
+                      borderRadius: '8px',
+                      marginBottom: '12px',
+                      border: `1px solid ${project.color}40`,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateX(4px)';
+                      e.currentTarget.style.backgroundColor = `${project.color}25`;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateX(0)';
+                      e.currentTarget.style.backgroundColor = `${project.color}15`;
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                      <div style={{ color: project.color, fontWeight: 'bold', fontSize: '15px' }}>
+                        📁 {project.name}
+                      </div>
+                      <span style={{
+                        fontSize: '10px',
+                        padding: '2px 8px',
+                        borderRadius: '12px',
+                        backgroundColor: project.status === 'Released' ? 'rgba(74, 222, 128, 0.2)' :
+                                        project.status === 'In Development' ? 'rgba(96, 165, 250, 0.2)' :
+                                        'rgba(156, 163, 175, 0.2)',
+                        color: project.status === 'Released' ? '#4ade80' :
+                               project.status === 'In Development' ? '#60a5fa' : '#9ca3af'
+                      }}>
+                        {project.status}
+                      </span>
+                    </div>
+                    <div style={{ color: theme === 'dark' ? '#d1d5db' : '#4b5563', fontSize: '13px', marginBottom: '8px' }}>
+                      {project.description}
+                    </div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                      {project.tech.map((tech, idx) => (
+                        <span key={idx} style={{
+                          fontSize: '11px',
+                          padding: '2px 8px',
+                          borderRadius: '4px',
+                          backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)',
+                          color: theme === 'dark' ? '#9ca3af' : '#6b7280'
+                        }}>
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                    <div style={{ color: '#6b7280', fontSize: '11px', marginTop: '8px' }}>
+                      Click for details →
+                    </div>
+                  </div>
+                ))}
               </div>
-              <button 
+              <button
                 onClick={() => handleNavClick('home')}
-                style={{ 
-                  background: 'none', 
-                  border: 'none', 
-                  color: '#4a9eff', 
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#4a9eff',
+                  cursor: 'pointer',
+                  fontSize: '12px',
+                  fontFamily: 'monospace'
+                }}
+              >
+                ← back to home
+              </button>
+            </div>
+          )}
+
+          {/* Project Detail View */}
+          {activeSection === 'projects' && selectedProject && (
+            <div>
+              <div style={{ color: theme === 'dark' ? '#888' : '#6b7280', marginBottom: '16px' }}>
+                citlol@portfolio ~/projects/{selectedProject.id} % cat README.md
+              </div>
+              <div style={{
+                padding: '20px',
+                backgroundColor: `${selectedProject.color}10`,
+                borderRadius: '12px',
+                border: `1px solid ${selectedProject.color}30`,
+                marginBottom: '20px'
+              }}>
+                <h3 style={{ color: selectedProject.color, marginBottom: '8px', fontSize: '20px' }}>
+                  {selectedProject.name}
+                </h3>
+                <div style={{
+                  display: 'inline-block',
+                  fontSize: '11px',
+                  padding: '3px 10px',
+                  borderRadius: '12px',
+                  backgroundColor: selectedProject.status === 'Released' ? 'rgba(74, 222, 128, 0.2)' :
+                                  selectedProject.status === 'In Development' ? 'rgba(96, 165, 250, 0.2)' :
+                                  'rgba(156, 163, 175, 0.2)',
+                  color: selectedProject.status === 'Released' ? '#4ade80' :
+                         selectedProject.status === 'In Development' ? '#60a5fa' : '#9ca3af',
+                  marginBottom: '12px'
+                }}>
+                  {selectedProject.status}
+                </div>
+                <p style={{ color: theme === 'dark' ? '#d1d5db' : '#4b5563', marginBottom: '16px', lineHeight: '1.6' }}>
+                  {selectedProject.description}
+                </p>
+
+                <div style={{ marginBottom: '16px' }}>
+                  <div style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280', fontSize: '12px', marginBottom: '6px' }}>
+                    Role: <span style={{ color: selectedProject.color }}>{selectedProject.role}</span>
+                  </div>
+                </div>
+
+                <div style={{ marginBottom: '16px' }}>
+                  <div style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280', fontSize: '12px', marginBottom: '8px' }}>Tech Stack:</div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                    {selectedProject.tech.map((tech, idx) => (
+                      <span key={idx} style={{
+                        fontSize: '12px',
+                        padding: '4px 12px',
+                        borderRadius: '6px',
+                        backgroundColor: `${selectedProject.color}20`,
+                        color: selectedProject.color,
+                        border: `1px solid ${selectedProject.color}40`
+                      }}>
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div style={{ marginBottom: '16px' }}>
+                  <div style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280', fontSize: '12px', marginBottom: '8px' }}>Highlights:</div>
+                  <ul style={{ margin: 0, paddingLeft: '20px', color: theme === 'dark' ? '#d1d5db' : '#4b5563' }}>
+                    {selectedProject.highlights.map((highlight, idx) => (
+                      <li key={idx} style={{ marginBottom: '6px', fontSize: '13px' }}>{highlight}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                <a
+                  href={selectedProject.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '8px 16px',
+                    backgroundColor: selectedProject.color,
+                    color: 'white',
+                    borderRadius: '6px',
+                    textDecoration: 'none',
+                    fontSize: '13px',
+                    fontWeight: '500',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => e.target.style.opacity = '0.8'}
+                  onMouseLeave={(e) => e.target.style.opacity = '1'}
+                >
+                  🐙 View on GitHub
+                </a>
+              </div>
+
+              <button
+                onClick={() => setSelectedProject(null)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#4a9eff',
+                  cursor: 'pointer',
+                  fontSize: '12px',
+                  fontFamily: 'monospace',
+                  marginRight: '16px'
+                }}
+              >
+                ← back to projects
+              </button>
+              <button
+                onClick={() => { setSelectedProject(null); handleNavClick('home'); }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: theme === 'dark' ? '#6b7280' : '#9ca3af',
                   cursor: 'pointer',
                   fontSize: '12px',
                   fontFamily: 'monospace'
