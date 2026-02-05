@@ -1045,7 +1045,7 @@ function App() {
                     caretColor: '#ec4899'
                   }}
                   placeholder="type a command..."
-                  autoFocus
+                  autoFocus={!isMobile}
                 />
               </div>
             </div>
