@@ -712,6 +712,7 @@ function App() {
   // addition of clearing terminal after "closing"
   const closeTerminal = () => {
     setShowTerminal(false);
+    setTerminalOutput([]); // Clear terminal history
     // Reset and reopen after a brief moment
     setTimeout(() => {
       setShowTerminal(true);
