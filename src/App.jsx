@@ -530,7 +530,6 @@ function App() {
           { type: 'info', text: ' GitHub: github.com/citlol' },
           { type: 'text', text: githubStats ? `   Public repos: ${githubStats.public_repos}` : '   Loading stats...' },
           { type: 'text', text: githubStats ? `   Followers: ${githubStats.followers}` : '' },
-          { type: 'text', text: githubStats ? `   Commits this week: ${githubStats.weeklyCommits}` : '' },
           { type: 'link', text: '   View profile →', url: 'https://github.com/citlol' },
         ];
         break;
@@ -572,7 +571,7 @@ function App() {
         setTerminalOutput([]);
         return;
       case 'sudo':
-        if (args.slice(1).join(' ') === 'hire-me') {
+        if (args.slice(1).join(' ') === 'hire me') {
           output = [
             { type: 'success', text: 'HIRE MODE ACTIVATED' },
             { type: 'text', text: '   Ready to bring creativity and dedication to your team!' },
@@ -625,17 +624,9 @@ function App() {
 
   // Fetch GitHub stats
   useEffect(() => {
-    Promise.all([
-      fetch('https://api.github.com/users/citlol').then(res => res.json()),
-      fetch('https://api.github.com/users/citlol/events?per_page=100').then(res => res.json())
-    ])
-      .then(([userData, events]) => {
-        const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-        const weeklyCommits = events
-          .filter(e => e.type === 'PushEvent' && new Date(e.created_at) > oneWeekAgo)
-          .reduce((sum, e) => sum + (e.payload?.commits?.length || 0), 0);
-        setGithubStats({ ...userData, weeklyCommits });
-      })
+    fetch('https://api.github.com/users/citlol')
+      .then(res => res.json())
+      .then(data => setGithubStats(data))
       .catch(() => setGithubStats(null));
   }, []);
 
@@ -821,6 +812,7 @@ function App() {
 
       {/* Terminal Window */}
       {showTerminal && (
+      <>
       <div
         className={isMobile ? 'terminal-window-mobile' : ''}
         style={{
@@ -1534,6 +1526,48 @@ function App() {
           )}
         </div>
       </div>
+
+      {/* Info Bubbles - Desktop only */}
+      {!isMobile && (
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: 'calc(50% + min(450px, 45vw) + 20px)',
+          transform: `translateY(calc(-50% + ${terminalPosition.y}px)) translateX(${terminalPosition.x}px)`,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px',
+          zIndex: 99
+        }}>
+          {[
+            { text: 'CS Student', delay: '0s' },
+            { text: 'Full-Stack Dev', delay: '0.1s' },
+            { text: 'Open to Work', delay: '0.2s' },
+            { text: 'React / JS', delay: '0.3s' },
+            { text: 'UI/UX Design', delay: '0.4s' },
+            { text: 'Creative Mind', delay: '0.5s' }
+          ].map((bubble, i) => (
+            <div
+              key={i}
+              style={{
+                backgroundColor: theme === 'dark' ? 'rgba(236, 72, 153, 0.15)' : 'rgba(236, 72, 153, 0.1)',
+                border: theme === 'dark' ? '1px solid rgba(236, 72, 153, 0.3)' : '1px solid rgba(236, 72, 153, 0.2)',
+                borderRadius: '20px',
+                padding: '8px 16px',
+                color: theme === 'dark' ? '#f9a8d4' : '#db2777',
+                fontSize: '13px',
+                fontWeight: '500',
+                backdropFilter: 'blur(10px)',
+                whiteSpace: 'nowrap',
+                animation: `bubbleIn 0.4s ease-out ${bubble.delay} both`
+              }}
+            >
+              {bubble.text}
+            </div>
+          ))}
+        </div>
+      )}
+      </>
       )}
 
       {/* Bottom Dock */}
