@@ -824,12 +824,12 @@ function App() {
           width: isMobile ? '95vw' : 'min(900px, 90vw)',
           maxWidth: isMobile ? '100vw' : '95vw',
           maxHeight: isMobile ? '80vh' : '85vh',
-          backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.85)' : 'rgba(255, 255, 255, 0.95)',
-          border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.1)',
+          backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.85)' : 'rgba(240, 240, 245, 0.85)',
+          border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.08)',
           borderRadius: '12px',
           boxShadow: theme === 'dark'
             ? '0 20px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1) inset'
-            : '0 20px 40px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05) inset',
+            : '0 20px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.03) inset',
           backdropFilter: 'blur(20px)',
           overflow: 'hidden',
           zIndex: 100,
@@ -841,7 +841,7 @@ function App() {
         <div
           className="terminal-header"
           style={{
-            backgroundColor: theme === 'dark' ? 'rgba(51, 51, 51, 0.8)' : 'rgba(229, 231, 235, 0.9)',
+            backgroundColor: theme === 'dark' ? 'rgba(51, 51, 51, 0.8)' : 'rgba(220, 220, 230, 0.8)',
             padding: '12px 16px',
             borderTopLeftRadius: '12px',
             borderTopRightRadius: '12px',
@@ -1577,7 +1577,7 @@ function App() {
         bottom: isMobile ? '10px' : '20px',
         left: '50%',
         transform: 'translateX(-50%)',
-        backgroundColor: theme === 'dark' ? 'rgba(80, 80, 80, 0.75)' : 'rgba(255, 255, 255, 0.95)',
+        backgroundColor: theme === 'dark' ? 'rgba(80, 80, 80, 0.75)' : 'rgba(240, 240, 245, 0.85)',
         backdropFilter: 'blur(20px)',
         borderRadius: '24px',
         padding: isMobile ? '10px 14px' : '12px 18px',
@@ -2141,7 +2141,7 @@ function App() {
           transform: 'translate(-50%, -50%)',
           width: isMobile ? '95vw' : '600px',
           maxHeight: isMobile ? '80vh' : '70vh',
-          backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.95)' : 'rgba(255, 255, 255, 0.98)',
+          backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.95)' : 'rgba(240, 240, 245, 0.9)',
           border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid rgba(0, 0, 0, 0.1)',
           borderRadius: '12px',
           boxShadow: theme === 'dark' ? '0 20px 40px rgba(0,0,0,0.7)' : '0 20px 40px rgba(0,0,0,0.15)',
@@ -2151,7 +2151,7 @@ function App() {
         }}>
           {/* Folder Header */}
           <div style={{
-            backgroundColor: theme === 'dark' ? 'rgba(51, 51, 51, 0.9)' : 'rgba(229, 231, 235, 0.95)',
+            backgroundColor: theme === 'dark' ? 'rgba(51, 51, 51, 0.9)' : 'rgba(220, 220, 230, 0.85)',
             padding: '12px 16px',
             borderTopLeftRadius: '12px',
             borderTopRightRadius: '12px',
@@ -2200,7 +2200,7 @@ function App() {
           transform: 'translate(-50%, -50%)',
           width: isMobile ? '95vw' : '600px',
           maxHeight: isMobile ? '80vh' : '70vh',
-          backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.95)' : 'rgba(255, 255, 255, 0.98)',
+          backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.95)' : 'rgba(240, 240, 245, 0.9)',
           border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid rgba(0, 0, 0, 0.1)',
           borderRadius: '12px',
           boxShadow: theme === 'dark' ? '0 20px 40px rgba(0,0,0,0.7)' : '0 20px 40px rgba(0,0,0,0.15)',
@@ -2210,7 +2210,7 @@ function App() {
         }}>
           {/* Folder Header */}
           <div style={{
-            backgroundColor: theme === 'dark' ? 'rgba(51, 51, 51, 0.9)' : 'rgba(229, 231, 235, 0.95)',
+            backgroundColor: theme === 'dark' ? 'rgba(51, 51, 51, 0.9)' : 'rgba(220, 220, 230, 0.85)',
             padding: '12px 16px',
             borderTopLeftRadius: '12px',
             borderTopRightRadius: '12px',
@@ -2259,7 +2259,7 @@ function App() {
           transform: 'translate(-50%, -50%)',
           width: isMobile ? '95vw' : '600px',
           maxHeight: isMobile ? '80vh' : '70vh',
-          backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.95)' : 'rgba(255, 255, 255, 0.98)',
+          backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.95)' : 'rgba(240, 240, 245, 0.9)',
           border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid rgba(0, 0, 0, 0.1)',
           borderRadius: '12px',
           boxShadow: theme === 'dark' ? '0 20px 40px rgba(0,0,0,0.7)' : '0 20px 40px rgba(0,0,0,0.15)',
@@ -2269,7 +2269,7 @@ function App() {
         }}>
           {/* Folder Header */}
           <div style={{
-            backgroundColor: theme === 'dark' ? 'rgba(51, 51, 51, 0.9)' : 'rgba(229, 231, 235, 0.95)',
+            backgroundColor: theme === 'dark' ? 'rgba(51, 51, 51, 0.9)' : 'rgba(220, 220, 230, 0.85)',
             padding: '12px 16px',
             borderTopLeftRadius: '12px',
             borderTopRightRadius: '12px',
