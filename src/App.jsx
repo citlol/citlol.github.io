@@ -530,7 +530,7 @@ function App() {
           { type: 'info', text: ' GitHub: github.com/citlol' },
           { type: 'text', text: githubStats ? `   Public repos: ${githubStats.public_repos}` : '   Loading stats...' },
           { type: 'text', text: githubStats ? `   Followers: ${githubStats.followers}` : '' },
-          { type: 'text', text: githubStats ? `   Commits: ${githubStats.}`}
+          { type: 'text', text: githubStats ? `   Commits this week: ${githubStats.weeklyCommits}` : '' },
           { type: 'link', text: '   View profile →', url: 'https://github.com/citlol' },
         ];
         break;
@@ -565,7 +565,7 @@ function App() {
           { type: 'text', text: '   • Miel Pomodoro - Character animation' },
           { type: 'info', text: ' Learning:' },
           { type: 'text', text: '   • Advanced SwiftUI animations' },
-          { type: 'text', text: '   • Cloud architecture patterns' },
+          { type: 'text', text: '   • ' },
         ];
         break;
       case 'clear':
@@ -574,7 +574,7 @@ function App() {
       case 'sudo':
         if (args.slice(1).join(' ') === 'hire-me') {
           output = [
-            { type: 'success', text: '✨ HIRE MODE ACTIVATED ✨' },
+            { type: 'success', text: 'HIRE MODE ACTIVATED' },
             { type: 'text', text: '   Ready to bring creativity and dedication to your team!' },
             { type: 'text', text: '    Let\'s talk: citlalli.tdr@gmail.com' },
             { type: 'info', text: '   [Process completed with exit code: EXCITED_TO_WORK]' },
@@ -625,9 +625,17 @@ function App() {
 
   // Fetch GitHub stats
   useEffect(() => {
-    fetch('https://api.github.com/users/citlol')
-      .then(res => res.json())
-      .then(data => setGithubStats(data))
+    Promise.all([
+      fetch('https://api.github.com/users/citlol').then(res => res.json()),
+      fetch('https://api.github.com/users/citlol/events?per_page=100').then(res => res.json())
+    ])
+      .then(([userData, events]) => {
+        const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+        const weeklyCommits = events
+          .filter(e => e.type === 'PushEvent' && new Date(e.created_at) > oneWeekAgo)
+          .reduce((sum, e) => sum + (e.payload?.commits?.length || 0), 0);
+        setGithubStats({ ...userData, weeklyCommits });
+      })
       .catch(() => setGithubStats(null));
   }, []);
 
@@ -710,6 +718,7 @@ function App() {
   };
 
   // Close terminal handler
+  // addition of clearing terminal after "closing"
   const closeTerminal = () => {
     setShowTerminal(false);
     // Reset and reopen after a brief moment
