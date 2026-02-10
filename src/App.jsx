@@ -32,7 +32,7 @@ const Stars = ({ theme }) => {
       width: '100%',
       height: '100%',
       pointerEvents: 'none',
-      zIndex: 0
+      zIndex: 1
     }}>
       {stars.map(star => (
         <div
@@ -65,10 +65,10 @@ const Clouds = ({ theme }) => {
       for (let i = 0; i < numClouds; i++) {
         cloudArray.push({
           id: i,
-          x: Math.random() * 90,
-          y: Math.random() * 70,
-          scale: Math.random() * 0.4 + 0.3,
-          opacity: Math.random() * 0.3 + 0.2,
+          x: Math.random() * 85,
+          y: Math.random() * 60,
+          scale: Math.random() * 0.3 + 0.2,
+          opacity: Math.random() * 0.4 + 0.3,
           animationDuration: Math.random() * 10 + 20,
           animationDelay: Math.random() * 5
         });
@@ -87,13 +87,13 @@ const Clouds = ({ theme }) => {
       width: '100%',
       height: '100%',
       pointerEvents: 'none',
-      zIndex: 1,
+      zIndex: 0,
       overflow: 'hidden'
     }}>
       {clouds.map(cloud => (
         <img
           key={cloud.id}
-          src={theme === 'dark' ? '/cloud_dark.jpg' : '/cloud_light.jpg'}
+          src={theme === 'dark' ? '/Cloud_light.png' : '/Cloud_dark.png'}
           alt=""
           style={{
             position: 'absolute',
@@ -103,8 +103,7 @@ const Clouds = ({ theme }) => {
             opacity: cloud.opacity,
             animation: `floatCloud ${cloud.animationDuration}s ease-in-out infinite`,
             animationDelay: `${cloud.animationDelay}s`,
-            filter: 'blur(1px)',
-            maxWidth: '300px'
+            maxWidth: '400px'
           }}
         />
       ))}
