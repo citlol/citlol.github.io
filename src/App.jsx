@@ -32,7 +32,7 @@ const Stars = ({ theme }) => {
       width: '100%',
       height: '100%',
       pointerEvents: 'none',
-      zIndex: 1
+      zIndex: 0
     }}>
       {stars.map(star => (
         <div
@@ -55,7 +55,7 @@ const Stars = ({ theme }) => {
   );
 };
 
-const Clouds = ({ theme }) => {
+const Clouds = () => {
   const [clouds, setClouds] = useState([]);
 
   useEffect(() => {
@@ -98,13 +98,13 @@ const Clouds = ({ theme }) => {
       width: '100%',
       height: '100%',
       pointerEvents: 'none',
-      zIndex: 0,
+      zIndex: 1,
       overflow: 'hidden'
     }}>
       {clouds.map(cloud => (
         <img
           key={cloud.id}
-          src={theme === 'dark' ? '/Cloud_light.png' : '/Cloud_dark.png'}
+          src="/Cloud_light.png"
           alt=""
           style={{
             position: 'absolute',
@@ -843,15 +843,15 @@ function App() {
         minHeight: '100vh',
         background: theme === 'dark'
           ? 'linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2a2a2a 100%)'
-          : 'linear-gradient(135deg, #d1d5db 0%, #b8bfc9 50%, #9ca3af 100%)',
+          : 'linear-gradient(135deg, #fce7f3 0%, #fbcfe8 50%, #f9a8d4 100%)',
         fontFamily: 'monospace',
         position: 'relative',
         overflow: isMobile ? 'auto' : 'hidden',
         padding: isMobile ? '10px' : '0',
         transition: 'background 0.3s ease'
       }}>
-      <Stars theme={theme} />
-      <Clouds theme={theme} />
+      {theme === 'dark' && <Stars theme={theme} />}
+      <Clouds />
       {/* Open to Work Badge */}
       {!isMobile && <OpenToWorkBadge theme={theme} />}
       {/* Desktop Clock */}
