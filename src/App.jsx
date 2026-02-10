@@ -574,6 +574,7 @@ function App() {
         if (args.slice(1).join(' ') === 'hire me') {
           output = [
             { type: 'success', text: 'HIRE MODE ACTIVATED' },
+            { type: 'image', src: '/bunnyjump.gif', alt: 'Excited bunny' },
             { type: 'text', text: '   Ready to bring creativity and dedication to your team!' },
             { type: 'text', text: '    Let\'s talk: citlalli.tdr@gmail.com' },
             { type: 'info', text: '   [Process completed with exit code: EXCITED_TO_WORK]' },
@@ -1001,6 +1002,21 @@ function App() {
               {/* Terminal output history */}
               <div style={{ marginBottom: '12px' }}>
                 {terminalOutput.map((line, idx) => (
+                  line.type === 'image' ? (
+                    <div key={idx} style={{ marginBottom: '8px', marginTop: '8px' }}>
+                      <img
+                        src={line.src}
+                        alt={line.alt || ''}
+                        style={{
+                          maxWidth: '150px',
+                          borderRadius: '8px',
+                          border: theme === 'dark' ? '1px solid rgba(236, 72, 153, 0.3)' : '1px solid rgba(236, 72, 153, 0.2)',
+                          backgroundColor: '#fdf2f8',
+                          padding: '8px'
+                        }}
+                      />
+                    </div>
+                  ) : (
                   <div key={idx} style={{
                     color: line.type === 'error' ? '#ef4444' :
                            line.type === 'success' ? '#ec4899' :
@@ -1019,6 +1035,7 @@ function App() {
                   >
                     {line.text}
                   </div>
+                  )
                 ))}
               </div>
 
@@ -1541,7 +1558,7 @@ function App() {
           zIndex: 99
         }}>
           {[
-            { text: 'CS Student', delay: '0s' },
+            { text: 'Graduating May 2026', delay: '0s' },
             { text: 'Full-Stack Dev', delay: '0.1s' },
             { text: 'Open to Work', delay: '0.2s' },
             { text: 'React / JS', delay: '0.3s' },
@@ -1560,7 +1577,17 @@ function App() {
                 fontWeight: '500',
                 backdropFilter: 'blur(10px)',
                 whiteSpace: 'nowrap',
-                animation: `bubbleIn 0.4s ease-out ${bubble.delay} both`
+                animation: `bubbleIn 0.4s ease-out ${bubble.delay} both`,
+                cursor: 'default',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'scale(1.05)';
+                e.target.style.backgroundColor = theme === 'dark' ? 'rgba(236, 72, 153, 0.25)' : 'rgba(236, 72, 153, 0.2)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'scale(1)';
+                e.target.style.backgroundColor = theme === 'dark' ? 'rgba(236, 72, 153, 0.15)' : 'rgba(236, 72, 153, 0.1)';
               }}
             >
               {bubble.text}
