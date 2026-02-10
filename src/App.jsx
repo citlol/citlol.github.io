@@ -307,6 +307,8 @@ const generateRandomFolderPositions = () => {
       { x: width / 2 - 500, y: height / 2 - 350, width: 1000, height: 700 },
       // Bottom dock
       { x: width / 2 - 300, y: height - 100, width: 600, height: 100 },
+      // Info bubbles (right side)
+      { x: width - 220, y: 0, width: 220, height: height },
     ];
   };
 
@@ -873,30 +875,33 @@ function App() {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <span style={{ color: '#888', fontSize: '12px' }}>citlol@portfolio</span>
-            <button
+            <div
               onClick={toggleTheme}
               style={{
-                background: 'none',
-                border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid rgba(0, 0, 0, 0.2)',
-                borderRadius: '6px',
-                padding: '4px 8px',
+                width: '44px',
+                height: '24px',
+                backgroundColor: theme === 'dark' ? '#3b3b3b' : '#ec4899',
+                borderRadius: '12px',
                 cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px',
-                fontSize: '12px',
-                color: theme === 'dark' ? '#fbbf24' : '#6366f1',
-                transition: 'all 0.2s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.backgroundColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.backgroundColor = 'transparent';
+                position: 'relative',
+                transition: 'background-color 0.3s ease',
+                border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(236, 72, 153, 0.3)'
               }}
             >
-              {theme === 'dark' ? '☀️' : '🌙'}
-            </button>
+              <div
+                style={{
+                  width: '20px',
+                  height: '20px',
+                  backgroundColor: '#fff',
+                  borderRadius: '50%',
+                  position: 'absolute',
+                  top: '2px',
+                  left: theme === 'dark' ? '2px' : '22px',
+                  transition: 'left 0.3s ease',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.3)'
+                }}
+              />
+            </div>
           </div>
         </div>
 
