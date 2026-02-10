@@ -1093,7 +1093,7 @@ function App() {
                   borderRadius: '8px',
                   border: '1px solid rgba(244, 114, 182, 0.2)'
                 }}>
-                  <h4 style={{ color: '#f472b6', marginBottom: '12px', fontSize: '14px' }}>🔨 Currently Building</h4>
+                  <h4 style={{ color: '#f472b6', marginBottom: '12px', fontSize: '14px' }}>[*] Currently Building</h4>
                   <div style={{ color: theme === 'dark' ? '#d1d5db' : '#4b5563', fontSize: '13px' }}>
                     <div style={{ marginBottom: '6px' }}>• Pancake - Finalizing budget tracking features</div>
                     <div style={{ marginBottom: '6px' }}>• lightdal - Wishlist website with item tracking</div>
