@@ -62,17 +62,17 @@ const Clouds = ({ theme }) => {
     const generateClouds = () => {
       const cloudArray = [];
       // Grid-based distribution for even spread
-      const cols = 4;
-      const rows = 3;
-      const cellWidth = 90 / cols;
-      const cellHeight = 75 / rows;
+      const cols = 5;
+      const rows = 4;
+      const cellWidth = 95 / cols;
+      const cellHeight = 90 / rows;
 
       let id = 0;
       for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
           // Add randomness within each cell
-          const x = col * cellWidth + Math.random() * (cellWidth * 0.7);
-          const y = row * cellHeight + Math.random() * (cellHeight * 0.7);
+          const x = col * cellWidth + Math.random() * (cellWidth * 0.6);
+          const y = row * cellHeight + Math.random() * (cellHeight * 0.5);
           cloudArray.push({
             id: id++,
             x,
@@ -843,7 +843,7 @@ function App() {
         minHeight: '100vh',
         background: theme === 'dark'
           ? 'linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2a2a2a 100%)'
-          : 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%)',
+          : 'linear-gradient(135deg, #d1d5db 0%, #b8bfc9 50%, #9ca3af 100%)',
         fontFamily: 'monospace',
         position: 'relative',
         overflow: isMobile ? 'auto' : 'hidden',
@@ -1018,7 +1018,7 @@ function App() {
                   onMouseEnter={(e) => e.target.style.color = '#ec4899'}
                   onMouseLeave={(e) => e.target.style.color = theme === 'dark' ? 'white' : '#1f2937'}
                 >
-                  📄 about.md
+                  ./about.md
                 </button>
                 <button
                   onClick={() => handleNavClick('projects')}
