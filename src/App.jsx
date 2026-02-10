@@ -61,16 +61,16 @@ const Clouds = ({ theme }) => {
   useEffect(() => {
     const generateClouds = () => {
       const cloudArray = [];
-      const numClouds = 6;
+      const numClouds = 12;
       for (let i = 0; i < numClouds; i++) {
         cloudArray.push({
           id: i,
-          x: Math.random() * 85,
-          y: Math.random() * 60,
-          scale: Math.random() * 0.3 + 0.2,
-          opacity: Math.random() * 0.4 + 0.3,
-          animationDuration: Math.random() * 10 + 20,
-          animationDelay: Math.random() * 5
+          x: Math.random() * 90,
+          y: Math.random() * 70,
+          scale: Math.random() * 0.5 + 0.1,
+          opacity: Math.random() * 0.4 + 0.2,
+          animationDuration: Math.random() * 15 + 20,
+          animationDelay: Math.random() * 10
         });
       }
       setClouds(cloudArray);
