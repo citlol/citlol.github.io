@@ -61,17 +61,28 @@ const Clouds = ({ theme }) => {
   useEffect(() => {
     const generateClouds = () => {
       const cloudArray = [];
-      const numClouds = 12;
-      for (let i = 0; i < numClouds; i++) {
-        cloudArray.push({
-          id: i,
-          x: Math.random() * 90,
-          y: Math.random() * 70,
-          scale: Math.random() * 0.5 + 0.1,
-          opacity: Math.random() * 0.4 + 0.2,
-          animationDuration: Math.random() * 15 + 20,
-          animationDelay: Math.random() * 10
-        });
+      // Grid-based distribution for even spread
+      const cols = 4;
+      const rows = 3;
+      const cellWidth = 90 / cols;
+      const cellHeight = 75 / rows;
+
+      let id = 0;
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          // Add randomness within each cell
+          const x = col * cellWidth + Math.random() * (cellWidth * 0.7);
+          const y = row * cellHeight + Math.random() * (cellHeight * 0.7);
+          cloudArray.push({
+            id: id++,
+            x,
+            y,
+            scale: Math.random() * 0.5 + 0.15,
+            opacity: Math.random() * 0.35 + 0.25,
+            animationDuration: Math.random() * 15 + 20,
+            animationDelay: Math.random() * 10
+          });
+        }
       }
       setClouds(cloudArray);
     };
