@@ -535,7 +535,7 @@ function App() {
         break;
       case 'projects':
         output = [
-          { type: 'info', text: '📁 My Projects:' },
+          { type: 'info', text: '[>] My Projects:' },
           ...projects.map(p => ({
             type: 'project',
             text: `   ${p.name} - ${p.tech.join(', ')} [${p.status}]`,
@@ -545,9 +545,9 @@ function App() {
         break;
       case 'skills':
         output = [
-          { type: 'success', text: '💻 Frontend: React, JavaScript, HTML/CSS, Swift' },
-          { type: 'info', text: '🔧 Backend: Node.js, MongoDB, Firebase' },
-          { type: 'warning', text: '🛠️ Tools: Git, Figma, VS Code, Adobe Illustrator' },
+          { type: 'success', text: '[>] Frontend: React, JavaScript, HTML/CSS, Swift' },
+          { type: 'info', text: '[>] Backend: Node.js, MongoDB, Firebase' },
+          { type: 'warning', text: '[>] Tools: Git, Figma, VS Code, Adobe Illustrator' },
         ];
         break;
       case 'contact':
@@ -961,7 +961,7 @@ function App() {
                   onMouseEnter={(e) => e.target.style.color = '#f472b6'}
                   onMouseLeave={(e) => e.target.style.color = theme === 'dark' ? 'white' : '#1f2937'}
                 >
-                  📁 projects/
+                  ~/projects/
                 </button>
                 <button
                   onClick={() => handleNavClick('contact')}
@@ -978,7 +978,7 @@ function App() {
                   onMouseEnter={(e) => e.target.style.color = '#d946ef'}
                   onMouseLeave={(e) => e.target.style.color = theme === 'dark' ? 'white' : '#1f2937'}
                 >
-                  ⚡ contact.sh
+                  ./contact.sh
                 </button>
                 <button
                   onClick={() => handleNavClick('skills')}
@@ -995,7 +995,7 @@ function App() {
                   onMouseEnter={(e) => e.target.style.color = '#fb7185'}
                   onMouseLeave={(e) => e.target.style.color = theme === 'dark' ? 'white' : '#1f2937'}
                 >
-                  ⚙️ skills.config
+                  .skills.config
                 </button>
               </div>
 
@@ -1133,7 +1133,7 @@ function App() {
                 )}
 
                 <div style={{ color: '#6b7280', fontSize: '13px', marginTop: '16px', padding: '12px', backgroundColor: theme === 'dark' ? 'rgba(236, 72, 153, 0.1)' : 'rgba(22, 163, 74, 0.1)', borderRadius: '8px', border: '1px solid rgba(236, 72, 153, 0.2)' }}>
-                  <span style={{ color: '#ec4899' }}>✨</span> Currently seeking software engineering opportunities to contribute to innovative projects
+                  <span style={{ color: '#ec4899' }}>[*]</span> Currently seeking software engineering opportunities to contribute to innovative projects
                 </div>
               </div>
               <button
@@ -1182,7 +1182,7 @@ function App() {
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
                       <div style={{ color: project.color, fontWeight: 'bold', fontSize: '15px' }}>
-                        📁 {project.name}
+                        [~] {project.name}
                       </div>
                       <span style={{
                         fontSize: '10px',
@@ -1390,7 +1390,7 @@ function App() {
                       e.target.style.transform = 'translateY(0)';
                     }}
                   >
-                    <span style={{ fontSize: '18px' }}>📧</span>
+                    <span style={{ fontSize: '18px' }}>[@]</span>
                     <span>citlalli.tdr@gmail.com</span>
                   </a>
                   <a
