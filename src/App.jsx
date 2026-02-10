@@ -32,7 +32,7 @@ const Stars = ({ theme }) => {
       width: '100%',
       height: '100%',
       pointerEvents: 'none',
-      zIndex: 1
+      zIndex: 0
     }}>
       {stars.map(star => (
         <div
@@ -48,6 +48,63 @@ const Stars = ({ theme }) => {
             opacity: star.opacity,
             animation: `twinkle ${star.animationDuration}s ease-in-out infinite`,
             animationDelay: `${star.animationDelay}s`
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+const Clouds = ({ theme }) => {
+  const [clouds, setClouds] = useState([]);
+
+  useEffect(() => {
+    const generateClouds = () => {
+      const cloudArray = [];
+      const numClouds = 6;
+      for (let i = 0; i < numClouds; i++) {
+        cloudArray.push({
+          id: i,
+          x: Math.random() * 90,
+          y: Math.random() * 70,
+          scale: Math.random() * 0.4 + 0.3,
+          opacity: Math.random() * 0.3 + 0.2,
+          animationDuration: Math.random() * 10 + 20,
+          animationDelay: Math.random() * 5
+        });
+      }
+      setClouds(cloudArray);
+    };
+
+    generateClouds();
+  }, []);
+
+  return (
+    <div style={{
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      pointerEvents: 'none',
+      zIndex: 1,
+      overflow: 'hidden'
+    }}>
+      {clouds.map(cloud => (
+        <img
+          key={cloud.id}
+          src={theme === 'dark' ? '/cloud_dark.jpg' : '/cloud_light.jpg'}
+          alt=""
+          style={{
+            position: 'absolute',
+            left: `${cloud.x}%`,
+            top: `${cloud.y}%`,
+            transform: `scale(${cloud.scale})`,
+            opacity: cloud.opacity,
+            animation: `floatCloud ${cloud.animationDuration}s ease-in-out infinite`,
+            animationDelay: `${cloud.animationDelay}s`,
+            filter: 'blur(1px)',
+            maxWidth: '300px'
           }}
         />
       ))}
@@ -784,6 +841,7 @@ function App() {
         transition: 'background 0.3s ease'
       }}>
       <Stars theme={theme} />
+      <Clouds theme={theme} />
       {/* Open to Work Badge */}
       {!isMobile && <OpenToWorkBadge theme={theme} />}
       {/* Desktop Clock */}
@@ -890,13 +948,14 @@ function App() {
             >
               <div
                 style={{
-                  width: '20px',
-                  height: '20px',
+                  width: '18px',
+                  height: '18px',
                   backgroundColor: '#fff',
                   borderRadius: '50%',
                   position: 'absolute',
-                  top: '2px',
-                  left: theme === 'dark' ? '2px' : '22px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  left: theme === 'dark' ? '3px' : '23px',
                   transition: 'left 0.3s ease',
                   boxShadow: '0 1px 3px rgba(0,0,0,0.3)'
                 }}

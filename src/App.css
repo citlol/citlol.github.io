@@ -719,3 +719,23 @@ section[role="button"]:focus {
     transform: translateX(0) scale(1);
   }
 }
+
+/* Floating clouds animation */
+@keyframes floatCloud {
+  0%, 100% {
+    margin-top: 0;
+    margin-left: 0;
+  }
+  25% {
+    margin-top: -10px;
+    margin-left: 5px;
+  }
+  50% {
+    margin-top: -5px;
+    margin-left: 10px;
+  }
+  75% {
+    margin-top: -15px;
+    margin-left: 5px;
+  }
+}
