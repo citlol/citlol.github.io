@@ -237,6 +237,7 @@ const DraggableFolder = ({ name, initialX, initialY, isMobile, onClick, theme, i
         style={{
           width: '48px',
           height: '48px',
+          objectFit: 'contain',
           pointerEvents: 'none'
         }}
       />
@@ -1947,12 +1948,19 @@ function App() {
           position: 'relative',
           width: isMobile ? '40px' : '50px',
           height: isMobile ? '40px' : '50px',
+          borderRadius: '12px',
           cursor: 'pointer',
           transition: 'transform 0.2s ease',
-          transform: hoveredIcon === 'Profile' ? 'scale(1.2) translateY(-8px)' : 'scale(1)'
+          overflow: 'visible'
         }}
-        onMouseEnter={() => setHoveredIcon('Profile')}
-        onMouseLeave={() => setHoveredIcon(null)}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'scale(1.1)';
+          setHoveredIcon('Profile');
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'scale(1)';
+          setHoveredIcon(null);
+        }}
         onClick={() => setShowProfileModal(true)}
         >
           <img
