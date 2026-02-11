@@ -2421,7 +2421,7 @@ function App() {
                 backgroundColor: '#f9a8d4'
               }}>
                 <img
-                  src="/IMG_8198.png"
+                  src="/IMG_8198.jpg"
                   alt="Profile"
                   style={{
                     width: '100%',
