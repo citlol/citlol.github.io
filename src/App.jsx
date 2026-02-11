@@ -235,8 +235,8 @@ const DraggableFolder = ({ name, initialX, initialY, isMobile, onClick, theme, i
         src={icon || (theme === 'dark' ? '/dark_bunny.png' : '/pink_bunny.png')}
         alt="Folder"
         style={{
-          width: '48px',
-          height: '48px',
+          width: icon ? '64px' : '48px',
+          height: icon ? '64px' : '48px',
           objectFit: 'contain',
           pointerEvents: 'none'
         }}
@@ -1946,8 +1946,8 @@ function App() {
 
         <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
           position: 'relative',
-          width: isMobile ? '40px' : '50px',
-          height: isMobile ? '40px' : '50px',
+          width: isMobile ? '50px' : '60px',
+          height: isMobile ? '50px' : '60px',
           borderRadius: '12px',
           cursor: 'pointer',
           transition: 'transform 0.2s ease',
