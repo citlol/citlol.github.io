@@ -2405,7 +2405,7 @@ function App() {
             <div style={{ maxHeight: 'calc(70vh - 100px)', overflow: 'auto' }}>
             {/* Profile Header */}
             <div style={{
-              background: 'linear-gradient(135deg, #ec4899 0%, #f472b6 50%, #fb7185 100%)',
+              background: '#fb7185 100%)',
               padding: '20px',
               position: 'relative'
             }}>
