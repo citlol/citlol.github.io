@@ -73,7 +73,9 @@ const Clouds = () => {
         for (let col = 0; col < cols; col++) {
           // Add randomness within each cell
           const x = col * cellWidth + Math.random() * (cellWidth * 0.6);
-          const y = row * cellHeight + Math.random() * (cellHeight * 0.4) - 2;
+          // Start first row higher (closer to top)
+          const yOffset = row === 0 ? -5 : 0;
+          const y = row * cellHeight + Math.random() * (cellHeight * 0.4) + yOffset;
           cloudArray.push({
             id: id++,
             x,
@@ -283,14 +285,14 @@ const OpenToWorkBadge = ({ theme }) => {
         width: '8px',
         height: '8px',
         borderRadius: '50%',
-        backgroundColor: '#ec4899',
+        backgroundColor: '#c026d3',
         animation: 'pulse-badge 2s ease-in-out infinite',
-        boxShadow: '0 0 8px #ec4899'
+        boxShadow: '0 0 8px #c026d3'
       }} />
       <span style={{
         fontSize: '12px',
         fontWeight: '600',
-        color: theme === 'dark' ? '#ec4899' : '#db2777',
+        color: theme === 'dark' ? '#c026d3' : '#a855f7',
         fontFamily: 'monospace'
       }}>
         Open to Work
@@ -505,7 +507,7 @@ function App() {
       description: 'A modern budgeting app that helps users track expenses and manage finances',
       tech: ['Swift', 'SwiftUI', 'Python'],
       role: 'Co-Founder & Frontend Developer',
-      color: '#ec4899',
+      color: '#c026d3',
       highlights: [
         'Built intuitive expense tracking with smart categorization',
         'PLaid integration for up-to-date budget tracking',
@@ -519,7 +521,7 @@ function App() {
       description: 'A productivity timer app with an animal pal - pomodoro focus sessions',
       tech: ['Swift', 'SwiftUI', 'UserNotifications', 'macOS'],
       role: 'Solo Developer',
-      color: '#f472b6',
+      color: '#d946ef',
       highlights: [
         'Custom timer with ambient sounds',
         'Progress tracking and statistics on desktop widget',
@@ -534,7 +536,7 @@ function App() {
       description: 'An interactive text-based adventure game set in the Star Wars universe',
       tech: ['Java', 'OOP', 'File I/O'],
       role: 'Developer',
-      color: '#fb7185',
+      color: '#e879f9',
       highlights: [
         'Fighting infamous Star Wars villains',
         'Save/load game functionality'
@@ -854,7 +856,7 @@ function App() {
         minHeight: '100vh',
         background: theme === 'dark'
           ? 'linear-gradient(135deg, #000000 0%, #080808 12%, #101010 25%, #151515 37%, #1a1a1a 50%, #1f1f1f 62%, #232323 75%, #272727 87%, #2a2a2a 100%)'
-          : 'linear-gradient(135deg, #fce7f3 0%, #fbcfe8 50%, #f9a8d4 100%)',
+          : 'linear-gradient(135deg, #faf5ff 0%, #f5d0fe 50%, #f0abfc 100%)',
         fontFamily: 'monospace',
         position: 'relative',
         overflow: isMobile ? 'auto' : 'hidden',
@@ -968,7 +970,7 @@ function App() {
               style={{
                 width: '44px',
                 height: '24px',
-                backgroundColor: theme === 'dark' ? '#3b3b3b' : '#ec4899',
+                backgroundColor: theme === 'dark' ? '#3b3b3b' : '#c026d3',
                 borderRadius: '12px',
                 cursor: 'pointer',
                 position: 'relative',
@@ -1005,7 +1007,7 @@ function App() {
           overflowY: 'auto'
         }}>
           {isInitializing ? (
-            <div style={{ color: theme === 'dark' ? '#ec4899' : '#db2777', marginBottom: '16px' }}>
+            <div style={{ color: theme === 'dark' ? '#c026d3' : '#a855f7', marginBottom: '16px' }}>
               Initializing<span className="typing-dots">...</span>
             </div>
           ) : (
@@ -1017,8 +1019,8 @@ function App() {
               {activeSection === 'home' && (
             <div>
               {/* Welcome message */}
-              <div style={{ marginBottom: '16px', color: theme === 'dark' ? '#ec4899' : '#db2777' }}>
-                Welcome! Type <span style={{ color: '#f472b6' }}>help</span> for commands or click a file below.
+              <div style={{ marginBottom: '16px', color: theme === 'dark' ? '#c026d3' : '#a855f7' }}>
+                Welcome! Type <span style={{ color: '#d946ef' }}>help</span> for commands or click a file below.
               </div>
 
               {/* File navigation */}
@@ -1035,7 +1037,7 @@ function App() {
                     fontFamily: 'monospace',
                     padding: '4px 0'
                   }}
-                  onMouseEnter={(e) => e.target.style.color = '#ec4899'}
+                  onMouseEnter={(e) => e.target.style.color = '#c026d3'}
                   onMouseLeave={(e) => e.target.style.color = theme === 'dark' ? 'white' : '#1f2937'}
                 >
                   ./about.md
@@ -1052,7 +1054,7 @@ function App() {
                     fontFamily: 'monospace',
                     padding: '4px 0'
                   }}
-                  onMouseEnter={(e) => e.target.style.color = '#f472b6'}
+                  onMouseEnter={(e) => e.target.style.color = '#d946ef'}
                   onMouseLeave={(e) => e.target.style.color = theme === 'dark' ? 'white' : '#1f2937'}
                 >
                   ~/projects/
@@ -1086,7 +1088,7 @@ function App() {
                     fontFamily: 'monospace',
                     padding: '4px 0'
                   }}
-                  onMouseEnter={(e) => e.target.style.color = '#fb7185'}
+                  onMouseEnter={(e) => e.target.style.color = '#e879f9'}
                   onMouseLeave={(e) => e.target.style.color = theme === 'dark' ? 'white' : '#1f2937'}
                 >
                   .skills.config
@@ -1113,13 +1115,13 @@ function App() {
                   ) : (
                   <div key={idx} style={{
                     color: line.type === 'error' ? '#ef4444' :
-                           line.type === 'success' ? '#ec4899' :
-                           line.type === 'info' ? '#f472b6' :
-                           line.type === 'warning' ? '#fb7185' :
+                           line.type === 'success' ? '#c026d3' :
+                           line.type === 'info' ? '#d946ef' :
+                           line.type === 'warning' ? '#e879f9' :
                            line.type === 'input' ? (theme === 'dark' ? '#888' : '#6b7280') :
                            line.type === 'command' ? (theme === 'dark' ? '#9ca3af' : '#6b7280') :
                            line.type === 'project' ? line.color :
-                           line.type === 'link' ? '#f472b6' :
+                           line.type === 'link' ? '#d946ef' :
                            (theme === 'dark' ? 'white' : '#1f2937'),
                     marginBottom: '4px',
                     cursor: line.type === 'link' ? 'pointer' : 'default',
@@ -1149,11 +1151,11 @@ function App() {
                     background: 'none',
                     border: 'none',
                     outline: 'none',
-                    color: theme === 'dark' ? '#ec4899' : '#db2777',
+                    color: theme === 'dark' ? '#c026d3' : '#a855f7',
                     fontFamily: 'monospace',
                     fontSize: '14px',
                     flex: 1,
-                    caretColor: '#ec4899'
+                    caretColor: '#c026d3'
                   }}
                   placeholder="type a command..."
                   autoFocus={!isMobile}
@@ -1168,12 +1170,12 @@ function App() {
                 citlol@portfolio ~/about % cat about.md
               </div>
               <div style={{ marginBottom: '20px' }}>
-                <h3 style={{ color: theme === 'dark' ? '#ec4899' : '#db2777', marginBottom: '16px', fontSize: '18px' }}># About Me</h3>
+                <h3 style={{ color: theme === 'dark' ? '#c026d3' : '#a855f7', marginBottom: '16px', fontSize: '18px' }}># About Me</h3>
                 <div style={{ marginBottom: '12px' }}>
-                  <span style={{ color: '#f472b6' }}></span> Computer Science Student & Full-Stack Developer
+                  <span style={{ color: '#d946ef' }}></span> Computer Science Student & Full-Stack Developer
                 </div>
                 <div style={{ marginBottom: '12px' }}>
-                  <span style={{ color: '#fb7185' }}></span> Co-Founder of Pancake - A modern budgeting app
+                  <span style={{ color: '#e879f9' }}></span> Co-Founder of Pancake - A modern budgeting app
                 </div>
                 <div style={{ marginBottom: '12px' }}>
                   <span style={{ color: '#d946ef' }}></span> Passionate about creating intuitive user experiences
@@ -1187,7 +1189,7 @@ function App() {
                   borderRadius: '8px',
                   border: '1px solid rgba(244, 114, 182, 0.2)'
                 }}>
-                  <h4 style={{ color: '#f472b6', marginBottom: '12px', fontSize: '14px' }}>[*] Currently Building</h4>
+                  <h4 style={{ color: '#d946ef', marginBottom: '12px', fontSize: '14px' }}>[*] Currently Building</h4>
                   <div style={{ color: theme === 'dark' ? '#d1d5db' : '#4b5563', fontSize: '13px' }}>
                     <div style={{ marginBottom: '6px' }}>• Pancake - Finalizing budget tracking features</div>
                     <div style={{ marginBottom: '6px' }}>• lightdal - Wishlist website with item tracking</div>
@@ -1227,7 +1229,7 @@ function App() {
                 )}
 
                 <div style={{ color: '#6b7280', fontSize: '13px', marginTop: '16px', padding: '12px', backgroundColor: theme === 'dark' ? 'rgba(236, 72, 153, 0.1)' : 'rgba(22, 163, 74, 0.1)', borderRadius: '8px', border: '1px solid rgba(236, 72, 153, 0.2)' }}>
-                  <span style={{ color: '#ec4899' }}>[*]</span> Currently seeking software engineering opportunities to contribute to innovative projects
+                  <span style={{ color: '#c026d3' }}>[*]</span> Currently seeking software engineering opportunities to contribute to innovative projects
                 </div>
               </div>
               <button
@@ -1285,8 +1287,8 @@ function App() {
                         backgroundColor: project.status === 'Released' ? 'rgba(236, 72, 153, 0.2)' :
                                         project.status === 'In Development' ? 'rgba(244, 114, 182, 0.2)' :
                                         'rgba(156, 163, 175, 0.2)',
-                        color: project.status === 'Released' ? '#ec4899' :
-                               project.status === 'In Development' ? '#f472b6' : '#9ca3af'
+                        color: project.status === 'Released' ? '#c026d3' :
+                               project.status === 'In Development' ? '#d946ef' : '#9ca3af'
                       }}>
                         {project.status}
                       </span>
@@ -1353,8 +1355,8 @@ function App() {
                   backgroundColor: selectedProject.status === 'Released' ? 'rgba(236, 72, 153, 0.2)' :
                                   selectedProject.status === 'In Development' ? 'rgba(244, 114, 182, 0.2)' :
                                   'rgba(156, 163, 175, 0.2)',
-                  color: selectedProject.status === 'Released' ? '#ec4899' :
-                         selectedProject.status === 'In Development' ? '#f472b6' : '#9ca3af',
+                  color: selectedProject.status === 'Released' ? '#c026d3' :
+                         selectedProject.status === 'In Development' ? '#d946ef' : '#9ca3af',
                   marginBottom: '12px'
                 }}>
                   {selectedProject.status}
@@ -1471,7 +1473,7 @@ function App() {
                       backgroundColor: 'rgba(236, 72, 153, 0.1)',
                       borderRadius: '8px',
                       border: '1px solid rgba(236, 72, 153, 0.2)',
-                      color: '#ec4899',
+                      color: '#c026d3',
                       textDecoration: 'none',
                       transition: 'all 0.2s ease'
                     }}
@@ -1499,7 +1501,7 @@ function App() {
                       backgroundColor: 'rgba(244, 114, 182, 0.1)',
                       borderRadius: '8px',
                       border: '1px solid rgba(244, 114, 182, 0.2)',
-                      color: '#f472b6',
+                      color: '#d946ef',
                       textDecoration: 'none',
                       transition: 'all 0.2s ease'
                     }}
@@ -1568,12 +1570,12 @@ function App() {
               </div>
               <div style={{ marginBottom: '20px' }}>
                 <div style={{ marginBottom: '16px' }}>
-                  <h4 style={{ color: '#ec4899', marginBottom: '8px' }}>Frontend</h4>
+                  <h4 style={{ color: '#c026d3', marginBottom: '8px' }}>Frontend</h4>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                     {['React', 'JavaScript', 'HTML/CSS', 'Swift'].map(skill => (
                       <span key={skill} style={{
                         backgroundColor: 'rgba(236, 72, 153, 0.2)',
-                        color: '#ec4899',
+                        color: '#c026d3',
                         padding: '4px 8px',
                         borderRadius: '4px',
                         fontSize: '12px',
@@ -1585,12 +1587,12 @@ function App() {
                   </div>
                 </div>
                 <div style={{ marginBottom: '16px' }}>
-                  <h4 style={{ color: '#f472b6', marginBottom: '8px' }}>Backend</h4>
+                  <h4 style={{ color: '#d946ef', marginBottom: '8px' }}>Backend</h4>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                     {['Node.js', 'MongoDB', 'Firebase'].map(skill => (
                       <span key={skill} style={{
                         backgroundColor: 'rgba(244, 114, 182, 0.2)',
-                        color: '#f472b6',
+                        color: '#d946ef',
                         padding: '4px 8px',
                         borderRadius: '4px',
                         fontSize: '12px',
@@ -1602,12 +1604,12 @@ function App() {
                   </div>
                 </div>
                 <div style={{ marginBottom: '16px' }}>
-                  <h4 style={{ color: '#fb7185', marginBottom: '8px' }}>Tools</h4>
+                  <h4 style={{ color: '#e879f9', marginBottom: '8px' }}>Tools</h4>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                     {['Git', 'Figma', 'VS Code', 'XCode', 'Adobe Illustrator'].map(skill => (
                       <span key={skill} style={{
                         backgroundColor: 'rgba(251, 113, 133, 0.2)',
-                        color: '#fb7185',
+                        color: '#e879f9',
                         padding: '4px 8px',
                         borderRadius: '4px',
                         fontSize: '12px',
@@ -1666,7 +1668,7 @@ function App() {
                 border: theme === 'dark' ? '1px solid rgba(236, 72, 153, 0.3)' : '1px solid rgba(255, 255, 255, 0.5)',
                 borderRadius: '20px',
                 padding: '8px 16px',
-                color: theme === 'dark' ? '#f9a8d4' : '#831843',
+                color: theme === 'dark' ? '#f0abfc' : '#831843',
                 fontSize: '13px',
                 fontWeight: '500',
                 backdropFilter: 'blur(10px)',
@@ -2306,7 +2308,7 @@ function App() {
         onClick={() => setShowProfileModal(false)}
         >
           <div style={{
-            backgroundColor: theme === 'dark' ? '#2a2a2a' : '#fce7f3',
+            backgroundColor: theme === 'dark' ? '#2a2a2a' : '#faf5ff',
             borderRadius: '12px',
             padding: '0',
             position: 'relative',
@@ -2357,7 +2359,7 @@ function App() {
                 </div>
                 {/* Browser tab */}
                 <div style={{
-                  backgroundColor: theme === 'dark' ? '#2a2a2a' : '#fce7f3',
+                  backgroundColor: theme === 'dark' ? '#2a2a2a' : '#faf5ff',
                   padding: '6px 16px',
                   borderRadius: '8px 8px 0 0',
                   fontSize: '12px',
@@ -2418,7 +2420,7 @@ function App() {
                 border: '4px solid white',
                 margin: '0 auto 15px',
                 overflow: 'hidden',
-                backgroundColor: '#f9a8d4'
+                backgroundColor: '#f0abfc'
               }}>
                 <img
                   src="/IMG_8198.jpg"
@@ -2461,7 +2463,7 @@ function App() {
               {/* About Me */}
               <div style={{ marginBottom: '20px' }}>
                 <h3 style={{
-                  color: '#ec4899',
+                  color: '#c026d3',
                   fontSize: '16px',
                   marginBottom: '10px',
                   display: 'flex',
@@ -2487,7 +2489,7 @@ function App() {
               {/* Current Favorite Song */}
               <div style={{ marginBottom: '20px' }}>
                 <h3 style={{
-                  color: '#f472b6',
+                  color: '#d946ef',
                   fontSize: '16px',
                   marginBottom: '10px',
                   display: 'flex',
@@ -2525,7 +2527,7 @@ function App() {
               {/* Hobbies */}
               <div>
                 <h3 style={{
-                  color: '#fb7185',
+                  color: '#e879f9',
                   fontSize: '16px',
                   marginBottom: '10px',
                   display: 'flex',
@@ -2546,7 +2548,7 @@ function App() {
                       border: '1px solid rgba(251, 113, 133, 0.3)',
                       borderRadius: '20px',
                       fontSize: '13px',
-                      color: '#fb7185'
+                      color: '#e879f9'
                     }}>
                       {hobby}
                     </span>
