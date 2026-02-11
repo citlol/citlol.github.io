@@ -2306,13 +2306,13 @@ function App() {
         onClick={() => setShowProfileModal(false)}
         >
           <div style={{
-            backgroundColor: theme === 'dark' ? '#1a1a2e' : '#fce7f3',
+            backgroundColor: theme === 'dark' ? '#2a2a2a' : '#fce7f3',
             borderRadius: '12px',
             padding: '0',
             position: 'relative',
-            maxWidth: '500px',
+            maxWidth: '700px',
             width: '90%',
-            maxHeight: '85vh',
+            maxHeight: '70vh',
             overflow: 'hidden',
             boxShadow: '0 25px 50px rgba(0,0,0,0.3)'
           }}
@@ -2357,7 +2357,7 @@ function App() {
                 </div>
                 {/* Browser tab */}
                 <div style={{
-                  backgroundColor: theme === 'dark' ? '#1a1a2e' : '#fce7f3',
+                  backgroundColor: theme === 'dark' ? '#2a2a2a' : '#fce7f3',
                   padding: '6px 16px',
                   borderRadius: '8px 8px 0 0',
                   fontSize: '12px',
@@ -2373,7 +2373,7 @@ function App() {
               </div>
               {/* URL bar */}
               <div style={{
-                backgroundColor: theme === 'dark' ? '#1a1a2e' : '#fff',
+                backgroundColor: theme === 'dark' ? '#3a3a3a' : '#fff',
                 borderRadius: '8px',
                 padding: '8px 12px',
                 display: 'flex',
@@ -2402,7 +2402,7 @@ function App() {
             </div>
 
             {/* Profile Content */}
-            <div style={{ maxHeight: 'calc(85vh - 100px)', overflow: 'auto' }}>
+            <div style={{ maxHeight: 'calc(70vh - 100px)', overflow: 'auto' }}>
             {/* Profile Header */}
             <div style={{
               background: 'linear-gradient(135deg, #ec4899 0%, #f472b6 50%, #fb7185 100%)',
@@ -2421,7 +2421,7 @@ function App() {
                 backgroundColor: '#f9a8d4'
               }}>
                 <img
-                  src="/profile.jpg"
+                  src="/profileicon.png"
                   alt="Profile"
                   style={{
                     width: '100%',
