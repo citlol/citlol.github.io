@@ -57,6 +57,7 @@ const Stars = ({ theme }) => {
 
 const Clouds = () => {
   const [clouds, setClouds] = useState([]);
+  const cloudTypes = ['/cloud_small.png', '/cloud_medium.png', '/cloud_long.png'];
 
   useEffect(() => {
     const generateClouds = () => {
@@ -77,6 +78,7 @@ const Clouds = () => {
             id: id++,
             x,
             y,
+            type: cloudTypes[Math.floor(Math.random() * cloudTypes.length)],
             scale: Math.random() * 0.5 + 0.15,
             opacity: Math.random() * 0.35 + 0.25,
             animationDuration: Math.random() * 15 + 20,
@@ -104,7 +106,7 @@ const Clouds = () => {
       {clouds.map(cloud => (
         <img
           key={cloud.id}
-          src="/Cloud_light.png"
+          src={cloud.type}
           alt=""
           style={{
             position: 'absolute',
@@ -2295,58 +2297,118 @@ function App() {
           left: '0',
           width: '100%',
           height: '100%',
-          backgroundColor: 'rgba(0,0,0,0.7)',
+          backgroundColor: 'transparent',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          zIndex: '1000',
-          backdropFilter: 'blur(5px)'
+          zIndex: '1000'
         }}
         onClick={() => setShowProfileModal(false)}
         >
           <div style={{
-            backgroundColor: theme === 'dark' ? '#1a1a2e' : '#fff',
-            borderRadius: '16px',
+            backgroundColor: theme === 'dark' ? '#1a1a2e' : '#fce7f3',
+            borderRadius: '12px',
             padding: '0',
             position: 'relative',
             maxWidth: '500px',
             width: '90%',
             maxHeight: '85vh',
-            overflow: 'auto',
-            border: theme === 'dark' ? '2px solid #ec4899' : '2px solid #f9a8d4'
+            overflow: 'hidden',
+            boxShadow: '0 25px 50px rgba(0,0,0,0.3)'
           }}
           onClick={(e) => e.stopPropagation()}
           >
+            {/* Browser Chrome */}
+            <div style={{
+              backgroundColor: theme === 'dark' ? '#2d2d2d' : '#e5e5e5',
+              padding: '12px 16px',
+              borderTopLeftRadius: '12px',
+              borderTopRightRadius: '12px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px'
+            }}>
+              {/* Traffic lights and tabs row */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                {/* Traffic light buttons */}
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <div
+                    onClick={() => setShowProfileModal(false)}
+                    style={{
+                      width: '12px',
+                      height: '12px',
+                      borderRadius: '50%',
+                      backgroundColor: '#ff5f57',
+                      cursor: 'pointer'
+                    }}
+                  />
+                  <div style={{
+                    width: '12px',
+                    height: '12px',
+                    borderRadius: '50%',
+                    backgroundColor: '#febc2e'
+                  }} />
+                  <div style={{
+                    width: '12px',
+                    height: '12px',
+                    borderRadius: '50%',
+                    backgroundColor: '#28c840'
+                  }} />
+                </div>
+                {/* Browser tab */}
+                <div style={{
+                  backgroundColor: theme === 'dark' ? '#1a1a2e' : '#fce7f3',
+                  padding: '6px 16px',
+                  borderRadius: '8px 8px 0 0',
+                  fontSize: '12px',
+                  color: theme === 'dark' ? '#fff' : '#333',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  marginTop: '4px'
+                }}>
+                  <span style={{ fontSize: '14px' }}>♡</span>
+                  My Profile
+                </div>
+              </div>
+              {/* URL bar */}
+              <div style={{
+                backgroundColor: theme === 'dark' ? '#1a1a2e' : '#fff',
+                borderRadius: '8px',
+                padding: '8px 12px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px'
+              }}>
+                {/* Navigation buttons */}
+                <div style={{ display: 'flex', gap: '8px', color: theme === 'dark' ? '#666' : '#999' }}>
+                  <span style={{ cursor: 'pointer' }}>←</span>
+                  <span style={{ cursor: 'pointer' }}>→</span>
+                  <span style={{ cursor: 'pointer' }}>↻</span>
+                </div>
+                {/* URL */}
+                <div style={{
+                  flex: 1,
+                  fontSize: '13px',
+                  color: theme === 'dark' ? '#888' : '#666',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}>
+                  <span style={{ color: '#28c840' }}>🔒</span>
+                  myspace.com/citlalli
+                </div>
+              </div>
+            </div>
+
+            {/* Profile Content */}
+            <div style={{ maxHeight: 'calc(85vh - 100px)', overflow: 'auto' }}>
             {/* Profile Header */}
             <div style={{
               background: 'linear-gradient(135deg, #ec4899 0%, #f472b6 50%, #fb7185 100%)',
               padding: '20px',
-              borderTopLeftRadius: '14px',
-              borderTopRightRadius: '14px',
               position: 'relative'
             }}>
-              {/* Close button */}
-              <button
-                onClick={() => setShowProfileModal(false)}
-                style={{
-                  position: 'absolute',
-                  top: '10px',
-                  right: '10px',
-                  background: 'rgba(255,255,255,0.2)',
-                  border: 'none',
-                  borderRadius: '50%',
-                  width: '30px',
-                  height: '30px',
-                  cursor: 'pointer',
-                  color: 'white',
-                  fontSize: '16px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
-                ✕
-              </button>
 
               {/* Profile Picture */}
               <div style={{
@@ -2491,6 +2553,7 @@ function App() {
                   ))}
                 </div>
               </div>
+            </div>
             </div>
           </div>
         </div>
