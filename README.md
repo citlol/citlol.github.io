@@ -1,13 +1,51 @@
-# React + Vite
+# Citlalli's Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A macOS-inspired personal portfolio website showcasing my projects, skills, and experience.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Interactive terminal with custom commands
+- Draggable desktop folders
+- Dark/Light theme toggle
+- Floating clouds and animated stars
+- MySpace-style profile modal
+- Responsive design for mobile and desktop
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-# Portfolio
+- React
+- Vite
+- CSS Animations
+
+## Projects Showcased
+
+- Pancake - Modern budgeting app (Co-Founder & Frontend Developer)
+- Miel-Pomodoro - Productivity timer with animal pals
+- Light Dal - Full-stack wishlist application
+- Top Escrow Website Redesign - Contract work
+
+## Terminal Commands
+
+- `help` - List available commands
+- `about` - Learn about me
+- `projects` - View my projects
+- `skills` - See my technical skills
+- `contact` - Get my contact info
+- `clear` - Clear terminal
+
+## Development
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+```
+
+## Live Site
+
+Visit: [citlol.github.io](https://citlol.github.io)
