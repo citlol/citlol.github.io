@@ -64,16 +64,16 @@ const Clouds = () => {
       const cloudArray = [];
       // Grid-based distribution for even spread
       const cols = 5;
-      const rows = 4;
+      const rows = 5;
       const cellWidth = 95 / cols;
-      const cellHeight = 90 / rows;
+      const cellHeight = 100 / rows;
 
       let id = 0;
       for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
           // Add randomness within each cell
           const x = col * cellWidth + Math.random() * (cellWidth * 0.6);
-          const y = row * cellHeight + Math.random() * (cellHeight * 0.5);
+          const y = row * cellHeight + Math.random() * (cellHeight * 0.4) - 2;
           cloudArray.push({
             id: id++,
             x,
@@ -2405,7 +2405,7 @@ function App() {
             <div style={{ maxHeight: 'calc(70vh - 100px)', overflow: 'auto' }}>
             {/* Profile Header */}
             <div style={{
-              background: '#fb7185 100%)',
+              background: '#fb7185',
               padding: '20px',
               position: 'relative'
             }}>
