@@ -160,7 +160,7 @@ const Tooltip = ({ text, show }) => {
   );
 };
 
-const DraggableFolder = ({ name, initialX, initialY, isMobile, onDoubleClick, theme }) => {
+const DraggableFolder = ({ name, initialX, initialY, isMobile, onClick, theme, icon }) => {
   const [position, setPosition] = useState({ x: initialX, y: initialY });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
@@ -189,9 +189,9 @@ const DraggableFolder = ({ name, initialX, initialY, isMobile, onDoubleClick, th
     setIsDragging(false);
   };
 
-  const handleDoubleClick = () => {
-    if (!dragMoved && onDoubleClick) {
-      onDoubleClick();
+  const handleClick = () => {
+    if (!dragMoved && onClick) {
+      onClick();
     }
   };
 
@@ -223,7 +223,7 @@ const DraggableFolder = ({ name, initialX, initialY, isMobile, onDoubleClick, th
         transition: isDragging ? 'none' : 'transform 0.2s ease'
       }}
       onMouseDown={handleMouseDown}
-      onDoubleClick={handleDoubleClick}
+      onClick={handleClick}
       onMouseEnter={(e) => {
         if (!isDragging) e.currentTarget.style.transform = 'scale(1.05)';
       }}
@@ -232,7 +232,7 @@ const DraggableFolder = ({ name, initialX, initialY, isMobile, onDoubleClick, th
       }}
     >
       <img
-        src={theme === 'dark' ? '/dark_bunny.png' : '/pink_bunny.png'}
+        src={icon || (theme === 'dark' ? '/dark_bunny.png' : '/pink_bunny.png')}
         alt="Folder"
         style={{
           width: '48px',
@@ -408,7 +408,7 @@ const generateRandomFolderPositions = () => {
   const forbiddenZones = getForbiddenZones();
 
   const positions = [];
-  const folderNames = ['Personal', 'School Work', 'Miel Pomodoro'];
+  const folderNames = ['Personal', 'School Work', 'Miel Pomodoro', 'My Profile'];
 
   for (let i = 0; i < folderNames.length; i++) {
     let attempts = 0;
@@ -460,6 +460,7 @@ function App() {
   const [showFigmaModal, setShowFigmaModal] = useState(false);
   const [showLoLModal, setShowLoLModal] = useState(false);
   const [showDiscordModal, setShowDiscordModal] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
   const [hoveredIcon, setHoveredIcon] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const [terminalPosition, setTerminalPosition] = useState({ x: 0, y: 0 });
@@ -862,7 +863,7 @@ function App() {
         initialX={folderPositions[0]?.x || 20}
         initialY={folderPositions[0]?.y || 80}
         isMobile={isMobile}
-        onDoubleClick={() => openFolder('personal')}
+        onClick={() => openFolder('personal')}
         theme={theme}
       />
       <DraggableFolder
@@ -870,7 +871,7 @@ function App() {
         initialX={folderPositions[1]?.x || 120}
         initialY={folderPositions[1]?.y || 80}
         isMobile={isMobile}
-        onDoubleClick={() => openFolder('schoolWork')}
+        onClick={() => openFolder('schoolWork')}
         theme={theme}
       />
       <DraggableFolder
@@ -878,8 +879,17 @@ function App() {
         initialX={folderPositions[2]?.x || 220}
         initialY={folderPositions[2]?.y || 80}
         isMobile={isMobile}
-        onDoubleClick={() => openFolder('mielPomodoro')}
+        onClick={() => openFolder('mielPomodoro')}
         theme={theme}
+      />
+      <DraggableFolder
+        name="My Profile"
+        initialX={folderPositions[3]?.x || 320}
+        initialY={folderPositions[3]?.y || 80}
+        isMobile={isMobile}
+        onClick={() => setShowProfileModal(true)}
+        theme={theme}
+        icon="/profileicon.png"
       />
 
       {/* Terminal Window */}
@@ -919,7 +929,7 @@ function App() {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            borderBottom: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)',
+            borderBottom: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(236, 72, 153, 0.15)',
             cursor: isDraggingTerminal ? 'grabbing' : 'grab',
             userSelect: 'none'
           }}
@@ -1932,6 +1942,30 @@ function App() {
           />
           <Tooltip text="AI Tools" show={hoveredIcon === 'AI Tools' && !isMobile} />
         </div>
+
+        <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
+          position: 'relative',
+          width: isMobile ? '40px' : '50px',
+          height: isMobile ? '40px' : '50px',
+          cursor: 'pointer',
+          transition: 'transform 0.2s ease',
+          transform: hoveredIcon === 'Profile' ? 'scale(1.2) translateY(-8px)' : 'scale(1)'
+        }}
+        onMouseEnter={() => setHoveredIcon('Profile')}
+        onMouseLeave={() => setHoveredIcon(null)}
+        onClick={() => setShowProfileModal(true)}
+        >
+          <img
+            src="/profileicon.png"
+            alt="Profile"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover'
+            }}
+          />
+          <Tooltip text="My Profile" show={hoveredIcon === 'Profile' && !isMobile} />
+        </div>
       </div>
 
       {/* Apple Music Modal */}
@@ -2233,6 +2267,217 @@ function App() {
         </div>
       )}
 
+      {/* Profile Modal - MySpace Style */}
+      {showProfileModal && (
+        <div style={{
+          position: 'fixed',
+          top: '0',
+          left: '0',
+          width: '100%',
+          height: '100%',
+          backgroundColor: 'rgba(0,0,0,0.7)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: '1000',
+          backdropFilter: 'blur(5px)'
+        }}
+        onClick={() => setShowProfileModal(false)}
+        >
+          <div style={{
+            backgroundColor: theme === 'dark' ? '#1a1a2e' : '#fff',
+            borderRadius: '16px',
+            padding: '0',
+            position: 'relative',
+            maxWidth: '500px',
+            width: '90%',
+            maxHeight: '85vh',
+            overflow: 'auto',
+            border: theme === 'dark' ? '2px solid #ec4899' : '2px solid #f9a8d4'
+          }}
+          onClick={(e) => e.stopPropagation()}
+          >
+            {/* Profile Header */}
+            <div style={{
+              background: 'linear-gradient(135deg, #ec4899 0%, #f472b6 50%, #fb7185 100%)',
+              padding: '20px',
+              borderTopLeftRadius: '14px',
+              borderTopRightRadius: '14px',
+              position: 'relative'
+            }}>
+              {/* Close button */}
+              <button
+                onClick={() => setShowProfileModal(false)}
+                style={{
+                  position: 'absolute',
+                  top: '10px',
+                  right: '10px',
+                  background: 'rgba(255,255,255,0.2)',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: '30px',
+                  height: '30px',
+                  cursor: 'pointer',
+                  color: 'white',
+                  fontSize: '16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                ✕
+              </button>
+
+              {/* Profile Picture */}
+              <div style={{
+                width: '120px',
+                height: '120px',
+                borderRadius: '50%',
+                border: '4px solid white',
+                margin: '0 auto 15px',
+                overflow: 'hidden',
+                backgroundColor: '#f9a8d4'
+              }}>
+                <img
+                  src="/profile.jpg"
+                  alt="Profile"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover'
+                  }}
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+              </div>
+
+              <h2 style={{
+                color: 'white',
+                textAlign: 'center',
+                margin: '0',
+                fontSize: '24px',
+                textShadow: '0 2px 4px rgba(0,0,0,0.2)'
+              }}>
+                Citlalli
+              </h2>
+              <p style={{
+                color: 'rgba(255,255,255,0.9)',
+                textAlign: 'center',
+                margin: '5px 0 0',
+                fontSize: '14px'
+              }}>
+                @citlol
+              </p>
+            </div>
+
+            {/* Profile Content */}
+            <div style={{
+              padding: '20px',
+              color: theme === 'dark' ? '#e0e0e0' : '#333'
+            }}>
+              {/* About Me */}
+              <div style={{ marginBottom: '20px' }}>
+                <h3 style={{
+                  color: '#ec4899',
+                  fontSize: '16px',
+                  marginBottom: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}>
+                  [~] About Me
+                </h3>
+                <p style={{
+                  fontSize: '14px',
+                  lineHeight: '1.6',
+                  margin: '0',
+                  padding: '12px',
+                  backgroundColor: theme === 'dark' ? 'rgba(236, 72, 153, 0.1)' : 'rgba(236, 72, 153, 0.05)',
+                  borderRadius: '8px',
+                  border: '1px solid rgba(236, 72, 153, 0.2)'
+                }}>
+                  CS student and full-stack developer passionate about creating intuitive user experiences.
+                  Currently building Pancake, a modern budgeting app. Always exploring new technologies and design patterns!
+                </p>
+              </div>
+
+              {/* Current Favorite Song */}
+              <div style={{ marginBottom: '20px' }}>
+                <h3 style={{
+                  color: '#f472b6',
+                  fontSize: '16px',
+                  marginBottom: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}>
+                  [♪] Current Favorite Song
+                </h3>
+                <div style={{
+                  padding: '12px',
+                  backgroundColor: theme === 'dark' ? 'rgba(244, 114, 182, 0.1)' : 'rgba(244, 114, 182, 0.05)',
+                  borderRadius: '8px',
+                  border: '1px solid rgba(244, 114, 182, 0.2)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px'
+                }}>
+                  <div style={{
+                    width: '50px',
+                    height: '50px',
+                    backgroundColor: '#f472b6',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '24px'
+                  }}>
+                    ♫
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 'bold', fontSize: '14px' }}>Song Title Here</div>
+                    <div style={{ fontSize: '12px', opacity: 0.7 }}>Artist Name</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Hobbies */}
+              <div>
+                <h3 style={{
+                  color: '#fb7185',
+                  fontSize: '16px',
+                  marginBottom: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}>
+                  [*] Hobbies
+                </h3>
+                <div style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: '8px'
+                }}>
+                  {['Gaming', 'Coding', 'Music', 'Design', 'Reading'].map(hobby => (
+                    <span key={hobby} style={{
+                      padding: '6px 12px',
+                      backgroundColor: theme === 'dark' ? 'rgba(251, 113, 133, 0.15)' : 'rgba(251, 113, 133, 0.1)',
+                      border: '1px solid rgba(251, 113, 133, 0.3)',
+                      borderRadius: '20px',
+                      fontSize: '13px',
+                      color: '#fb7185'
+                    }}>
+                      {hobby}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Folder Windows */}
       {openFolders.personal && (
         <div style={{
@@ -2242,8 +2487,8 @@ function App() {
           transform: 'translate(-50%, -50%)',
           width: isMobile ? '95vw' : 'min(600px, calc(100vw - 280px))',
           maxHeight: isMobile ? '80vh' : '70vh',
-          backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.95)' : 'rgba(240, 240, 245, 0.9)',
-          border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid rgba(0, 0, 0, 0.1)',
+          backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.95)' : 'rgba(255, 255, 255, 0.9)',
+          border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid rgba(236, 72, 153, 0.2)',
           borderRadius: '12px',
           boxShadow: theme === 'dark' ? '0 20px 40px rgba(0,0,0,0.7)' : '0 20px 40px rgba(0,0,0,0.15)',
           backdropFilter: 'blur(20px)',
@@ -2252,14 +2497,14 @@ function App() {
         }}>
           {/* Folder Header */}
           <div style={{
-            backgroundColor: theme === 'dark' ? 'rgba(51, 51, 51, 0.9)' : 'rgba(220, 220, 230, 0.85)',
+            backgroundColor: theme === 'dark' ? 'rgba(51, 51, 51, 0.9)' : 'rgba(253, 242, 248, 0.95)',
             padding: '12px 16px',
             borderTopLeftRadius: '12px',
             borderTopRightRadius: '12px',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            borderBottom: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)'
+            borderBottom: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(236, 72, 153, 0.15)'
           }}>
             <div style={{ display: 'flex', gap: '8px' }}>
               <div
@@ -2301,8 +2546,8 @@ function App() {
           transform: 'translate(-50%, -50%)',
           width: isMobile ? '95vw' : 'min(600px, calc(100vw - 280px))',
           maxHeight: isMobile ? '80vh' : '70vh',
-          backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.95)' : 'rgba(240, 240, 245, 0.9)',
-          border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid rgba(0, 0, 0, 0.1)',
+          backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.95)' : 'rgba(255, 255, 255, 0.9)',
+          border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid rgba(236, 72, 153, 0.2)',
           borderRadius: '12px',
           boxShadow: theme === 'dark' ? '0 20px 40px rgba(0,0,0,0.7)' : '0 20px 40px rgba(0,0,0,0.15)',
           backdropFilter: 'blur(20px)',
@@ -2311,14 +2556,14 @@ function App() {
         }}>
           {/* Folder Header */}
           <div style={{
-            backgroundColor: theme === 'dark' ? 'rgba(51, 51, 51, 0.9)' : 'rgba(220, 220, 230, 0.85)',
+            backgroundColor: theme === 'dark' ? 'rgba(51, 51, 51, 0.9)' : 'rgba(253, 242, 248, 0.95)',
             padding: '12px 16px',
             borderTopLeftRadius: '12px',
             borderTopRightRadius: '12px',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            borderBottom: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)'
+            borderBottom: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(236, 72, 153, 0.15)'
           }}>
             <div style={{ display: 'flex', gap: '8px' }}>
               <div
@@ -2360,8 +2605,8 @@ function App() {
           transform: 'translate(-50%, -50%)',
           width: isMobile ? '95vw' : 'min(600px, calc(100vw - 280px))',
           maxHeight: isMobile ? '80vh' : '70vh',
-          backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.95)' : 'rgba(240, 240, 245, 0.9)',
-          border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid rgba(0, 0, 0, 0.1)',
+          backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.95)' : 'rgba(255, 255, 255, 0.9)',
+          border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid rgba(236, 72, 153, 0.2)',
           borderRadius: '12px',
           boxShadow: theme === 'dark' ? '0 20px 40px rgba(0,0,0,0.7)' : '0 20px 40px rgba(0,0,0,0.15)',
           backdropFilter: 'blur(20px)',
@@ -2370,14 +2615,14 @@ function App() {
         }}>
           {/* Folder Header */}
           <div style={{
-            backgroundColor: theme === 'dark' ? 'rgba(51, 51, 51, 0.9)' : 'rgba(220, 220, 230, 0.85)',
+            backgroundColor: theme === 'dark' ? 'rgba(51, 51, 51, 0.9)' : 'rgba(253, 242, 248, 0.95)',
             padding: '12px 16px',
             borderTopLeftRadius: '12px',
             borderTopRightRadius: '12px',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            borderBottom: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)'
+            borderBottom: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(236, 72, 153, 0.15)'
           }}>
             <div style={{ display: 'flex', gap: '8px' }}>
               <div
