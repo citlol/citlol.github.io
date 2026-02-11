@@ -1947,8 +1947,8 @@ function App() {
 
         <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
           position: 'relative',
-          width: isMobile ? '55px' : '70px',
-          height: isMobile ? '55px' : '70px',
+          width: isMobile ? '40px' : '50px',
+          height: isMobile ? '40px' : '50px',
           borderRadius: '12px',
           cursor: 'pointer',
           transition: 'transform 0.2s ease',
