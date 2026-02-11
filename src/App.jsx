@@ -241,8 +241,8 @@ const DraggableFolder = ({ name, initialX, initialY, isMobile, onClick, theme, i
         src={icon || (theme === 'dark' ? '/dark_bunny.png' : '/pink_bunny.png')}
         alt="Folder"
         style={{
-          width: icon ? '80px' : '48px',
-          height: icon ? '80px' : '48px',
+          width: icon ? '100px' : '48px',
+          height: icon ? '100px' : '48px',
           objectFit: 'contain',
           pointerEvents: 'none'
         }}
@@ -1977,10 +1977,10 @@ function App() {
             src="/profile_.png"
             alt="Profile"
             style={{
-              width: '75px',
-              height: '75px',
+              width: '90px',
+              height: '90px',
               objectFit: 'contain',
-              marginBottom: '-18px'
+              marginBottom: '-22px'
             }}
           />
           <Tooltip text="My Profile" show={hoveredIcon === 'Profile' && !isMobile} />
