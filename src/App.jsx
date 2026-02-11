@@ -1696,7 +1696,8 @@ function App() {
         bottom: isMobile ? '10px' : '20px',
         left: '50%',
         transform: 'translateX(-50%)',
-        backgroundColor: theme === 'dark' ? 'rgba(80, 80, 80, 0.75)' : 'rgba(240, 240, 245, 0.85)',
+        zIndex: 50,
+        backgroundColor: theme === 'dark' ? 'rgba(80, 80, 80, 0.9)' : 'rgba(240, 240, 245, 0.95)',
         backdropFilter: 'blur(20px)',
         borderRadius: '24px',
         padding: isMobile ? '10px 14px' : '12px 18px',
@@ -1980,7 +1981,7 @@ function App() {
               width: '90px',
               height: '90px',
               objectFit: 'contain',
-              marginBottom: '-35px'
+              marginBottom: '-28px'
             }}
           />
           <Tooltip text="My Profile" show={hoveredIcon === 'Profile' && !isMobile} />
