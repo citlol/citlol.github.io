@@ -890,7 +890,7 @@ function App() {
         isMobile={isMobile}
         onClick={() => setShowProfileModal(true)}
         theme={theme}
-        icon="/profileicon.png"
+        icon="/profile_.png"
       />
 
       {/* Terminal Window */}
@@ -1964,7 +1964,7 @@ function App() {
         onClick={() => setShowProfileModal(true)}
         >
           <img
-            src="/profileicon.png"
+            src="/profile_.png"
             alt="Profile"
             style={{
               width: '100%',
