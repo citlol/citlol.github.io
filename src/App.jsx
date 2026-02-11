@@ -1971,10 +1971,10 @@ function App() {
             src="/profile_.png"
             alt="Profile"
             style={{
-              width: '55px',
-              height: '55px',
+              width: '75px',
+              height: '75px',
               objectFit: 'contain',
-              marginBottom: '-5px'
+              marginBottom: '-18px'
             }}
           />
           <Tooltip text="My Profile" show={hoveredIcon === 'Profile' && !isMobile} />
