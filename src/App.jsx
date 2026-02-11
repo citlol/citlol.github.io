@@ -244,7 +244,8 @@ const DraggableFolder = ({ name, initialX, initialY, isMobile, onClick, theme, i
       <span style={{
         color: theme === 'dark' ? 'white' : '#1f2937',
         textShadow: theme === 'dark' ? '1px 1px 2px rgba(0,0,0,0.8)' : '1px 1px 2px rgba(255,255,255,0.8)',
-        pointerEvents: 'none'
+        pointerEvents: 'none',
+        marginTop: icon ? '-15px' : '0'
       }}>
         {name}
       </span>
