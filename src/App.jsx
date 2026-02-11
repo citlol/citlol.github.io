@@ -232,7 +232,7 @@ const DraggableFolder = ({ name, initialX, initialY, isMobile, onDoubleClick, th
       }}
     >
       <img
-        src="/DarkVersion.ico"
+        src={theme === 'dark' ? '/dark_bunny.png' : '/pink_bunny.png'}
         alt="Folder"
         style={{
           width: '48px',
@@ -1642,11 +1642,11 @@ function App() {
             <div
               key={i}
               style={{
-                backgroundColor: theme === 'dark' ? 'rgba(236, 72, 153, 0.15)' : 'rgba(236, 72, 153, 0.1)',
-                border: theme === 'dark' ? '1px solid rgba(236, 72, 153, 0.3)' : '1px solid rgba(236, 72, 153, 0.2)',
+                backgroundColor: theme === 'dark' ? 'rgba(236, 72, 153, 0.15)' : 'rgba(255, 255, 255, 0.7)',
+                border: theme === 'dark' ? '1px solid rgba(236, 72, 153, 0.3)' : '1px solid rgba(255, 255, 255, 0.5)',
                 borderRadius: '20px',
                 padding: '8px 16px',
-                color: theme === 'dark' ? '#f9a8d4' : '#db2777',
+                color: theme === 'dark' ? '#f9a8d4' : '#831843',
                 fontSize: '13px',
                 fontWeight: '500',
                 backdropFilter: 'blur(10px)',
@@ -1657,11 +1657,11 @@ function App() {
               }}
               onMouseEnter={(e) => {
                 e.target.style.transform = 'scale(1.05)';
-                e.target.style.backgroundColor = theme === 'dark' ? 'rgba(236, 72, 153, 0.25)' : 'rgba(236, 72, 153, 0.2)';
+                e.target.style.backgroundColor = theme === 'dark' ? 'rgba(236, 72, 153, 0.25)' : 'rgba(255, 255, 255, 0.9)';
               }}
               onMouseLeave={(e) => {
                 e.target.style.transform = 'scale(1)';
-                e.target.style.backgroundColor = theme === 'dark' ? 'rgba(236, 72, 153, 0.15)' : 'rgba(236, 72, 153, 0.1)';
+                e.target.style.backgroundColor = theme === 'dark' ? 'rgba(236, 72, 153, 0.15)' : 'rgba(255, 255, 255, 0.7)';
               }}
             >
               {bubble.text}
