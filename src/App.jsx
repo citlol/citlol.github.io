@@ -544,6 +544,21 @@ function App() {
       ],
       github: 'https://github.com/citlol/light-dal',
       status: 'In Development'
+    },
+    {
+      id: 'top-escrow',
+      name: 'Top Escrow Website Redesign',
+      description: 'Overhauled the company website from the ground up, modernizing design, structure, and user experience',
+      tech: ['Web Design', 'UI/UX', 'Frontend'],
+      role: 'Contract Developer',
+      color: '#ec4899',
+      highlights: [
+        'Complete website redesign and modernization',
+        'Collaborated closely with company stakeholders',
+        'Multiple iterations incorporating feedback until final approval'
+      ],
+      website: 'https://topescrow.com',
+      status: 'Contract'
     }
   ];
 
@@ -1287,9 +1302,11 @@ function App() {
                         borderRadius: '12px',
                         backgroundColor: project.status === 'Released' ? 'rgba(236, 72, 153, 0.2)' :
                                         project.status === 'In Development' ? 'rgba(244, 114, 182, 0.2)' :
+                                        project.status === 'Contract' ? 'rgba(34, 197, 94, 0.2)' :
                                         'rgba(156, 163, 175, 0.2)',
                         color: project.status === 'Released' ? '#ec4899' :
-                               project.status === 'In Development' ? '#f472b6' : '#9ca3af'
+                               project.status === 'In Development' ? '#f472b6' :
+                               project.status === 'Contract' ? '#22c55e' : '#9ca3af'
                       }}>
                         {project.status}
                       </span>
@@ -1355,9 +1372,11 @@ function App() {
                   borderRadius: '12px',
                   backgroundColor: selectedProject.status === 'Released' ? 'rgba(236, 72, 153, 0.2)' :
                                   selectedProject.status === 'In Development' ? 'rgba(244, 114, 182, 0.2)' :
+                                  selectedProject.status === 'Contract' ? 'rgba(34, 197, 94, 0.2)' :
                                   'rgba(156, 163, 175, 0.2)',
                   color: selectedProject.status === 'Released' ? '#ec4899' :
-                         selectedProject.status === 'In Development' ? '#f472b6' : '#9ca3af',
+                         selectedProject.status === 'In Development' ? '#f472b6' :
+                         selectedProject.status === 'Contract' ? '#22c55e' : '#9ca3af',
                   marginBottom: '12px'
                 }}>
                   {selectedProject.status}
