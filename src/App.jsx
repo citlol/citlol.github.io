@@ -251,7 +251,7 @@ const DraggableFolder = ({ name, initialX, initialY, isMobile, onClick, theme, i
         color: theme === 'dark' ? 'white' : '#1f2937',
         textShadow: theme === 'dark' ? '1px 1px 2px rgba(0,0,0,0.8)' : '1px 1px 2px rgba(255,255,255,0.8)',
         pointerEvents: 'none',
-        marginTop: icon ? '-15px' : '0'
+        marginTop: icon ? '-30px' : '0'
       }}>
         {name}
       </span>
@@ -1980,7 +1980,7 @@ function App() {
               width: '90px',
               height: '90px',
               objectFit: 'contain',
-              marginBottom: '-22px'
+              marginBottom: '-35px'
             }}
           />
           <Tooltip text="My Profile" show={hoveredIcon === 'Profile' && !isMobile} />
