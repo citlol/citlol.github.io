@@ -1952,7 +1952,10 @@ function App() {
           borderRadius: '12px',
           cursor: 'pointer',
           transition: 'transform 0.2s ease',
-          overflow: 'visible'
+          overflow: 'visible',
+          display: 'flex',
+          alignItems: 'flex-end',
+          justifyContent: 'center'
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = 'scale(1.1)';
@@ -1968,9 +1971,10 @@ function App() {
             src="/profile_.png"
             alt="Profile"
             style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'contain'
+              width: '55px',
+              height: '55px',
+              objectFit: 'contain',
+              marginBottom: '-5px'
             }}
           />
           <Tooltip text="My Profile" show={hoveredIcon === 'Profile' && !isMobile} />
