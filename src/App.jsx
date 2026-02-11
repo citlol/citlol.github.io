@@ -531,18 +531,19 @@ function App() {
       status: 'WIP'
     },
     {
-      id: 'star-wars-game',
-      name: 'Star-Wars-All-In-Game',
-      description: 'An interactive text-based adventure game set in the Star Wars universe',
-      tech: ['Java', 'OOP', 'File I/O'],
+      id: 'light-dal',
+      name: 'Light Dal',
+      description: 'A full-stack wishlist application where users can create, manage, and share their wishlists with friends and family',
+      tech: ['Node.js', 'Express.js', 'JavaScript', 'REST API', 'Git'],
       role: 'Developer',
       color: '#fb7185',
       highlights: [
-        'Fighting infamous Star Wars villains',
-        'Save/load game functionality'
+        'RESTful API backend with Express.js',
+        'Plans for TypeScript migration & React frontend',
+        'User authentication with JWT (planned)'
       ],
-      github: 'https://github.com/citlol/star-wars-game',
-      status: 'Completed'
+      github: 'https://github.com/citlol/light-dal',
+      status: 'In Development'
     }
   ];
 
@@ -2000,7 +2001,7 @@ function App() {
           left: '0',
           width: '100%',
           height: '100%',
-          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          backgroundColor: 'transparent',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -2095,7 +2096,7 @@ function App() {
           left: '0',
           width: '100%',
           height: '100%',
-          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          backgroundColor: 'transparent',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -2172,7 +2173,7 @@ function App() {
           left: '0',
           width: '100%',
           height: '100%',
-          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          backgroundColor: 'transparent',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -2242,7 +2243,7 @@ function App() {
           left: '0',
           width: '100%',
           height: '100%',
-          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          backgroundColor: 'transparent',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
