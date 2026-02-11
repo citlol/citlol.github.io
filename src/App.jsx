@@ -1961,7 +1961,7 @@ function App() {
             style={{
               width: '100%',
               height: '100%',
-              objectFit: 'cover'
+              objectFit: 'contain'
             }}
           />
           <Tooltip text="My Profile" show={hoveredIcon === 'Profile' && !isMobile} />
