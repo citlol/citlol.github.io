@@ -164,12 +164,14 @@ const DraggableFolder = ({ name, initialX, initialY, isMobile, onClick, theme, i
   const [position, setPosition] = useState({ x: initialX, y: initialY });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [mouseStart, setMouseStart] = useState({ x: 0, y: 0 });
   const [dragMoved, setDragMoved] = useState(false);
 
   const handleMouseDown = (e) => {
     if (isMobile) return;
     setIsDragging(true);
     setDragMoved(false);
+    setMouseStart({ x: e.clientX, y: e.clientY });
     setDragStart({
       x: e.clientX - position.x,
       y: e.clientY - position.y
@@ -178,7 +180,11 @@ const DraggableFolder = ({ name, initialX, initialY, isMobile, onClick, theme, i
 
   const handleMouseMove = (e) => {
     if (!isDragging) return;
-    setDragMoved(true);
+    const dx = Math.abs(e.clientX - mouseStart.x);
+    const dy = Math.abs(e.clientY - mouseStart.y);
+    if (dx > 5 || dy > 5) {
+      setDragMoved(true);
+    }
     setPosition({
       x: e.clientX - dragStart.x,
       y: e.clientY - dragStart.y
@@ -845,7 +851,7 @@ function App() {
       <div style={{
         minHeight: '100vh',
         background: theme === 'dark'
-          ? 'linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2a2a2a 100%)'
+          ? 'linear-gradient(135deg, #000000 0%, #080808 12%, #101010 25%, #151515 37%, #1a1a1a 50%, #1f1f1f 62%, #232323 75%, #272727 87%, #2a2a2a 100%)'
           : 'linear-gradient(135deg, #fce7f3 0%, #fbcfe8 50%, #f9a8d4 100%)',
         fontFamily: 'monospace',
         position: 'relative',
@@ -2399,7 +2405,7 @@ function App() {
                   alignItems: 'center',
                   gap: '8px'
                 }}>
-                  [~] About Me
+                  [~] About Me 
                 </h3>
                 <p style={{
                   fontSize: '14px',
@@ -2436,21 +2442,19 @@ function App() {
                   alignItems: 'center',
                   gap: '12px'
                 }}>
-                  <div style={{
-                    width: '50px',
-                    height: '50px',
-                    backgroundColor: '#f472b6',
-                    borderRadius: '8px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '24px'
-                  }}>
-                    ♫
-                  </div>
+                  <img
+                    src="/record.png"
+                    alt="Record"
+                    style={{
+                      width: '55px',
+                      height: '55px',
+                      objectFit: 'contain',
+                      animation: 'spin 3s linear infinite'
+                    }}
+                  />
                   <div>
-                    <div style={{ fontWeight: 'bold', fontSize: '14px' }}>Song Title Here</div>
-                    <div style={{ fontSize: '12px', opacity: 0.7 }}>Artist Name</div>
+                    <div style={{ fontWeight: 'bold', fontSize: '14px' }}>What You Saying</div>
+                    <div style={{ fontSize: '12px', opacity: 0.7 }}>Lil Uzi Vert</div>
                   </div>
                 </div>
               </div>
