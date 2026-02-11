@@ -2417,7 +2417,7 @@ function App() {
                   border: '1px solid rgba(236, 72, 153, 0.2)'
                 }}>
                   CS student and full-stack developer passionate about creating intuitive user experiences.
-                  Currently building Pancake, a modern budgeting app. Always exploring new technologies and design patterns!
+                  Currently building Pancake and light dal. Always exploring new technologies and design patterns!
                 </p>
               </div>
 
@@ -2446,8 +2446,8 @@ function App() {
                     src="/record.png"
                     alt="Record"
                     style={{
-                      width: '55px',
-                      height: '55px',
+                      width: '75px',
+                      height: '75px',
                       objectFit: 'contain',
                       animation: 'spin 3s linear infinite'
                     }}
