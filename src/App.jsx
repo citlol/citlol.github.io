@@ -2405,7 +2405,7 @@ function App() {
             <div style={{ maxHeight: 'calc(70vh - 100px)', overflow: 'auto' }}>
             {/* Profile Header */}
             <div style={{
-              background: '#fb7185',
+              background: '#DB5EBD',
               padding: '20px',
               position: 'relative'
             }}>
