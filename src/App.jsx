@@ -512,8 +512,8 @@ function App() {
         'Built intuitive expense tracking with smart categorization',
         'PLaid integration for up-to-date budget tracking',
       ],
-      github: 'https://github.com/citlol/pancake',
-      status: 'In Development'
+      github: 'https://pancakemoney.com/',
+      status: 'Beta Testing'
     },
     {
       id: 'miel-pomodoro',
@@ -1208,7 +1208,7 @@ function App() {
                   <h4 style={{ color: '#f472b6', marginBottom: '12px', fontSize: '14px' }}>[*] Currently Building</h4>
                   <div style={{ color: theme === 'dark' ? '#d1d5db' : '#4b5563', fontSize: '13px' }}>
                     <div style={{ marginBottom: '6px' }}>• Pancake - Finalizing budget tracking features</div>
-                    <div style={{ marginBottom: '6px' }}>• lightdal - Wishlist website with item tracking</div>
+                    <div style={{ marginBottom: '6px' }}>• light dal - Wishlist website with item tracking</div>
                   </div>
                 </div>
 
@@ -1438,7 +1438,7 @@ function App() {
                   onMouseEnter={(e) => e.target.style.opacity = '0.8'}
                   onMouseLeave={(e) => e.target.style.opacity = '1'}
                 >
-                  View on GitHub
+                  View
                 </a>
               </div>
 
