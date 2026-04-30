@@ -259,7 +259,7 @@ img { max-width: 100%; display: block; }
 /* ── Profile module ───────────────────────────────────── */
 .profile { padding: var(--space-md); text-align: center; }
 .profile-photo-wrap {
-  width: 168px; height: 168px;
+  width: min(220px, 100%);
   margin: 0 auto;
   border-radius: var(--r-md);
   border: 4px solid var(--surface-raised);
@@ -268,7 +268,11 @@ img { max-width: 100%; display: block; }
   background: var(--pink-100);
   position: relative;
 }
-.profile-photo-wrap img { width: 100%; height: 100%; object-fit: cover; }
+.profile-photo-wrap img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
 
 .profile-name {
   font-family: var(--display);
