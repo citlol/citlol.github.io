@@ -1,2970 +1,577 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 
-const Stars = ({ theme }) => {
-  const [stars, setStars] = useState([]);
+// ── Profile data ─────────────────────────────────────────
+const PROFILE = {
+  name: 'Citlalli',
+  fullName: 'Citlalli Trejo Del Rio',
+  handle: '@citlol',
+  pronouns: 'she/her',
+  school: 'CS @ UT Dallas',
+  status: 'Open to grad-role offers',
+  graduation: 'Class of 2026',
+  mood: { label: 'mood', text: 'caffeinated and shipping ✦' },
+  photo: '/IMG_8198.jpg',
+  email: 'citlalli.tdr@gmail.com',
+  github: 'https://github.com/citlol',
+  linkedin: 'https://linkedin.com/in/citlalli-trejo-del-rio',
+  resume: '/resume.pdf',
+  bio: "Hi — I'm a CS senior at UT Dallas building thoughtful software at the intersection of frontend, iOS, and ML. I like soft tools, careful interfaces, and shipping things that feel a little personal.",
+};
 
-  useEffect(() => {
-    const generateStars = () => {
-      const starArray = [];
-      for (let i = 0; i < 100; i++) {
-        starArray.push({
-          id: i,
-          x: Math.random() * 100,
-          y: Math.random() * 100,
-          size: Math.random() * 3 + 1,
-          opacity: Math.random() * 0.8 + 0.2,
-          animationDelay: Math.random() * 4,
-          animationDuration: Math.random() * 3 + 2
-        });
-      }
-      setStars(starArray);
-    };
+// ── Tools / languages ────────────────────────────────────
+const TOOLS = {
+  Languages: ['Java', 'TypeScript', 'Swift', 'Python', 'C++', 'SQL', 'JavaScript'],
+  Frameworks: ['React', 'Next.js', 'Node.js', 'SwiftUI', 'PyTorch'],
+  Tools: ['Git', 'VS Code', 'Linux', 'Xcode', 'Figma', 'MongoDB'],
+};
 
-    generateStars();
-  }, []);
+// ── Featured projects (deep dives) ───────────────────────
+const PROJECTS = [
+  {
+    id: 'pancake',
+    name: 'Pancake Money',
+    role: 'Frontend Developer',
+    period: '06/2025 – Present',
+    status: 'Current',
+    description: 'iOS budgeting app integrating a Python backend and the Plaid API for secure aggregation and visualization of financial data.',
+    highlights: [
+      'Led iOS development for an app integrating a Python backend and Plaid API',
+      'Designed and built UI and financial data visualizations in Swift',
+      'Modular, object-oriented architecture',
+    ],
+    tech: ['Swift', 'SwiftUI', 'Python', 'Plaid API'],
+    link: 'https://pancakemoney.com/',
+    linkLabel: 'pancakemoney.com',
+  },
+  {
+    id: 'phobos',
+    name: 'Phobos — Wishlist Web App',
+    role: 'Full-stack developer',
+    period: 'Released',
+    status: 'Released',
+    description: 'Full-stack wishlist platform with multi-page routing, collaborative sharing, and a custom dark/light theme system.',
+    highlights: [
+      'Secure REST API with JWT auth, bcrypt hashing, email verification, account lockout',
+      'Production hardening: rate limiting, input validation, Helmet, CORS',
+      'Deployed on Vercel + Railway under a custom domain',
+    ],
+    tech: ['Next.js', 'React', 'TypeScript', 'Node.js', 'PostgreSQL', 'Vercel'],
+    link: 'https://myphobos.app',
+    linkLabel: 'myphobos.app',
+  },
+  {
+    id: 'inpainting',
+    name: 'Partial-Conv U-Net Inpainting',
+    role: 'Researcher / developer',
+    period: 'Personal research',
+    status: 'Released',
+    description: 'Image inpainting model based on published research, achieving 28–32 dB PSNR and SSIM up to 0.96.',
+    highlights: [
+      '33M-parameter Partial Convolution U-Net for irregular masks',
+      'Full training pipeline with logging and a Gradio demo',
+      'Evaluated with PSNR, SSIM, and FID metrics',
+    ],
+    tech: ['Python', 'PyTorch', 'TorchVision', 'OpenCV', 'Gradio'],
+    link: 'https://github.com/citlol/partial-conv-inpainting',
+    linkLabel: 'github.com/citlol',
+  },
+  {
+    id: 'bigram',
+    name: 'Bigram Language Model',
+    role: 'Solo developer',
+    period: 'Course / personal',
+    status: 'Released',
+    description: 'Java bigram language model with Kneser-Ney smoothing for probabilistic text generation and autocomplete.',
+    highlights: [
+      'Bigram model with Kneser-Ney smoothing, beam search, and greedy decoding',
+      'MySQL persistence layer handling 600k+ relationships with batched writes',
+      'Clean DBInterface abstraction; JUnit 5 coverage for training and prediction',
+    ],
+    tech: ['Java 17', 'Maven', 'MySQL', 'JavaFX', 'JUnit 5'],
+    link: 'https://github.com/citlol/bigram-language-model',
+    linkLabel: 'github.com/citlol',
+  },
+];
 
+// ── Work / experience ────────────────────────────────────
+const EXPERIENCE = [
+  {
+    id: 'pancake-job',
+    company: 'Pancake Money',
+    role: 'Frontend Developer (iOS)',
+    period: 'Jun 2025 – Present',
+    status: 'Current',
+    blurb: 'Building an iOS budgeting app with secure Plaid integration and live financial visualizations.',
+    highlights: [
+      'Lead iOS development for a Plaid-integrated budgeting app with a Python backend',
+      'Design and implement UI + financial data visualizations in Swift / SwiftUI',
+      'Iterate on a modular, object-oriented architecture for fast feature work',
+    ],
+    stack: ['Swift', 'SwiftUI', 'Python', 'Plaid API'],
+  },
+  {
+    id: 'top-escrow-job',
+    company: 'Top Escrow',
+    role: 'Website Redesign — Contractor',
+    period: 'Jul 2025 – Aug 2025',
+    status: 'Contract',
+    blurb: 'Redesigned and rebuilt the company website using modern frontend practices.',
+    highlights: [
+      'Redesigned and rebuilt the company website with a modern frontend',
+      'Collaborated with stakeholders through iterative revisions',
+      'Configured the domain and contact form for production deployment',
+    ],
+    stack: ['Web Design', 'UI/UX', 'Frontend'],
+  },
+];
+
+// ── Top 8 (a curation: 6 projects + GitHub + LinkedIn) ──
+const TOP_8 = [
+  { name: 'Pancake', detail: 'iOS budgeting',         href: 'https://pancakemoney.com/' },
+  { name: 'Phobos',  detail: 'Wishlist web app',      href: 'https://myphobos.app' },
+  { name: 'Miel',    detail: 'macOS Pomodoro',        href: 'https://github.com/citlol/miel-pomodoro' },
+  { name: 'Bigram',  detail: 'Java language model',   href: 'https://github.com/citlol/bigram-language-model' },
+  { name: 'Inpaint', detail: 'PyTorch U-Net',         href: 'https://github.com/citlol/partial-conv-inpainting' },
+  { name: 'Top Escrow', detail: 'Site redesign',      href: 'https://topescrow.com' },
+  { name: 'GitHub',  detail: '@citlol',               href: 'https://github.com/citlol' },
+  { name: 'LinkedIn',detail: 'Connect',               href: 'https://linkedin.com/in/citlalli-trejo-del-rio' },
+];
+
+// ── Nav anchors ──────────────────────────────────────────
+const NAV = [
+  { id: 'home',     label: 'Home' },
+  { id: 'top8',     label: 'Top 8' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'work',     label: 'Experience' },
+  { id: 'contact',  label: 'Contact' },
+];
+
+// ─────────────────────────────────────────────────────────
+
+function Module({ title, hint, children, accent }) {
+  const style = accent ? { '--module-accent': accent } : undefined;
   return (
-    <div style={{
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      pointerEvents: 'none',
-      zIndex: 0
-    }}>
-      {stars.map(star => (
-        <div
-          key={star.id}
-          style={{
-            position: 'absolute',
-            left: `${star.x}%`,
-            top: `${star.y}%`,
-            width: `${star.size}px`,
-            height: `${star.size}px`,
-            backgroundColor: theme === 'dark' ? 'white' : '#94a3b8',
-            borderRadius: '50%',
-            opacity: star.opacity,
-            animation: `twinkle ${star.animationDuration}s ease-in-out infinite`,
-            animationDelay: `${star.animationDelay}s`
-          }}
-        />
+    <section className="module" style={style}>
+      <header className="module-head">
+        <span>{title}</span>
+        {hint && <small>{hint}</small>}
+      </header>
+      <div className="module-body">{children}</div>
+    </section>
+  );
+}
+
+function ProfileModule({ ghStats }) {
+  return (
+    <Module title="My Profile" hint="✦ online">
+      <div className="profile">
+        <div className="profile-photo-wrap">
+          <img src={PROFILE.photo} alt="Citlalli" />
+        </div>
+        <h1 className="profile-name">{PROFILE.name}</h1>
+        <div className="profile-handle">{PROFILE.handle}</div>
+        <span className="online-badge">online now</span>
+
+        <div className="mood">
+          <span className="mood-label">{PROFILE.mood.label}</span>
+          <span className="mood-text">{PROFILE.mood.text}</span>
+        </div>
+
+        <ul className="profile-info">
+          <li><dt>school</dt><dd>{PROFILE.school}</dd></li>
+          <li><dt>grad</dt><dd>{PROFILE.graduation}</dd></li>
+          <li><dt>status</dt><dd>{PROFILE.status}</dd></li>
+          {ghStats && (
+            <li>
+              <dt>github</dt>
+              <dd>
+                {ghStats.public_repos} repos · {ghStats.followers} followers
+              </dd>
+            </li>
+          )}
+        </ul>
+      </div>
+    </Module>
+  );
+}
+
+function NavModule({ active, onNav }) {
+  return (
+    <Module title="View My:" hint="navigate" accent="var(--lavender-200)">
+      <nav>
+        <ul className="nav-list">
+          {NAV.map(item => (
+            <li key={item.id}>
+              <button
+                type="button"
+                className="nav-link"
+                aria-current={active === item.id ? 'true' : 'false'}
+                onClick={() => onNav(item.id)}
+              >
+                {item.label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <div className="btn-row" style={{ marginTop: 'var(--space-md)' }}>
+        <a className="btn btn-primary" href={`mailto:${PROFILE.email}`}>
+          ✦ Hire me
+        </a>
+        <a className="btn" href={PROFILE.resume} download>
+          ⬇ Download résumé
+        </a>
+      </div>
+    </Module>
+  );
+}
+
+function ContactsModule() {
+  const items = [
+    { glyph: 'GH', label: 'GitHub',   href: PROFILE.github,   url: 'github.com/citlol' },
+    { glyph: 'IN', label: 'LinkedIn', href: PROFILE.linkedin, url: 'linkedin.com/in/...' },
+    { glyph: '@',  label: 'Email',    href: `mailto:${PROFILE.email}`, url: PROFILE.email.replace('@', ' [at] ') },
+  ];
+  return (
+    <Module title="Contacting Citlalli" accent="var(--aqua-200)">
+      <ul className="link-list">
+        {items.map(item => (
+          <li key={item.label}>
+            <a
+              className="link-row"
+              href={item.href}
+              target={item.href.startsWith('mailto:') ? undefined : '_blank'}
+              rel="noopener noreferrer"
+            >
+              <span className="glyph">{item.glyph}</span>
+              <span className="label">{item.label}</span>
+              <span className="url">{item.url}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </Module>
+  );
+}
+
+function ToolsModule() {
+  return (
+    <Module title="Tools / Languages" accent="var(--gold-mood)">
+      {Object.entries(TOOLS).map(([group, items]) => (
+        <div className="tag-group" key={group}>
+          <h4 className="tag-group-title">{group}</h4>
+          <ul className="tag-list">
+            {items.map(t => <li key={t} className="tag">{t}</li>)}
+          </ul>
+        </div>
       ))}
-    </div>
+    </Module>
   );
-};
+}
 
-const Clouds = () => {
-  const [clouds, setClouds] = useState([]);
-  const cloudTypes = ['/cloud_small.png', '/cloud_medium.png', '/cloud_long.png'];
-
-  useEffect(() => {
-    const generateClouds = () => {
-      const cloudArray = [];
-      // Grid-based distribution for even spread
-      const cols = 5;
-      const rows = 5;
-      const cellWidth = 95 / cols;
-      const cellHeight = 100 / rows;
-
-      let id = 0;
-      for (let row = 0; row < rows; row++) {
-        for (let col = 0; col < cols; col++) {
-          // Add randomness within each cell
-          const x = col * cellWidth + Math.random() * (cellWidth * 0.6);
-          // Start first row higher (closer to top)
-          const yOffset = row === 0 ? -5 : 0;
-          const y = row * cellHeight + Math.random() * (cellHeight * 0.4) + yOffset;
-          cloudArray.push({
-            id: id++,
-            x,
-            y,
-            type: cloudTypes[Math.floor(Math.random() * cloudTypes.length)],
-            scale: Math.random() * 0.5 + 0.15,
-            opacity: Math.random() * 0.35 + 0.25,
-            animationDuration: Math.random() * 15 + 20,
-            animationDelay: Math.random() * 10
-          });
-        }
-      }
-      setClouds(cloudArray);
-    };
-
-    generateClouds();
-  }, []);
-
+function ListeningModule() {
+  const [loading, setLoading] = useState(true);
   return (
-    <div style={{
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      pointerEvents: 'none',
-      zIndex: 1,
-      overflow: 'hidden'
-    }}>
-      {clouds.map(cloud => (
-        <img
-          key={cloud.id}
-          src={cloud.type}
-          alt=""
+    <Module title="Currently Listening" hint="♫ apple music">
+      <div className="listening-frame">
+        {loading && (
+          <div style={{ padding: 'var(--space-md)', fontSize: 13, color: 'var(--ink-muted)' }}>
+            loading playlist…
+          </div>
+        )}
+        <iframe
+          title="Apple Music Playlist"
+          src="https://embed.music.apple.com/us/playlist/%EC%B2%AD%EC%B6%98%EC%9D%80-%EB%B0%94%EB%A1%9C-%EC%A7%80%EA%B8%88/pl.u-JPAZZlGtJa55XR"
+          frameBorder="0"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy"
           style={{
-            position: 'absolute',
-            left: `${cloud.x}%`,
-            top: `${cloud.y}%`,
-            transform: `scale(${cloud.scale})`,
-            opacity: cloud.opacity,
-            animation: `floatCloud ${cloud.animationDuration}s ease-in-out infinite`,
-            animationDelay: `${cloud.animationDelay}s`,
-            maxWidth: '400px'
+            width: '100%',
+            height: 175,
+            display: loading ? 'none' : 'block',
+            border: 0,
+            background: '#fff',
           }}
+          onLoad={() => setLoading(false)}
         />
-      ))}
-    </div>
+      </div>
+    </Module>
   );
-};
+}
 
-const Tooltip = ({ text, show }) => {
-  if (!show) return null;
+// ── Main column ─────────────────────────────────────────
 
+function Hero() {
   return (
-    <div style={{
-      position: 'absolute',
-      bottom: '65px',
-      left: '50%',
-      transform: 'translateX(-50%)',
-      backgroundColor: 'rgba(255, 255, 255, 0.95)',
-      color: 'black',
-      padding: '6px 10px',
-      borderRadius: '6px',
-      fontSize: '12px',
-      fontWeight: '500',
-      whiteSpace: 'nowrap',
-      pointerEvents: 'none',
-      zIndex: '99999',
-      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
-      border: '1px solid rgba(0, 0, 0, 0.1)',
-      opacity: 1
-    }}>
-      {text}
-      <div style={{
-        position: 'absolute',
-        top: '100%',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        width: '0',
-        height: '0',
-        borderLeft: '4px solid transparent',
-        borderRight: '4px solid transparent',
-        borderTop: '4px solid rgba(255, 255, 255, 0.95)'
-      }}></div>
-    </div>
+    <section id="home" className="section">
+      <div className="hero">
+        <p className="section-eyebrow">welcome to my page ✦</p>
+        <h2 className="section-title">Hi, I'm {PROFILE.name}.</h2>
+        <p className="section-lead">{PROFILE.bio}</p>
+        <div className="hero-meta">
+          <dl>
+            <dt>currently</dt>
+            <dd>Frontend Dev @ Pancake Money</dd>
+          </dl>
+          <dl>
+            <dt>studying</dt>
+            <dd>{PROFILE.school} · {PROFILE.graduation}</dd>
+          </dl>
+          <dl>
+            <dt>open to</dt>
+            <dd>2026 grad-role offers</dd>
+          </dl>
+        </div>
+      </div>
+    </section>
   );
-};
+}
 
-const DraggableFolder = ({ name, initialX, initialY, isMobile, onClick, theme, icon }) => {
-  const [position, setPosition] = useState({ x: initialX, y: initialY });
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [mouseStart, setMouseStart] = useState({ x: 0, y: 0 });
-  const [dragMoved, setDragMoved] = useState(false);
-
-  const handleMouseDown = (e) => {
-    if (isMobile) return;
-    setIsDragging(true);
-    setDragMoved(false);
-    setMouseStart({ x: e.clientX, y: e.clientY });
-    setDragStart({
-      x: e.clientX - position.x,
-      y: e.clientY - position.y
-    });
-  };
-
-  const handleMouseMove = (e) => {
-    if (!isDragging) return;
-    const dx = Math.abs(e.clientX - mouseStart.x);
-    const dy = Math.abs(e.clientY - mouseStart.y);
-    if (dx > 5 || dy > 5) {
-      setDragMoved(true);
-    }
-    setPosition({
-      x: e.clientX - dragStart.x,
-      y: e.clientY - dragStart.y
-    });
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  const handleClick = () => {
-    if (!dragMoved && onClick) {
-      onClick();
-    }
-  };
-
-  useEffect(() => {
-    if (isDragging) {
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
-      return () => {
-        window.removeEventListener('mousemove', handleMouseMove);
-        window.removeEventListener('mouseup', handleMouseUp);
-      };
-    }
-  }, [isDragging, dragStart]);
-
+function Top8Section() {
   return (
-    <div
-      className={isMobile ? 'desktop-folder' : ''}
-      style={{
-        position: 'absolute',
-        left: `${position.x}px`,
-        top: `${position.y}px`,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        fontSize: '12px',
-        cursor: isDragging ? 'grabbing' : 'grab',
-        userSelect: 'none',
-        zIndex: isDragging ? 1000 : 10,
-        transition: isDragging ? 'none' : 'transform 0.2s ease'
-      }}
-      onMouseDown={handleMouseDown}
-      onClick={handleClick}
-      onMouseEnter={(e) => {
-        if (!isDragging) e.currentTarget.style.transform = 'scale(1.05)';
-      }}
-      onMouseLeave={(e) => {
-        if (!isDragging) e.currentTarget.style.transform = 'scale(1)';
-      }}
-    >
-      <img
-        src={icon || (theme === 'dark' ? '/dark_bunny.png' : '/pink_bunny.png')}
-        alt="Folder"
+    <section id="top8" className="section">
+      <p className="section-eyebrow">★ top 8</p>
+      <h2 className="section-title">My Top 8.</h2>
+      <p className="section-lead" style={{ marginBottom: 'var(--space-lg)' }}>
+        A handful of things I'm proud of — projects, work, and where to find me.
+      </p>
+      <div className="top8">
+        {TOP_8.map((item, i) => (
+          <a
+            key={item.name}
+            className="top8-card"
+            href={item.href}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div>
+              <div className="num">№ {String(i + 1).padStart(2, '0')}</div>
+              <div className="name">{item.name}</div>
+              <div className="detail">{item.detail}</div>
+            </div>
+            <div className="arrow">↗</div>
+          </a>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ProjectsSection() {
+  return (
+    <section id="projects" className="section">
+      <p className="section-eyebrow">/ projects</p>
+      <h2 className="section-title">Featured Projects.</h2>
+      <p className="section-lead" style={{ marginBottom: 'var(--space-lg)' }}>
+        A few deeper looks at things I've shipped — mobile, web, and ML.
+      </p>
+      <div className="project-list">
+        {PROJECTS.map((p, i) => (
+          <article key={p.id} className="project">
+            <div className="num">{String(i + 1).padStart(2, '0')}</div>
+            <div>
+              <h3>{p.name}</h3>
+              <div className="meta">
+                {p.role} · {p.period}
+              </div>
+              <p>{p.description}</p>
+              <ul>
+                {p.highlights.map(h => <li key={h}>{h}</li>)}
+              </ul>
+              <ul className="tags">
+                {p.tech.map(t => <li key={t} className="tag">{t}</li>)}
+              </ul>
+            </div>
+            {p.link && (
+              <a
+                className="visit"
+                href={p.link}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {p.linkLabel}
+              </a>
+            )}
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function WorkSection() {
+  return (
+    <section id="work" className="section">
+      <p className="section-eyebrow">↗ experience</p>
+      <h2 className="section-title">Where I've Worked.</h2>
+      <div className="work-list">
+        {EXPERIENCE.map(job => (
+          <article key={job.id} className="work-entry">
+            <div className="period">
+              {job.period}
+              <div><span className="status">{job.status}</span></div>
+            </div>
+            <div>
+              <h3>{job.company}</h3>
+              <div className="role">{job.role}</div>
+              <p>{job.blurb}</p>
+              <ul>
+                {job.highlights.map(h => <li key={h}>{h}</li>)}
+              </ul>
+              <ul className="stack">
+                {job.stack.map(s => <li key={s} className="tag">{s}</li>)}
+              </ul>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ContactSection() {
+  return (
+    <section id="contact" className="section">
+      <p className="section-eyebrow">✉ get in touch</p>
+      <h2 className="section-title">Let's build something.</h2>
+      <p className="section-lead">
+        I'm graduating in {PROFILE.graduation.replace('Class of ', '')} and looking for a role
+        where I can keep shipping thoughtful software. The fastest way to reach me is email —
+        otherwise the résumé and socials are linked in the sidebar.
+      </p>
+      <div
         style={{
-          width: icon ? '100px' : '48px',
-          height: icon ? '100px' : '48px',
-          objectFit: 'contain',
-          pointerEvents: 'none'
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 'var(--space-sm)',
+          marginTop: 'var(--space-lg)',
+          maxWidth: 480,
         }}
-      />
-      <span style={{
-        color: theme === 'dark' ? 'white' : '#1f2937',
-        textShadow: theme === 'dark' ? '1px 1px 2px rgba(0,0,0,0.8)' : '1px 1px 2px rgba(255,255,255,0.8)',
-        pointerEvents: 'none',
-        marginTop: icon ? '-30px' : '0'
-      }}>
-        {name}
-      </span>
-    </div>
+      >
+        <a
+          className="btn btn-primary"
+          href={`mailto:${PROFILE.email}`}
+          style={{ flex: '1 1 auto' }}
+        >
+          ✦ {PROFILE.email}
+        </a>
+        <a
+          className="btn"
+          href={PROFILE.resume}
+          download
+          style={{ flex: '0 1 200px' }}
+        >
+          ⬇ Download résumé
+        </a>
+      </div>
+    </section>
   );
-};
+}
 
-// Open to Work Badge Component
-const OpenToWorkBadge = ({ theme }) => {
-  return (
-    <div style={{
-      position: 'absolute',
-      top: '10px',
-      left: '10px',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '8px',
-      backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.7)' : 'rgba(255, 255, 255, 0.9)',
-      backdropFilter: 'blur(10px)',
-      border: theme === 'dark' ? '1px solid rgba(236, 72, 153, 0.3)' : '1px solid rgba(22, 163, 74, 0.3)',
-      borderRadius: '20px',
-      padding: '8px 14px',
-      zIndex: 20,
-      transition: 'all 0.3s ease'
-    }}>
-      <div style={{
-        width: '8px',
-        height: '8px',
-        borderRadius: '50%',
-        backgroundColor: '#ec4899',
-        animation: 'pulse-badge 2s ease-in-out infinite',
-        boxShadow: '0 0 8px #ec4899'
-      }} />
-      <span style={{
-        fontSize: '12px',
-        fontWeight: '600',
-        color: theme === 'dark' ? '#ec4899' : '#db2777',
-        fontFamily: 'monospace'
-      }}>
-        Open to Work
-      </span>
-    </div>
-  );
-};
+// ── App shell ────────────────────────────────────────────
 
-const DesktopClock = ({ isMobile, theme }) => {
-  const [time, setTime] = useState(new Date());
-
+function useActiveSection(ids) {
+  const [active, setActive] = useState(ids[0]);
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTime(new Date());
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  const formatTime = (date) => {
-    return date.toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: true
-    });
-  };
-
-  const formatDate = (date) => {
-    return date.toLocaleDateString([], {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric'
-    });
-  };
-
-  if (isMobile) return null;
-
-  return (
-    <div style={{
-      position: 'absolute',
-      top: '10px',
-      right: '10px',
-      backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.7)' : 'rgba(255, 255, 255, 0.9)',
-      backdropFilter: 'blur(10px)',
-      border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)',
-      borderRadius: '8px',
-      padding: window.innerWidth <= 768 ? '8px 12px' : '12px 16px',
-      color: theme === 'dark' ? 'white' : '#1f2937',
-      textAlign: 'center',
-      fontFamily: 'monospace',
-      userSelect: 'none',
-      zIndex: 20,
-      transition: 'all 0.3s ease'
-    }}>
-      <div style={{
-        fontSize: window.innerWidth <= 768 ? '14px' : '16px',
-        fontWeight: 'bold',
-        marginBottom: '4px',
-        textShadow: theme === 'dark' ? '1px 1px 2px rgba(0,0,0,0.8)' : 'none'
-      }}>
-        {formatTime(time)}
-      </div>
-      <div style={{
-        fontSize: window.innerWidth <= 768 ? '10px' : '12px',
-        opacity: 0.8,
-        textShadow: theme === 'dark' ? '1px 1px 2px rgba(0,0,0,0.8)' : 'none'
-      }}>
-        {formatDate(time)}
-      </div>
-    </div>
-  );
-};
-
-// Helper function to generate random folder positions
-const generateRandomFolderPositions = () => {
-  const folderSize = 70; // approximate folder width/height including text
-  const padding = 20; // minimum distance between folders
-
-  // Define forbidden zones (areas to avoid)
-  const getForbiddenZones = () => {
-    const width = typeof window !== 'undefined' ? window.innerWidth : 1200;
-    const height = typeof window !== 'undefined' ? window.innerHeight : 800;
-
-    return [
-      // Open to Work badge (top-left)
-      { x: 0, y: 0, width: 180, height: 60 },
-      // Clock (top-right)
-      { x: width - 160, y: 0, width: 160, height: 80 },
-      // Terminal window (center) - larger zone to be safe
-      { x: width / 2 - 500, y: height / 2 - 350, width: 1000, height: 700 },
-      // Bottom dock
-      { x: width / 2 - 300, y: height - 100, width: 600, height: 100 },
-      // Info bubbles (right side)
-      { x: width - 220, y: 0, width: 220, height: height },
-    ];
-  };
-
-  const isInForbiddenZone = (x, y, forbiddenZones) => {
-    for (const zone of forbiddenZones) {
-      if (
-        x < zone.x + zone.width + padding &&
-        x + folderSize > zone.x - padding &&
-        y < zone.y + zone.height + padding &&
-        y + folderSize > zone.y - padding
-      ) {
-        return true;
-      }
-    }
-    return false;
-  };
-
-  const overlapsWithOther = (x, y, existingPositions) => {
-    for (const pos of existingPositions) {
-      const distance = Math.sqrt(Math.pow(x - pos.x, 2) + Math.pow(y - pos.y, 2));
-      if (distance < folderSize + padding) {
-        return true;
-      }
-    }
-    return false;
-  };
-
-  const width = typeof window !== 'undefined' ? window.innerWidth : 1200;
-  const height = typeof window !== 'undefined' ? window.innerHeight : 800;
-  const forbiddenZones = getForbiddenZones();
-
-  const positions = [];
-  const folderNames = ['Personal', 'School Work', 'Miel Pomodoro', 'My Profile'];
-
-  for (let i = 0; i < folderNames.length; i++) {
-    let attempts = 0;
-    let x, y;
-
-    // Try to find a valid position
-    do {
-      // Generate random position in safe areas (edges of screen)
-      const side = Math.floor(Math.random() * 4); // 0=top, 1=right, 2=bottom-ish, 3=left
-
-      switch (side) {
-        case 0: // Top area (but not corners)
-          x = 180 + Math.random() * (width - 400);
-          y = 70 + Math.random() * 80;
-          break;
-        case 1: // Right side
-          x = width - 100 - Math.random() * 80;
-          y = 100 + Math.random() * (height - 300);
-          break;
-        case 2: // Left side lower
-          x = 20 + Math.random() * 100;
-          y = 80 + Math.random() * (height - 300);
-          break;
-        case 3: // Left side
-          x = 20 + Math.random() * 150;
-          y = 150 + Math.random() * (height - 400);
-          break;
-        default:
-          x = 20 + Math.random() * 150;
-          y = 80 + Math.random() * 200;
-      }
-
-      attempts++;
-    } while (
-      (isInForbiddenZone(x, y, forbiddenZones) || overlapsWithOther(x, y, positions)) &&
-      attempts < 100
+    const els = ids.map(id => document.getElementById(id)).filter(Boolean);
+    if (!els.length) return;
+    const observer = new IntersectionObserver(
+      entries => {
+        const visible = entries
+          .filter(e => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]) setActive(visible[0].target.id);
+      },
+      { rootMargin: '-30% 0px -55% 0px', threshold: [0, 0.25, 0.5, 0.75, 1] },
     );
+    els.forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, [ids]);
+  return active;
+}
 
-    positions.push({ x, y, name: folderNames[i] });
-  }
-
-  return positions;
-};
-
-function App() {
-  const [activeSection, setActiveSection] = useState('home');
-  const [showAppleMusicModal, setShowAppleMusicModal] = useState(false);
-  const [isAppleMusicLoading, setIsAppleMusicLoading] = useState(true);
-  const [showFigmaModal, setShowFigmaModal] = useState(false);
-  const [showLoLModal, setShowLoLModal] = useState(false);
-  const [showDiscordModal, setShowDiscordModal] = useState(false);
-  const [showProfileModal, setShowProfileModal] = useState(false);
-  const [hoveredIcon, setHoveredIcon] = useState(null);
-  const [isMobile, setIsMobile] = useState(false);
-  const [terminalPosition, setTerminalPosition] = useState({ x: 0, y: 0 });
-  const [isDraggingTerminal, setIsDraggingTerminal] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  // Random folder positions
-  const [folderPositions, setFolderPositions] = useState(() => generateRandomFolderPositions());
-  const [showTerminal, setShowTerminal] = useState(true);
-  const [isInitializing, setIsInitializing] = useState(true);
-  const [theme, setTheme] = useState('dark');
-  const [openFolders, setOpenFolders] = useState({
-    personal: false,
-    schoolWork: false,
-    mielPomodoro: false
+function useTheme() {
+  const [theme, setTheme] = useState(() => {
+    if (typeof window === 'undefined') return 'light';
+    try {
+      const saved = window.localStorage.getItem('citlol-theme');
+      if (saved === 'dark' || saved === 'light') return saved;
+    } catch (_) {}
+    return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   });
-  // Interactive terminal state
-  const [commandInput, setCommandInput] = useState('');
-  const [commandHistory, setCommandHistory] = useState([]);
-  const [historyIndex, setHistoryIndex] = useState(-1);
-  const [terminalOutput, setTerminalOutput] = useState([]);
-  const [showCommandLine, setShowCommandLine] = useState(false);
-  // GitHub stats state
-  const [githubStats, setGithubStats] = useState(null);
-  // Project detail state
-  const [selectedProject, setSelectedProject] = useState(null);
 
-  // Professional experience (work)
-  const experience = [
-    {
-      id: 'pancake',
-      name: 'Pancake Money',
-      description: 'iOS budgeting app integrating a Python backend and the Plaid API for secure aggregation and visualization of financial data',
-      tech: ['Swift', 'SwiftUI', 'Python', 'Plaid API'],
-      role: 'Frontend Developer',
-      period: '06/2025 – Present',
-      color: '#ec4899',
-      highlights: [
-        'Led iOS development for an app integrating a Python backend and the Plaid API',
-        'Designed and implemented UI and financial data visualizations in Swift',
-        'Built with a modular, object-oriented architecture'
-      ],
-      website: 'https://pancakemoney.com/',
-      status: 'Current'
-    },
-    {
-      id: 'top-escrow',
-      name: 'Top Escrow',
-      description: 'Redesigned and rebuilt the company website using modern frontend practices, improving usability and visual consistency',
-      tech: ['Web Design', 'UI/UX', 'Frontend'],
-      role: 'Website Redesign Contractor',
-      period: '07/2025 – 08/2025',
-      color: '#fb7185',
-      highlights: [
-        'Redesigned and rebuilt the company website with modern frontend practices',
-        'Collaborated with stakeholders to deliver iterative revisions based on feedback',
-        'Supported deployment by configuring the domain and ensuring contact form functionality'
-      ],
-      website: 'https://topescrow.com',
-      status: 'Contract'
-    }
-  ];
-
-  // Project data with case studies
-  const projects = [
-    {
-      id: 'phobos',
-      name: 'Phobos – Wishlist Web App',
-      description: 'Full-stack wishlist platform with multi-page routing, collaborative sharing, and a custom dark/light theme system',
-      tech: ['Next.js', 'React', 'TypeScript', 'Node.js', 'PostgreSQL', 'Vercel', 'Railway'],
-      role: 'Developer',
-      color: '#fb7185',
-      highlights: [
-        'Built a secure REST API with JWT auth, bcrypt hashing, email verification, and account lockout protection',
-        'Implemented production-ready hardening: rate limiting, input validation, Helmet, and CORS',
-        'Deployed on Vercel and Railway under a custom domain'
-      ],
-      github: 'https://myphobos.app',
-      status: 'Released'
-    },
-    {
-      id: 'bigram',
-      name: 'Bigram Language Model & Autocomplete',
-      description: 'Java bigram language model with Kneser-Ney smoothing supporting probabilistic text generation and autocomplete',
-      tech: ['Java 17', 'Maven', 'MySQL', 'JavaFX', 'JUnit 5'],
-      role: 'Developer',
-      color: '#f472b6',
-      highlights: [
-        'Architected a bigram language model with Kneser-Ney smoothing supporting beam search and greedy decoding',
-        'Designed a scalable MySQL persistence layer handling 600k+ relationships with batched writes and idempotent upserts',
-        'Built a clean DBInterface abstraction supporting autocomplete and sentence generation',
-        'Wrote JUnit 5 tests covering training, prediction, and edge cases; documented architecture for cross-team integration'
-      ],
-      github: 'https://github.com/citlol/bigram-language-model',
-      status: 'Released'
-    },
-    {
-      id: 'inpainting',
-      name: 'Partial Convolution U-Net Inpainting',
-      description: 'Image inpainting model based on published research, achieving 28–32 dB PSNR and SSIM up to 0.96',
-      tech: ['Python', 'PyTorch', 'TorchVision', 'OpenCV', 'Gradio'],
-      role: 'Developer',
-      color: '#ec4899',
-      highlights: [
-        'Implemented a 33M-parameter Partial Convolution U-Net for irregular image inpainting',
-        'Achieved PSNR of 28–32 dB and SSIM up to 0.96; evaluated performance with FID metrics',
-        'Built a full training pipeline with logging and an interactive Gradio demo'
-      ],
-      github: 'https://github.com/citlol/partial-conv-inpainting',
-      status: 'Released'
-    },
-    {
-      id: 'miel-pomodoro',
-      name: 'Miel – Pomodoro Timer',
-      description: 'macOS menu bar pomodoro timer with customizable UI components and an animal pal companion',
-      tech: ['Swift', 'SwiftUI', 'macOS', 'Procreate', 'Adobe Illustrator'],
-      role: 'Solo Developer',
-      color: '#f472b6',
-      highlights: [
-        'macOS menu bar timer with customizable UI components built with object-oriented design',
-        'Hand-illustrated animal pal companion features designed in Procreate and Illustrator',
-        'Rapidly prototyped and debugged features using AI tools and Git-based workflows'
-      ],
-      github: 'https://github.com/citlol/miel-pomodoro',
-      status: 'WIP'
-    }
-  ];
-
-  // Terminal commands handler
-  const handleCommand = (cmd) => {
-    const trimmedCmd = cmd.trim().toLowerCase();
-    const args = trimmedCmd.split(' ');
-    const command = args[0];
-
-    let output = [];
-
-    switch (command) {
-      case 'help':
-        output = [
-          { type: 'info', text: 'Available commands:' },
-          { type: 'command', text: '  help          - Show this help message' },
-          { type: 'command', text: '  whoami        - About me' },
-          { type: 'command', text: '  ls            - List sections' },
-          { type: 'command', text: '  cat resume    - View/download resume' },
-          { type: 'command', text: '  github        - View GitHub stats' },
-          { type: 'command', text: '  work          - Professional experience' },
-          { type: 'command', text: '  projects      - List projects' },
-          { type: 'command', text: '  skills        - Show skills' },
-          { type: 'command', text: '  contact       - Contact info' },
-          { type: 'command', text: '  now           - What I\'m currently working on' },
-          { type: 'command', text: '  clear         - Clear terminal' },
-          { type: 'command', text: '  sudo hire me  - Easter egg' },
-        ];
-        break;
-      case 'whoami':
-        output = [
-          { type: 'success', text: 'Hi! I\'m Citlalli Trejo Del Rio' },
-          { type: 'text', text: '   CS @ UT Dallas — Full-Stack Developer' },
-          { type: 'text', text: '   Frontend Developer at Pancake Money' },
-          { type: 'text', text: '   Building scalable web apps, iOS apps, and ML systems' },
-          { type: 'info', text: '   Currently seeking software engineering opportunities' },
-          { type: 'info', text: '   Graduating June 2026!!'}
-        ];
-        break;
-      case 'ls':
-        output = [
-          { type: 'text', text: 'drwxr-xr-x  about.md' },
-          { type: 'text', text: 'drwxr-xr-x  work/' },
-          { type: 'text', text: 'drwxr-xr-x  projects/' },
-          { type: 'text', text: 'drwxr-xr-x  skills.config' },
-          { type: 'text', text: '-rwxr-xr-x  contact.sh' },
-          { type: 'text', text: '-rw-r--r--  resume.pdf' },
-        ];
-        break;
-      case 'cat':
-        if (args[1] === 'resume' || args[1] === 'resume.pdf') {
-          output = [
-            { type: 'success', text: 'Opening resume...' },
-            { type: 'link', text: 'Click here to download resume', url: '/resume.pdf' },
-          ];
-          // Trigger download
-          setTimeout(() => {
-            const link = document.createElement('a');
-            link.href = '/resume.pdf';
-            link.download = 'Citlalli_Trejo_Resume.pdf';
-            link.click();
-          }, 500);
-        } else {
-          output = [{ type: 'error', text: `cat: ${args[1] || ''}: No such file` }];
-        }
-        break;
-      case 'github':
-        output = [
-          { type: 'info', text: ' GitHub: github.com/citlol' },
-          { type: 'text', text: githubStats ? `   Public repos: ${githubStats.public_repos}` : '   Loading stats...' },
-          { type: 'text', text: githubStats ? `   Followers: ${githubStats.followers}` : '' },
-          { type: 'link', text: '   View profile →', url: 'https://github.com/citlol' },
-        ];
-        break;
-      case 'projects':
-        output = [
-          { type: 'info', text: '[>] My Projects:' },
-          ...projects.map(p => ({
-            type: 'project',
-            text: `   ${p.name} - ${p.tech.join(', ')} [${p.status}]`,
-            color: p.color
-          }))
-        ];
-        break;
-      case 'work':
-      case 'experience':
-        output = [
-          { type: 'info', text: '[>] Professional Experience:' },
-          ...experience.flatMap(w => [
-            {
-              type: 'project',
-              text: `   ${w.name} — ${w.role} [${w.period}]`,
-              color: w.color
-            },
-            { type: 'text', text: `      ${w.description}` }
-          ])
-        ];
-        break;
-      case 'skills':
-        output = [
-          { type: 'success', text: '[>] Languages: Java, TypeScript, Swift, Python, C++, SQL, JavaScript, HTML, CSS/Tailwind' },
-          { type: 'info', text: '[>] Frameworks: React, Next.js, Node.js, SwiftUI, PyTorch' },
-          { type: 'warning', text: '[>] Tools: Git, VS Code, Linux, Xcode, Figma, MongoDB' },
-        ];
-        break;
-      case 'contact':
-        output = [
-          { type: 'info', text: ' Email: citlalli.tdr@gmail.com' },
-          { type: 'link', text: ' LinkedIn: linkedin.com/in/citlalli-trejo-del-rio', url: 'https://linkedin.com/in/citlalli-trejo-del-rio' },
-          { type: 'link', text: ' GitHub: github.com/citlol', url: 'https://github.com/citlol' },
-        ];
-        break;
-      case 'now':
-        output = [
-          { type: 'success', text: ' Currently Building:' },
-          { type: 'text', text: '   • Pancake - iOS budgeting app with Plaid integration' },
-          { type: 'text', text: '   • Phobos - Full-stack wishlist platform on Next.js' },
-          { type: 'text', text: '   • Bigram language model & autocomplete (Java + MySQL)' },
-          { type: 'text', text: '   • Miel Pomodoro - macOS menu bar timer' },
-          { type: 'info', text: ' Learning:' },
-          { type: 'text', text: '   • Advanced SwiftUI animations' },
-          { type: 'text', text: '   • Production-ready full-stack architecture' },
-        ];
-        break;
-      case 'clear':
-        setTerminalOutput([]);
-        return;
-      case 'sudo':
-        if (args.slice(1).join(' ') === 'hire me') {
-          output = [
-            { type: 'success', text: 'HIRE MODE ACTIVATED' },
-            { type: 'image', src: '/bunnyjump.gif', alt: 'Excited bunny' },
-            { type: 'text', text: '   Ready to bring creativity and dedication to your team!' },
-            { type: 'text', text: '    Let\'s talk: citlalli.tdr@gmail.com' },
-            { type: 'info', text: '   [Process completed with exit code: EXCITED_TO_WORK]' },
-          ];
-        } else {
-          output = [{ type: 'error', text: 'sudo: command not found' }];
-        }
-        break;
-      case '':
-        return;
-      default:
-        output = [{ type: 'error', text: `command not found: ${command}. Type 'help' for available commands.` }];
-    }
-
-    setTerminalOutput(prev => [
-      ...prev,
-      { type: 'input', text: `citlol@portfolio ~ % ${cmd}` },
-      ...output
-    ]);
-  };
-
-  // Handle keyboard input for terminal
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      handleCommand(commandInput);
-      setCommandHistory(prev => [...prev, commandInput]);
-      setHistoryIndex(-1);
-      setCommandInput('');
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      if (commandHistory.length > 0) {
-        const newIndex = historyIndex < commandHistory.length - 1 ? historyIndex + 1 : historyIndex;
-        setHistoryIndex(newIndex);
-        setCommandInput(commandHistory[commandHistory.length - 1 - newIndex] || '');
-      }
-    } else if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      if (historyIndex > 0) {
-        const newIndex = historyIndex - 1;
-        setHistoryIndex(newIndex);
-        setCommandInput(commandHistory[commandHistory.length - 1 - newIndex] || '');
-      } else {
-        setHistoryIndex(-1);
-        setCommandInput('');
-      }
-    }
-  };
-
-  // Fetch GitHub stats
   useEffect(() => {
-    fetch('https://api.github.com/users/citlol')
-      .then(res => res.json())
-      .then(data => setGithubStats(data))
-      .catch(() => setGithubStats(null));
-  }, []);
-
-  // Theme toggle handler
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
-  };
-
-  // Apply theme to HTML element
-  useEffect(() => {
-    document.documentElement.classList.remove('dark', 'light');
-    document.documentElement.classList.add(theme);
+    document.documentElement.dataset.theme = theme;
+    try { window.localStorage.setItem('citlol-theme', theme); } catch (_) {}
   }, [theme]);
 
-  const handleNavClick = (section) => {
-    setActiveSection(section);
-  };
+  const toggle = () => setTheme(t => (t === 'dark' ? 'light' : 'dark'));
+  return [theme, toggle];
+}
 
-  const openAppleMusicModal = () => {
-    setShowAppleMusicModal(true);
-    setIsAppleMusicLoading(true);
-    // Set a timeout to hide loading after 3 seconds regardless
-    setTimeout(() => {
-      setIsAppleMusicLoading(false);
-    }, 3000);
-  };
+export default function App() {
+  const [ghStats, setGhStats] = useState(null);
+  const [theme, toggleTheme] = useTheme();
 
-  const closeAppleMusicModal = () => {
-    setShowAppleMusicModal(false);
-    setIsAppleMusicLoading(true);
-  };
-
-  const openFigmaModal = () => {
-    setShowFigmaModal(true);
-  };
-
-  const closeFigmaModal = () => {
-    setShowFigmaModal(false);
-  };
-
-  const openLoLModal = () => {
-    setShowLoLModal(true);
-  };
-
-  const closeLoLModal = () => {
-    setShowLoLModal(false);
-  };
-
-  const openDiscordModal = () => {
-    setShowDiscordModal(true);
-  };
-
-  const closeDiscordModal = () => {
-    setShowDiscordModal(false);
-  };
-
-  // Terminal drag handlers
-  const handleTerminalMouseDown = (e) => {
-    if (isMobile) return;
-    // Only drag if clicking on the header area
-    if (e.target.closest('.terminal-header')) {
-      setIsDraggingTerminal(true);
-      setDragStart({
-        x: e.clientX - terminalPosition.x,
-        y: e.clientY - terminalPosition.y
-      });
-    }
-  };
-
-  const handleTerminalMouseMove = (e) => {
-    if (!isDraggingTerminal) return;
-    setTerminalPosition({
-      x: e.clientX - dragStart.x,
-      y: e.clientY - dragStart.y
-    });
-  };
-
-  const handleTerminalMouseUp = () => {
-    setIsDraggingTerminal(false);
-  };
-
-  // Close terminal handler
-  // addition of clearing terminal after "closing"
-  const closeTerminal = () => {
-    setShowTerminal(false);
-    setTerminalOutput([]); // Clear terminal history
-    // Reset and reopen after a brief moment
-    setTimeout(() => {
-      setShowTerminal(true);
-      setIsInitializing(true);
-      setActiveSection('home');
-      setTerminalPosition({ x: 0, y: 0 });
-      // Hide initializing text after 2 seconds
-      setTimeout(() => {
-        setIsInitializing(false);
-      }, 2000);
-    }, 100);
-  };
-
-  // Folder handlers
-  const openFolder = (folderName) => {
-    setOpenFolders(prev => ({ ...prev, [folderName]: true }));
-  };
-
-  const closeFolder = (folderName) => {
-    setOpenFolders(prev => ({ ...prev, [folderName]: false }));
-  };
-
-  // Initialization timer
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsInitializing(false);
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, [showTerminal]);
-
-  // Terminal dragging effect
-  useEffect(() => {
-    if (isDraggingTerminal) {
-      window.addEventListener('mousemove', handleTerminalMouseMove);
-      window.addEventListener('mouseup', handleTerminalMouseUp);
-      return () => {
-        window.removeEventListener('mousemove', handleTerminalMouseMove);
-        window.removeEventListener('mouseup', handleTerminalMouseUp);
-      };
-    }
-  }, [isDraggingTerminal, dragStart]);
-
-  // Mobile detection
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-
-    return () => window.removeEventListener('resize', checkMobile);
+    let cancelled = false;
+    fetch('https://api.github.com/users/citlol')
+      .then(r => (r.ok ? r.json() : null))
+      .then(data => {
+        if (!cancelled && data) setGhStats(data);
+      })
+      .catch(() => {});
+    return () => { cancelled = true; };
   }, []);
+
+  const navIds = useRef(NAV.map(n => n.id)).current;
+  const active = useActiveSection(navIds);
+
+  const scrollTo = (id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   return (
     <>
-      <div style={{
-        minHeight: '100vh',
-        background: theme === 'dark'
-          ? 'linear-gradient(135deg, #000000 0%, #080808 12%, #101010 25%, #151515 37%, #1a1a1a 50%, #1f1f1f 62%, #232323 75%, #272727 87%, #2a2a2a 100%)'
-          : 'linear-gradient(135deg, #fce7f3 0%, #fbcfe8 50%, #f9a8d4 100%)',
-        fontFamily: 'monospace',
-        position: 'relative',
-        overflow: isMobile ? 'auto' : 'hidden',
-        padding: isMobile ? '10px' : '0',
-        transition: 'background 0.3s ease'
-      }}>
-      {theme === 'dark' && <Stars theme={theme} />}
-      <Clouds />
-      {/* Open to Work Badge */}
-      {!isMobile && <OpenToWorkBadge theme={theme} />}
-      {/* Desktop Clock */}
-      <DesktopClock isMobile={isMobile} theme={theme} />
-      {/* Desktop Folders - Random positions */}
-      <DraggableFolder
-        name="Personal"
-        initialX={folderPositions[0]?.x || 20}
-        initialY={folderPositions[0]?.y || 80}
-        isMobile={isMobile}
-        onClick={() => openFolder('personal')}
-        theme={theme}
-      />
-      <DraggableFolder
-        name="School Work"
-        initialX={folderPositions[1]?.x || 120}
-        initialY={folderPositions[1]?.y || 80}
-        isMobile={isMobile}
-        onClick={() => openFolder('schoolWork')}
-        theme={theme}
-      />
-      <DraggableFolder
-        name="Miel Pomodoro"
-        initialX={folderPositions[2]?.x || 220}
-        initialY={folderPositions[2]?.y || 80}
-        isMobile={isMobile}
-        onClick={() => openFolder('mielPomodoro')}
-        theme={theme}
-      />
-      <DraggableFolder
-        name="My Profile"
-        initialX={folderPositions[3]?.x || 320}
-        initialY={folderPositions[3]?.y || 80}
-        isMobile={isMobile}
-        onClick={() => setShowProfileModal(true)}
-        theme={theme}
-        icon="/profile_.png"
-      />
-
-      {/* Terminal Window */}
-      {showTerminal && (
-      <>
-      <div
-        className={isMobile ? 'terminal-window-mobile' : ''}
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: `translate(calc(-50% + ${terminalPosition.x}px), calc(-50% + ${terminalPosition.y}px))`,
-          width: isMobile ? '95vw' : 'min(800px, calc(100vw - 280px))',
-          maxWidth: isMobile ? '100vw' : 'calc(100vw - 280px)',
-          maxHeight: isMobile ? '80vh' : '85vh',
-          backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.85)' : 'rgba(240, 240, 245, 0.85)',
-          border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.08)',
-          borderRadius: '12px',
-          boxShadow: theme === 'dark'
-            ? '0 20px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1) inset'
-            : '0 20px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.03) inset',
-          backdropFilter: 'blur(20px)',
-          overflow: 'hidden',
-          zIndex: 100,
-          cursor: isDraggingTerminal ? 'grabbing' : 'default'
-        }}
-        onMouseDown={handleTerminalMouseDown}
-      >
-        {/* Terminal Header */}
-        <div
-          className="terminal-header"
-          style={{
-            backgroundColor: theme === 'dark' ? 'rgba(51, 51, 51, 0.8)' : 'rgba(220, 220, 230, 0.8)',
-            padding: '12px 16px',
-            borderTopLeftRadius: '12px',
-            borderTopRightRadius: '12px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            borderBottom: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(236, 72, 153, 0.15)',
-            cursor: isDraggingTerminal ? 'grabbing' : 'grab',
-            userSelect: 'none'
-          }}
-        >
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <div
-              onClick={closeTerminal}
-              style={{
-                width: '12px',
-                height: '12px',
-                borderRadius: '50%',
-                backgroundColor: '#ff5f57',
-                cursor: 'pointer',
-                transition: 'transform 0.2s ease'
-              }}
-              onMouseEnter={(e) => e.target.style.transform = 'scale(1.2)'}
-              onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
-            ></div>
-            <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ffbd2e' }}></div>
-            <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#28ca42' }}></div>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ color: '#888', fontSize: '12px' }}>citlol@portfolio</span>
-            <div
-              onClick={toggleTheme}
-              style={{
-                width: '44px',
-                height: '24px',
-                backgroundColor: theme === 'dark' ? '#3b3b3b' : '#ec4899',
-                borderRadius: '12px',
-                cursor: 'pointer',
-                position: 'relative',
-                transition: 'background-color 0.3s ease',
-                border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(236, 72, 153, 0.3)'
-              }}
-            >
-              <div
-                style={{
-                  width: '18px',
-                  height: '18px',
-                  backgroundColor: '#fff',
-                  borderRadius: '50%',
-                  position: 'absolute',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  left: theme === 'dark' ? '3px' : '23px',
-                  transition: 'left 0.3s ease',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.3)'
-                }}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Terminal Content */}
-        <div style={{
-          padding: isMobile ? '16px' : '24px',
-          color: theme === 'dark' ? 'white' : '#1f2937',
-          fontSize: isMobile ? '13px' : '14px',
-          minHeight: isMobile ? '300px' : '400px',
-          maxHeight: isMobile ? '60vh' : '70vh',
-          lineHeight: '1.6',
-          overflowY: 'auto'
-        }}>
-          {isInitializing ? (
-            <div style={{ color: theme === 'dark' ? '#ec4899' : '#db2777', marginBottom: '16px' }}>
-              Initializing<span className="typing-dots">...</span>
-            </div>
-          ) : (
-            <>
-              <div style={{ color: theme === 'dark' ? '#888' : '#6b7280', marginBottom: '16px' }}>
-                citlol@portfolio ~ % 
-              </div>
-
-              {activeSection === 'home' && (
-            <div>
-              {/* Welcome message */}
-              <div style={{ marginBottom: '16px', color: theme === 'dark' ? '#ec4899' : '#db2777' }}>
-                Welcome! Type <span style={{ color: '#f472b6' }}>help</span> for commands or click a file below.
-              </div>
-
-              {/* File navigation */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '20px' }}>
-                <button
-                  onClick={() => handleNavClick('about')}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: theme === 'dark' ? 'white' : '#1f2937',
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    fontSize: '14px',
-                    fontFamily: 'monospace',
-                    padding: '4px 0'
-                  }}
-                  onMouseEnter={(e) => e.target.style.color = '#ec4899'}
-                  onMouseLeave={(e) => e.target.style.color = theme === 'dark' ? 'white' : '#1f2937'}
-                >
-                  ./about.md
-                </button>
-                <button
-                  onClick={() => handleNavClick('work')}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: theme === 'dark' ? 'white' : '#1f2937',
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    fontSize: '14px',
-                    fontFamily: 'monospace',
-                    padding: '4px 0'
-                  }}
-                  onMouseEnter={(e) => e.target.style.color = '#ec4899'}
-                  onMouseLeave={(e) => e.target.style.color = theme === 'dark' ? 'white' : '#1f2937'}
-                >
-                  ~/work/
-                </button>
-                <button
-                  onClick={() => handleNavClick('projects')}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: theme === 'dark' ? 'white' : '#1f2937',
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    fontSize: '14px',
-                    fontFamily: 'monospace',
-                    padding: '4px 0'
-                  }}
-                  onMouseEnter={(e) => e.target.style.color = '#f472b6'}
-                  onMouseLeave={(e) => e.target.style.color = theme === 'dark' ? 'white' : '#1f2937'}
-                >
-                  ~/projects/
-                </button>
-                <button
-                  onClick={() => handleNavClick('contact')}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: theme === 'dark' ? 'white' : '#1f2937',
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    fontSize: '14px',
-                    fontFamily: 'monospace',
-                    padding: '4px 0'
-                  }}
-                  onMouseEnter={(e) => e.target.style.color = '#f472b6'}
-                  onMouseLeave={(e) => e.target.style.color = theme === 'dark' ? 'white' : '#1f2937'}
-                >
-                  ./contact.sh
-                </button>
-                <button
-                  onClick={() => handleNavClick('skills')}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: theme === 'dark' ? 'white' : '#1f2937',
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    fontSize: '14px',
-                    fontFamily: 'monospace',
-                    padding: '4px 0'
-                  }}
-                  onMouseEnter={(e) => e.target.style.color = '#fb7185'}
-                  onMouseLeave={(e) => e.target.style.color = theme === 'dark' ? 'white' : '#1f2937'}
-                >
-                  .skills.config
-                </button>
-              </div>
-
-              {/* Terminal output history */}
-              <div style={{ marginBottom: '12px' }}>
-                {terminalOutput.map((line, idx) => (
-                  line.type === 'image' ? (
-                    <div key={idx} style={{ marginBottom: '8px', marginTop: '8px' }}>
-                      <img
-                        src={line.src}
-                        alt={line.alt || ''}
-                        style={{
-                          maxWidth: '150px',
-                          borderRadius: '8px',
-                          border: theme === 'dark' ? '1px solid rgba(236, 72, 153, 0.3)' : '1px solid rgba(236, 72, 153, 0.2)',
-                          backgroundColor: '#fdf2f8',
-                          padding: '8px'
-                        }}
-                      />
-                    </div>
-                  ) : (
-                  <div key={idx} style={{
-                    color: line.type === 'error' ? '#ef4444' :
-                           line.type === 'success' ? '#ec4899' :
-                           line.type === 'info' ? '#f472b6' :
-                           line.type === 'warning' ? '#fb7185' :
-                           line.type === 'input' ? (theme === 'dark' ? '#888' : '#6b7280') :
-                           line.type === 'command' ? (theme === 'dark' ? '#9ca3af' : '#6b7280') :
-                           line.type === 'project' ? line.color :
-                           line.type === 'link' ? '#f472b6' :
-                           (theme === 'dark' ? 'white' : '#1f2937'),
-                    marginBottom: '4px',
-                    cursor: line.type === 'link' ? 'pointer' : 'default',
-                    textDecoration: line.type === 'link' ? 'underline' : 'none'
-                  }}
-                  onClick={() => line.url && window.open(line.url, '_blank')}
-                  >
-                    {line.text}
-                  </div>
-                  )
-                ))}
-              </div>
-
-              {/* Command input line */}
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                color: theme === 'dark' ? '#888' : '#6b7280'
-              }}>
-                <span>citlol@portfolio ~ % </span>
-                <input
-                  type="text"
-                  value={commandInput}
-                  onChange={(e) => setCommandInput(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    outline: 'none',
-                    color: theme === 'dark' ? '#ec4899' : '#db2777',
-                    fontFamily: 'monospace',
-                    fontSize: '14px',
-                    flex: 1,
-                    caretColor: '#ec4899'
-                  }}
-                  placeholder="type a command..."
-                  autoFocus={!isMobile}
-                />
-              </div>
-            </div>
-          )}
-
-          {activeSection === 'about' && (
-            <div>
-              <div style={{ color: theme === 'dark' ? '#888' : '#6b7280', marginBottom: '16px' }}>
-                citlol@portfolio ~/about % cat about.md
-              </div>
-              <div style={{ marginBottom: '20px' }}>
-                <h3 style={{ color: theme === 'dark' ? '#ec4899' : '#db2777', marginBottom: '16px', fontSize: '18px' }}># About Me</h3>
-                <div style={{ marginBottom: '12px' }}>
-                  <span style={{ color: '#f472b6' }}></span> CS @ UT Dallas (Expected 06/2026) — Full-Stack Developer
-                </div>
-                <div style={{ marginBottom: '12px' }}>
-                  <span style={{ color: '#fb7185' }}></span> Frontend Developer at Pancake Money (iOS + Plaid)
-                </div>
-                <div style={{ marginBottom: '12px' }}>
-                  <span style={{ color: '#f472b6' }}></span> Building scalable web apps, iOS apps, and ML systems
-                </div>
-
-                {/* Currently Building Section */}
-                <div style={{
-                  marginTop: '24px',
-                  padding: '16px',
-                  backgroundColor: theme === 'dark' ? 'rgba(244, 114, 182, 0.1)' : 'rgba(59, 130, 246, 0.1)',
-                  borderRadius: '8px',
-                  border: '1px solid rgba(244, 114, 182, 0.2)'
-                }}>
-                  <h4 style={{ color: '#f472b6', marginBottom: '12px', fontSize: '14px' }}>[*] Currently Building</h4>
-                  <div style={{ color: theme === 'dark' ? '#d1d5db' : '#4b5563', fontSize: '13px' }}>
-                    <div style={{ marginBottom: '6px' }}>• Pancake — iOS budgeting app with Plaid integration</div>
-                    <div style={{ marginBottom: '6px' }}>• Phobos — Full-stack wishlist web app on Next.js</div>
-                    <div style={{ marginBottom: '6px' }}>• Bigram language model & autocomplete (Java + MySQL)</div>
-                    <div style={{ marginBottom: '6px' }}>• Miel Pomodoro — macOS menu bar timer</div>
-                  </div>
-                </div>
-
-                {/* GitHub Stats */}
-                {githubStats && (
-                  <div style={{
-                    marginTop: '16px',
-                    padding: '16px',
-                    backgroundColor: theme === 'dark' ? 'rgba(217, 70, 239, 0.1)' : 'rgba(124, 58, 237, 0.1)',
-                    borderRadius: '8px',
-                    border: '1px solid rgba(217, 70, 239, 0.2)'
-                  }}>
-                    <h4 style={{ color: '#f472b6', marginBottom: '12px', fontSize: '14px' }}>GitHub Stats</h4>
-                    <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', color: theme === 'dark' ? '#d1d5db' : '#4b5563', fontSize: '13px' }}>
-                      <div>
-                        <span style={{ color: '#f472b6', fontWeight: 'bold' }}>{githubStats.public_repos}</span> repos
-                      </div>
-                      <div>
-                        <span style={{ color: '#f472b6', fontWeight: 'bold' }}>{githubStats.followers}</span> followers
-                      </div>
-                      <div>
-                        <span style={{ color: '#f472b6', fontWeight: 'bold' }}>{githubStats.following}</span> following
-                      </div>
-                    </div>
-                    <a
-                      href="https://github.com/citlol"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ color: '#f472b6', fontSize: '12px', marginTop: '8px', display: 'inline-block' }}
-                    >
-                      View profile →
-                    </a>
-                  </div>
-                )}
-
-                <div style={{ color: '#6b7280', fontSize: '13px', marginTop: '16px', padding: '12px', backgroundColor: theme === 'dark' ? 'rgba(236, 72, 153, 0.1)' : 'rgba(22, 163, 74, 0.1)', borderRadius: '8px', border: '1px solid rgba(236, 72, 153, 0.2)' }}>
-                  <span style={{ color: '#ec4899' }}>[*]</span> Currently seeking software engineering opportunities to contribute to innovative projects
-                </div>
-              </div>
-              <button
-                onClick={() => handleNavClick('home')}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#4a9eff',
-                  cursor: 'pointer',
-                  fontSize: '12px',
-                  fontFamily: 'monospace'
-                }}
-              >
-                ← back to home
-              </button>
-            </div>
-          )}
-
-          {activeSection === 'work' && (
-            <div>
-              <div style={{ color: theme === 'dark' ? '#888' : '#6b7280', marginBottom: '16px' }}>
-                citlol@portfolio ~/work % cat experience.md
-              </div>
-              <div style={{ marginBottom: '20px' }}>
-                {experience.map((job) => (
-                  <div
-                    key={job.id}
-                    style={{
-                      padding: '16px',
-                      backgroundColor: `${job.color}15`,
-                      borderRadius: '8px',
-                      marginBottom: '12px',
-                      border: `1px solid ${job.color}40`,
-                      transition: 'all 0.2s ease'
-                    }}
-                  >
-                    <div style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'flex-start',
-                      flexWrap: 'wrap',
-                      gap: '8px',
-                      marginBottom: '8px'
-                    }}>
-                      <div>
-                        <div style={{ color: job.color, fontWeight: 'bold', fontSize: '15px' }}>
-                          [@] {job.name}
-                        </div>
-                        <div style={{
-                          color: theme === 'dark' ? '#d1d5db' : '#4b5563',
-                          fontSize: '12px',
-                          marginTop: '2px'
-                        }}>
-                          {job.role}
-                        </div>
-                      </div>
-                      <span style={{
-                        fontSize: '11px',
-                        padding: '3px 10px',
-                        borderRadius: '12px',
-                        backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
-                        color: theme === 'dark' ? '#d1d5db' : '#4b5563',
-                        whiteSpace: 'nowrap'
-                      }}>
-                        {job.period}
-                      </span>
-                    </div>
-                    <div style={{
-                      color: theme === 'dark' ? '#d1d5db' : '#4b5563',
-                      fontSize: '13px',
-                      marginBottom: '10px',
-                      lineHeight: '1.5'
-                    }}>
-                      {job.description}
-                    </div>
-                    <ul style={{
-                      margin: '0 0 12px 0',
-                      paddingLeft: '20px',
-                      color: theme === 'dark' ? '#d1d5db' : '#4b5563'
-                    }}>
-                      {job.highlights.map((h, i) => (
-                        <li key={i} style={{ fontSize: '12px', marginBottom: '4px', lineHeight: '1.5' }}>{h}</li>
-                      ))}
-                    </ul>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '10px' }}>
-                      {job.tech.map((tech, idx) => (
-                        <span key={idx} style={{
-                          fontSize: '11px',
-                          padding: '2px 8px',
-                          borderRadius: '4px',
-                          backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)',
-                          color: theme === 'dark' ? '#9ca3af' : '#6b7280'
-                        }}>
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                    {job.website && (
-                      <a
-                        href={job.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{
-                          display: 'inline-block',
-                          fontSize: '12px',
-                          color: job.color,
-                          textDecoration: 'none',
-                          fontWeight: 500
-                        }}
-                      >
-                        Visit site →
-                      </a>
-                    )}
-                  </div>
-                ))}
-              </div>
-              <button
-                onClick={() => handleNavClick('home')}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#4a9eff',
-                  cursor: 'pointer',
-                  fontSize: '12px',
-                  fontFamily: 'monospace'
-                }}
-              >
-                ← back to home
-              </button>
-            </div>
-          )}
-
-          {activeSection === 'projects' && !selectedProject && (
-            <div>
-              <div style={{ color: theme === 'dark' ? '#888' : '#6b7280', marginBottom: '16px' }}>
-                citlol@portfolio ~/projects % ls -la
-              </div>
-              <div style={{ marginBottom: '20px' }}>
-                {projects.map((project) => (
-                  <div
-                    key={project.id}
-                    onClick={() => setSelectedProject(project)}
-                    style={{
-                      padding: '16px',
-                      backgroundColor: `${project.color}15`,
-                      borderRadius: '8px',
-                      marginBottom: '12px',
-                      border: `1px solid ${project.color}40`,
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'translateX(4px)';
-                      e.currentTarget.style.backgroundColor = `${project.color}25`;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'translateX(0)';
-                      e.currentTarget.style.backgroundColor = `${project.color}15`;
-                    }}
-                  >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
-                      <div style={{ color: project.color, fontWeight: 'bold', fontSize: '15px' }}>
-                        [~] {project.name}
-                      </div>
-                      <span style={{
-                        fontSize: '10px',
-                        padding: '2px 8px',
-                        borderRadius: '12px',
-                        backgroundColor: project.status === 'Released' ? 'rgba(236, 72, 153, 0.2)' :
-                                        project.status === 'In Development' ? 'rgba(244, 114, 182, 0.2)' :
-                                        project.status === 'Contract' ? 'rgba(34, 197, 94, 0.2)' :
-                                        'rgba(156, 163, 175, 0.2)',
-                        color: project.status === 'Released' ? '#ec4899' :
-                               project.status === 'In Development' ? '#f472b6' :
-                               project.status === 'Contract' ? '#22c55e' : '#9ca3af'
-                      }}>
-                        {project.status}
-                      </span>
-                    </div>
-                    <div style={{ color: theme === 'dark' ? '#d1d5db' : '#4b5563', fontSize: '13px', marginBottom: '8px' }}>
-                      {project.description}
-                    </div>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                      {project.tech.map((tech, idx) => (
-                        <span key={idx} style={{
-                          fontSize: '11px',
-                          padding: '2px 8px',
-                          borderRadius: '4px',
-                          backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)',
-                          color: theme === 'dark' ? '#9ca3af' : '#6b7280'
-                        }}>
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                    <div style={{ color: '#6b7280', fontSize: '11px', marginTop: '8px' }}>
-                      Click for details →
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <button
-                onClick={() => handleNavClick('home')}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#4a9eff',
-                  cursor: 'pointer',
-                  fontSize: '12px',
-                  fontFamily: 'monospace'
-                }}
-              >
-                ← back to home
-              </button>
-            </div>
-          )}
-
-          {/* Project Detail View */}
-          {activeSection === 'projects' && selectedProject && (
-            <div>
-              <div style={{ color: theme === 'dark' ? '#888' : '#6b7280', marginBottom: '16px' }}>
-                citlol@portfolio ~/projects/{selectedProject.id} % cat README.md
-              </div>
-              <div style={{
-                padding: '20px',
-                backgroundColor: `${selectedProject.color}10`,
-                borderRadius: '12px',
-                border: `1px solid ${selectedProject.color}30`,
-                marginBottom: '20px'
-              }}>
-                <h3 style={{ color: selectedProject.color, marginBottom: '8px', fontSize: '20px' }}>
-                  {selectedProject.name}
-                </h3>
-                <div style={{
-                  display: 'inline-block',
-                  fontSize: '11px',
-                  padding: '3px 10px',
-                  borderRadius: '12px',
-                  backgroundColor: selectedProject.status === 'Released' ? 'rgba(236, 72, 153, 0.2)' :
-                                  selectedProject.status === 'In Development' ? 'rgba(244, 114, 182, 0.2)' :
-                                  selectedProject.status === 'Contract' ? 'rgba(34, 197, 94, 0.2)' :
-                                  'rgba(156, 163, 175, 0.2)',
-                  color: selectedProject.status === 'Released' ? '#ec4899' :
-                         selectedProject.status === 'In Development' ? '#f472b6' :
-                         selectedProject.status === 'Contract' ? '#22c55e' : '#9ca3af',
-                  marginBottom: '12px'
-                }}>
-                  {selectedProject.status}
-                </div>
-                <p style={{ color: theme === 'dark' ? '#d1d5db' : '#4b5563', marginBottom: '16px', lineHeight: '1.6' }}>
-                  {selectedProject.description}
-                </p>
-
-                <div style={{ marginBottom: '16px' }}>
-                  <div style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280', fontSize: '12px', marginBottom: '6px' }}>
-                    Role: <span style={{ color: selectedProject.color }}>{selectedProject.role}</span>
-                  </div>
-                </div>
-
-                <div style={{ marginBottom: '16px' }}>
-                  <div style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280', fontSize: '12px', marginBottom: '8px' }}>Tech Stack:</div>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                    {selectedProject.tech.map((tech, idx) => (
-                      <span key={idx} style={{
-                        fontSize: '12px',
-                        padding: '4px 12px',
-                        borderRadius: '6px',
-                        backgroundColor: `${selectedProject.color}20`,
-                        color: selectedProject.color,
-                        border: `1px solid ${selectedProject.color}40`
-                      }}>
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div style={{ marginBottom: '16px' }}>
-                  <div style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280', fontSize: '12px', marginBottom: '8px' }}>Highlights:</div>
-                  <ul style={{ margin: 0, paddingLeft: '20px', color: theme === 'dark' ? '#d1d5db' : '#4b5563' }}>
-                    {selectedProject.highlights.map((highlight, idx) => (
-                      <li key={idx} style={{ marginBottom: '6px', fontSize: '13px' }}>{highlight}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                <a
-                  href={selectedProject.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    padding: '8px 16px',
-                    backgroundColor: selectedProject.color,
-                    color: 'white',
-                    borderRadius: '6px',
-                    textDecoration: 'none',
-                    fontSize: '13px',
-                    fontWeight: '500',
-                    transition: 'all 0.2s ease'
-                  }}
-                  onMouseEnter={(e) => e.target.style.opacity = '0.8'}
-                  onMouseLeave={(e) => e.target.style.opacity = '1'}
-                >
-                  View
-                </a>
-              </div>
-
-              <button
-                onClick={() => setSelectedProject(null)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#4a9eff',
-                  cursor: 'pointer',
-                  fontSize: '12px',
-                  fontFamily: 'monospace',
-                  marginRight: '16px'
-                }}
-              >
-                ← back to projects
-              </button>
-              <button
-                onClick={() => { setSelectedProject(null); handleNavClick('home'); }}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: theme === 'dark' ? '#6b7280' : '#9ca3af',
-                  cursor: 'pointer',
-                  fontSize: '12px',
-                  fontFamily: 'monospace'
-                }}
-              >
-                ← back to home
-              </button>
-            </div>
-          )}
-
-          {activeSection === 'contact' && (
-            <div>
-              <div style={{ color: theme === 'dark' ? '#888' : '#6b7280', marginBottom: '16px' }}>
-                citlol@portfolio ~/contact % ./contact.sh
-              </div>
-              <div style={{ marginBottom: '20px' }}>
-                <div style={{
-                  display: 'grid',
-                  gap: '12px',
-                  gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(250px, 1fr))'
-                }}>
-                  <a
-                    href="mailto:citlalli.tdr@gmail.com"
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '12px',
-                      padding: '12px',
-                      backgroundColor: 'rgba(236, 72, 153, 0.1)',
-                      borderRadius: '8px',
-                      border: '1px solid rgba(236, 72, 153, 0.2)',
-                      color: '#ec4899',
-                      textDecoration: 'none',
-                      transition: 'all 0.2s ease'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.target.style.backgroundColor = 'rgba(236, 72, 153, 0.2)';
-                      e.target.style.transform = 'translateY(-2px)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.backgroundColor = 'rgba(236, 72, 153, 0.1)';
-                      e.target.style.transform = 'translateY(0)';
-                    }}
-                  >
-                    <span style={{ fontSize: '18px' }}>[@]</span>
-                    <span>citlalli.tdr@gmail.com</span>
-                  </a>
-                  <a
-                    href="https://linkedin.com/in/citlalli-trejo-del-rio"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '12px',
-                      padding: '12px',
-                      backgroundColor: 'rgba(244, 114, 182, 0.1)',
-                      borderRadius: '8px',
-                      border: '1px solid rgba(244, 114, 182, 0.2)',
-                      color: '#f472b6',
-                      textDecoration: 'none',
-                      transition: 'all 0.2s ease'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.target.style.backgroundColor = 'rgba(244, 114, 182, 0.2)';
-                      e.target.style.transform = 'translateY(-2px)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.backgroundColor = 'rgba(244, 114, 182, 0.1)';
-                      e.target.style.transform = 'translateY(0)';
-                    }}
-                  >
-                    <span style={{ fontSize: '18px' }}></span>
-                    <span>LinkedIn</span>
-                  </a>
-                  <a
-                    href="https://github.com/citlol"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '12px',
-                      padding: '12px',
-                      backgroundColor: 'rgba(217, 70, 239, 0.1)',
-                      borderRadius: '8px',
-                      border: '1px solid rgba(217, 70, 239, 0.2)',
-                      color: '#f472b6',
-                      textDecoration: 'none',
-                      transition: 'all 0.2s ease'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.target.style.backgroundColor = 'rgba(217, 70, 239, 0.2)';
-                      e.target.style.transform = 'translateY(-2px)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.backgroundColor = 'rgba(217, 70, 239, 0.1)';
-                      e.target.style.transform = 'translateY(0)';
-                    }}
-                  >
-                    <span style={{ fontSize: '18px' }}></span>
-                    <span>GitHub</span>
-                  </a>
-                </div>
-              </div>
-              <button 
-                onClick={() => handleNavClick('home')}
-                style={{ 
-                  background: 'none', 
-                  border: 'none', 
-                  color: '#4a9eff', 
-                  cursor: 'pointer',
-                  fontSize: '12px',
-                  fontFamily: 'monospace'
-                }}
-              >
-                ← back to home
-              </button>
-            </div>
-          )}
-
-          {activeSection === 'skills' && (
-            <div>
-              <div style={{ color: theme === 'dark' ? '#888' : '#6b7280', marginBottom: '16px' }}>
-                citlol@portfolio ~/skills % cat skills.config
-              </div>
-              <div style={{ marginBottom: '20px' }}>
-                <div style={{ marginBottom: '16px' }}>
-                  <h4 style={{ color: '#ec4899', marginBottom: '8px' }}>Languages</h4>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                    {['Java', 'TypeScript', 'Swift', 'Python', 'C++', 'SQL', 'JavaScript', 'HTML', 'CSS/Tailwind'].map(skill => (
-                      <span key={skill} style={{
-                        backgroundColor: 'rgba(236, 72, 153, 0.2)',
-                        color: '#ec4899',
-                        padding: '4px 8px',
-                        borderRadius: '4px',
-                        fontSize: '12px',
-                        border: '1px solid rgba(236, 72, 153, 0.3)'
-                      }}>
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div style={{ marginBottom: '16px' }}>
-                  <h4 style={{ color: '#f472b6', marginBottom: '8px' }}>Frameworks & Libraries</h4>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                    {['React', 'Next.js', 'Node.js', 'SwiftUI', 'PyTorch', 'TorchVision', 'JavaFX', 'Express'].map(skill => (
-                      <span key={skill} style={{
-                        backgroundColor: 'rgba(244, 114, 182, 0.2)',
-                        color: '#f472b6',
-                        padding: '4px 8px',
-                        borderRadius: '4px',
-                        fontSize: '12px',
-                        border: '1px solid rgba(244, 114, 182, 0.3)'
-                      }}>
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div style={{ marginBottom: '16px' }}>
-                  <h4 style={{ color: '#fb7185', marginBottom: '8px' }}>Tools & Platforms</h4>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                    {['Git', 'VS Code', 'Linux', 'Xcode', 'Figma', 'MongoDB', 'PostgreSQL', 'MySQL', 'Vercel', 'Railway'].map(skill => (
-                      <span key={skill} style={{
-                        backgroundColor: 'rgba(251, 113, 133, 0.2)',
-                        color: '#fb7185',
-                        padding: '4px 8px',
-                        borderRadius: '4px',
-                        fontSize: '12px',
-                        border: '1px solid rgba(251, 113, 133, 0.3)'
-                      }}>
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              <button
-                onClick={() => handleNavClick('home')}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#4a9eff',
-                  cursor: 'pointer',
-                  fontSize: '12px',
-                  fontFamily: 'monospace'
-                }}
-              >
-                ← back to home
-              </button>
-            </div>
-          )}
-            </>
-          )}
-        </div>
+      <div className="banner">
+        <span><span className="heart">✦</span>&nbsp;{PROFILE.fullName.toLowerCase()}.com</span>
+        <span className="banner-right">
+          <span>last login · today</span>
+          <button
+            type="button"
+            className="theme-toggle"
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            onClick={toggleTheme}
+          >
+            <span className="glyph">✦</span>
+            {theme === 'dark' ? 'light' : 'dark'}
+          </button>
+        </span>
       </div>
 
-      {/* Info Bubbles - Desktop only */}
-      {!isMobile && (
-        <div style={{
-          position: 'fixed',
-          top: '50%',
-          right: '30px',
-          transform: 'translateY(-50%)',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '12px',
-          zIndex: 99
-        }}>
-          {[
-            { text: 'Graduating June 2026', delay: '0s' },
-            { text: 'Full-Stack Dev', delay: '0.1s' },
-            { text: 'Open to Work', delay: '0.2s' },
-            { text: 'TypeScript / Java / Swift', delay: '0.3s' },
-            { text: 'iOS + ML + Web', delay: '0.4s' },
-            { text: 'CS @ UT Dallas', delay: '0.5s' }
-          ].map((bubble, i) => (
-            <div
-              key={i}
-              style={{
-                backgroundColor: theme === 'dark' ? 'rgba(236, 72, 153, 0.15)' : 'rgba(255, 255, 255, 0.7)',
-                border: theme === 'dark' ? '1px solid rgba(236, 72, 153, 0.3)' : '1px solid rgba(255, 255, 255, 0.5)',
-                borderRadius: '20px',
-                padding: '8px 16px',
-                color: theme === 'dark' ? '#f9a8d4' : '#831843',
-                fontSize: '13px',
-                fontWeight: '500',
-                backdropFilter: 'blur(10px)',
-                whiteSpace: 'nowrap',
-                animation: `bubbleIn 0.4s ease-out ${bubble.delay} both`,
-                cursor: 'default',
-                transition: 'all 0.2s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.transform = 'scale(1.05)';
-                e.target.style.backgroundColor = theme === 'dark' ? 'rgba(236, 72, 153, 0.25)' : 'rgba(255, 255, 255, 0.9)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.transform = 'scale(1)';
-                e.target.style.backgroundColor = theme === 'dark' ? 'rgba(236, 72, 153, 0.15)' : 'rgba(255, 255, 255, 0.7)';
-              }}
-            >
-              {bubble.text}
-            </div>
-          ))}
-        </div>
-      )}
-      </>
-      )}
+      <div className="page">
+        <aside className="sidebar">
+          <ProfileModule ghStats={ghStats} />
+          <NavModule active={active} onNav={scrollTo} />
+          <ContactsModule />
+          <ToolsModule />
+          <ListeningModule />
+        </aside>
 
-      {/* Bottom Dock */}
-      <div className={isMobile ? 'mobile-dock' : ''} style={{
-        position: 'fixed',
-        bottom: isMobile ? '10px' : '20px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        zIndex: 50,
-        backgroundColor: theme === 'dark' ? 'rgba(80, 80, 80, 0.9)' : 'rgba(240, 240, 245, 0.95)',
-        backdropFilter: 'blur(20px)',
-        borderRadius: '24px',
-        padding: isMobile ? '10px 14px' : '12px 18px',
-        display: 'flex',
-        gap: isMobile ? '10px' : '12px',
-        boxShadow: theme === 'dark' ? '0 8px 32px rgba(0,0,0,0.5)' : '0 8px 32px rgba(0,0,0,0.15)',
-        border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)',
-        maxWidth: isMobile ? '90%' : 'none',
-        transition: 'all 0.3s ease'
-      }}>
-        <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
-          position: 'relative',
-          width: isMobile ? '40px' : '50px',
-          height: isMobile ? '40px' : '50px',
-          borderRadius: '12px',
-          cursor: 'pointer',
-          transition: 'transform 0.2s ease',
-          overflow: 'visible'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'scale(1.1)';
-          setHoveredIcon('Terminal');
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'scale(1)';
-          setHoveredIcon(null);
-        }}
-        >
-          <img 
-            src="/Terminal.svg" 
-            alt="Terminal"
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover'
-            }}
-          />
-          <Tooltip text="Terminal" show={hoveredIcon === 'Terminal' && !isMobile} />
-        </div>
-
-        <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
-          position: 'relative',
-          width: isMobile ? '40px' : '50px',
-          height: isMobile ? '40px' : '50px',
-          borderRadius: '12px',
-          cursor: 'pointer',
-          transition: 'transform 0.2s ease',
-          overflow: 'visible'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'scale(1.1)';
-          setHoveredIcon('League of Legends');
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'scale(1)';
-          setHoveredIcon(null);
-        }}
-        onClick={openLoLModal}
-        >
-          <img 
-            src="/LoL.svg" 
-            alt="League of Legends"
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover'
-            }}
-          />
-          <Tooltip text="League of Legends" show={hoveredIcon === 'League of Legends' && !isMobile} />
-        </div>
-
-        <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
-          position: 'relative',
-          width: isMobile ? '40px' : '50px',
-          height: isMobile ? '40px' : '50px',
-          borderRadius: '12px',
-          cursor: 'pointer',
-          transition: 'transform 0.2s ease',
-          overflow: 'visible'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'scale(1.1)';
-          setHoveredIcon('Notion');
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'scale(1)';
-          setHoveredIcon(null);
-        }}
-        >
-          <img 
-            src="/Notion.svg" 
-            alt="Notion"
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover'
-            }}
-          />
-          <Tooltip text="Notion" show={hoveredIcon === 'Notion' && !isMobile} />
-        </div>
-
-        <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
-          position: 'relative',
-          width: isMobile ? '40px' : '50px',
-          height: isMobile ? '40px' : '50px',
-          borderRadius: '12px',
-          cursor: 'pointer',
-          transition: 'transform 0.2s ease',
-          overflow: 'visible'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'scale(1.1)';
-          setHoveredIcon('VS Code');
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'scale(1)';
-          setHoveredIcon(null);
-        }}
-        >
-          <img 
-            src="/vscode.png" 
-            alt="VS Code"
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover'
-            }}
-          />
-          <Tooltip text="VS Code" show={hoveredIcon === 'VS Code' && !isMobile} />
-        </div>
-
-        <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
-          position: 'relative',
-          width: isMobile ? '40px' : '50px',
-          height: isMobile ? '40px' : '50px',
-          borderRadius: '12px',
-          cursor: 'pointer',
-          transition: 'transform 0.2s ease',
-          overflow: 'visible'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'scale(1.1)';
-          setHoveredIcon('Figma');
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'scale(1)';
-          setHoveredIcon(null);
-        }}
-        onClick={openFigmaModal}
-        >
-          <img 
-            src="/Figma.svg" 
-            alt="Figma"
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover'
-            }}
-          />
-          <Tooltip text="Figma" show={hoveredIcon === 'Figma' && !isMobile} />
-        </div>
-
-        <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
-          position: 'relative',
-          width: isMobile ? '40px' : '50px',
-          height: isMobile ? '40px' : '50px',
-          borderRadius: '12px',
-          cursor: 'pointer',
-          transition: 'transform 0.2s ease',
-          overflow: 'visible'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'scale(1.1)';
-          setHoveredIcon('Apple Music');
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'scale(1)';
-          setHoveredIcon(null);
-        }}
-        onClick={openAppleMusicModal}
-        >
-          <img
-            src="/Apple_Music_Icon_blk_sm_073120.svg"
-            alt="Apple Music"
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover'
-            }}
-          />
-          <Tooltip text="Apple Music" show={hoveredIcon === 'Apple Music' && !isMobile} />
-        </div>
-
-        <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
-          position: 'relative',
-          width: isMobile ? '40px' : '50px',
-          height: isMobile ? '40px' : '50px',
-          borderRadius: '12px',
-          cursor: 'pointer',
-          transition: 'transform 0.2s ease',
-          overflow: 'visible'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'scale(1.1)';
-          setHoveredIcon('Discord');
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'scale(1)';
-          setHoveredIcon(null);
-        }}
-        onClick={openDiscordModal}
-        >
-          <img 
-            src="/Discord.svg" 
-            alt="Discord"
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover'
-            }}
-          />
-          <Tooltip text="Discord" show={hoveredIcon === 'Discord' && !isMobile} />
-        </div>
-
-        <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
-          position: 'relative',
-          width: isMobile ? '40px' : '50px',
-          height: isMobile ? '40px' : '50px',
-          borderRadius: '12px',
-          cursor: 'pointer',
-          transition: 'transform 0.2s ease',
-          overflow: 'visible'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'scale(1.1)';
-          setHoveredIcon('AI Tools');
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'scale(1)';
-          setHoveredIcon(null);
-        }}
-        >
-          <img 
-            src="/Ai.svg" 
-            alt="AI Tools"
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover'
-            }}
-          />
-          <Tooltip text="AI Tools" show={hoveredIcon === 'AI Tools' && !isMobile} />
-        </div>
-
-        <div className={isMobile ? 'mobile-dock-icon' : ''} style={{
-          position: 'relative',
-          width: isMobile ? '40px' : '50px',
-          height: isMobile ? '40px' : '50px',
-          borderRadius: '12px',
-          cursor: 'pointer',
-          transition: 'transform 0.2s ease',
-          overflow: 'visible',
-          display: 'flex',
-          alignItems: 'flex-end',
-          justifyContent: 'center'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'scale(1.1)';
-          setHoveredIcon('Profile');
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'scale(1)';
-          setHoveredIcon(null);
-        }}
-        onClick={() => setShowProfileModal(true)}
-        >
-          <img
-            src="/profile_.png"
-            alt="Profile"
-            style={{
-              width: '90px',
-              height: '90px',
-              objectFit: 'contain',
-              marginBottom: '-28px'
-            }}
-          />
-          <Tooltip text="My Profile" show={hoveredIcon === 'Profile' && !isMobile} />
-        </div>
-      </div>
-
-      {/* Apple Music Modal */}
-      {showAppleMusicModal && (
-        <div style={{
-          position: 'fixed',
-          top: '0',
-          left: '0',
-          width: '100%',
-          height: '100%',
-          backgroundColor: 'transparent',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: '1000'
-        }}
-        onClick={closeAppleMusicModal}
-        >
-          <div className={isMobile ? 'mobile-modal' : ''} style={{
-            backgroundColor: '#000000',
-            borderRadius: '12px',
-            padding: isMobile ? '15px' : '20px',
-            position: 'relative',
-            maxWidth: isMobile ? 'calc(100% - 40px)' : 'min(500px, calc(100vw - 40px))',
-            width: '90%',
-            margin: isMobile ? '20px' : '0',
-            maxHeight: 'calc(100vh - 40px)',
-            overflow: 'auto',
-            display: 'flex',
-            flexDirection: 'column'
-          }}
-          onClick={(e) => e.stopPropagation()}
-          >
-            {/* Close button */}
-            <button
-              onClick={closeAppleMusicModal}
-              style={{
-                position: 'absolute',
-                top: '10px',
-                right: '15px',
-                background: 'none',
-                border: 'none',
-                fontSize: '20px',
-                cursor: 'pointer',
-                color: '#999'
-              }}
-            >
-              ✕
-            </button>
-
-            <h3 style={{ marginTop: '0', marginBottom: '20px', color: '#999' }}>
-              🎵 My Apple Music Playlist
-            </h3>
-
-            {/* Loading dots */}
-            {isAppleMusicLoading && (
-              <div style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                minHeight: '200px',
-                height: 'min(380px, 60vh)',
-                marginBottom: '20px',
-                gap: '8px'
-              }}>
-                <div className="loading-dot"></div>
-                <div className="loading-dot"></div>
-                <div className="loading-dot"></div>
-              </div>
-            )}
-
-
-            {/* Apple Music Embed */}
-            <iframe
-              src="https://embed.music.apple.com/us/playlist/%EC%B2%AD%EC%B6%98%EC%9D%80-%EB%B0%94%EB%A1%9C-%EC%A7%80%EA%B8%88/pl.u-JPAZZlGtJa55XR"
-              width="100%"
-              frameBorder="0"
-              allowTransparency="true"
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              loading="lazy"
-              style={{
-                borderRadius: '12px',
-                display: isAppleMusicLoading ? 'none' : 'block',
-                width: '100%',
-                height: 'min(380px, 60vh)',
-                minHeight: '220px'
-              }}
-              onLoad={() => setIsAppleMusicLoading(false)}
-            ></iframe>
-
-            <p style={{
-              fontSize: '12px',
-              color: '#999',
-              marginTop: '10px',
-              textAlign: 'center'
-            }}>
-              Click outside to close
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* Figma Modal */}
-      {showFigmaModal && (
-        <div style={{
-          position: 'fixed',
-          top: '0',
-          left: '0',
-          width: '100%',
-          height: '100%',
-          backgroundColor: 'transparent',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: '1000'
-        }}
-        onClick={closeFigmaModal}
-        >
-          <div style={{
-            backgroundColor: '#000000',
-            borderRadius: '12px',
-            padding: '20px',
-            position: 'relative',
-            maxWidth: '800px',
-            width: '90%'
-          }}
-          onClick={(e) => e.stopPropagation()}
-          >
-            {/* Close button */}
-            <button 
-              onClick={closeFigmaModal}
-              style={{
-                position: 'absolute',
-                top: '10px',
-                right: '15px',
-                background: 'none',
-                border: 'none',
-                fontSize: '20px',
-                cursor: 'pointer',
-                color: '#999'
-              }}
-            >
-              ✕
-            </button>
-
-            <h3 style={{ marginTop: '0', marginBottom: '20px', color: '#999' }}>
-              🎨 My Figma Design
-            </h3>
-
-            {/* Figma Design Image */}
-            <div style={{
-              width: '100%',
-              borderRadius: '12px',
-              overflow: 'visible'
-            }}>
-              <img 
-                src="/FigmaView.png" 
-                alt="Figma Design"
-                style={{
-                  width: '100%',
-                  height: 'auto',
-                  display: 'block',
-                  borderRadius: '12px'
-                }}
-              />
-            </div>
-
-            <p style={{ 
-              fontSize: '12px', 
-              color: '#999', 
-              marginTop: '10px', 
-              textAlign: 'center' 
-            }}>
-              Click outside to close
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* League of Legends Modal */}
-      {showLoLModal && (
-        <div style={{
-          position: 'fixed',
-          top: '0',
-          left: '0',
-          width: '100%',
-          height: '100%',
-          backgroundColor: 'transparent',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: '1000'
-        }}
-        onClick={closeLoLModal}
-        >
-          <div style={{
-            backgroundColor: '#000000',
-            borderRadius: '12px',
-            padding: '20px',
-            position: 'relative',
-            maxWidth: '900px',
-            width: '95%',
-            maxHeight: '80vh',
-            overflow: 'auto'
-          }}
-          onClick={(e) => e.stopPropagation()}
-          >
-            {/* Close button */}
-            <button 
-              onClick={closeLoLModal}
-              style={{
-                position: 'absolute',
-                top: '10px',
-                right: '15px',
-                background: 'none',
-                border: 'none',
-                fontSize: '20px',
-                cursor: 'pointer',
-                color: '#999'
-              }}
-            >
-              ✕
-            </button>
-
-            <h3 style={{ marginTop: '0', marginBottom: '20px', color: '#999' }}>
-              ⚔️ League of Legends Profile
-            </h3>
-
-            {/* LoL Profile Content */}
-            <div style={{
-              width: '100%',
-              minHeight: '400px',
-              backgroundColor: '#111',
-              borderRadius: '12px'
-            }}>
-            </div>
-
-            <p style={{
-              fontSize: '12px',
-              color: '#999',
-              marginTop: '10px',
-              textAlign: 'center'
-            }}>
-              Click outside to close
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* Discord SVG-only Modal */}
-      {showDiscordModal && (
-        <div style={{
-          position: 'fixed',
-          top: '0',
-          left: '0',
-          width: '100%',
-          height: '100%',
-          backgroundColor: 'transparent',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: '1000'
-        }}
-        onClick={closeDiscordModal}
-        >
-          <div style={{ position: 'relative' }}>
-            {/* Close button */}
-            <button
-              onClick={closeDiscordModal}
-              style={{
-                position: 'absolute',
-                top: '-10px',
-                right: '-10px',
-                background: 'rgba(0, 0, 0, 0.8)',
-                border: 'none',
-                borderRadius: '50%',
-                width: '30px',
-                height: '30px',
-                fontSize: '16px',
-                cursor: 'pointer',
-                color: '#999',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                zIndex: '10001'
-              }}
-            >
-              ✕
-            </button>
-
-            {/* Just the SVG, no modal container */}
-            <img
-              src="/DiscordProfile.svg"
-              alt="Discord Profile"
-              style={{
-                maxWidth: '500px',
-                width: '90%',
-                height: 'auto',
-                cursor: 'pointer'
-              }}
-              onClick={(e) => e.stopPropagation()}
-            />
-          </div>
-        </div>
-      )}
-
-      {/* Profile Modal - MySpace Style */}
-      {showProfileModal && (
-        <div style={{
-          position: 'fixed',
-          top: '0',
-          left: '0',
-          width: '100%',
-          height: '100%',
-          backgroundColor: 'transparent',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: '1000'
-        }}
-        onClick={() => setShowProfileModal(false)}
-        >
-          <div style={{
-            backgroundColor: theme === 'dark' ? '#2a2a2a' : '#fce7f3',
-            borderRadius: '12px',
-            padding: '0',
-            position: 'relative',
-            maxWidth: '700px',
-            width: 'min(90%, 700px)',
-            maxHeight: 'min(85vh, 800px)',
-            display: 'flex',
-            flexDirection: 'column',
-            overflow: 'hidden',
-            boxShadow: '0 25px 50px rgba(0,0,0,0.3)'
-          }}
-          onClick={(e) => e.stopPropagation()}
-          >
-            {/* Browser Chrome */}
-            <div style={{
-              backgroundColor: theme === 'dark' ? '#2d2d2d' : '#e5e5e5',
-              padding: '12px 16px',
-              borderTopLeftRadius: '12px',
-              borderTopRightRadius: '12px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '10px'
-            }}>
-              {/* Traffic lights and tabs row */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                {/* Traffic light buttons */}
-                <div style={{ display: 'flex', gap: '8px' }}>
-                  <div
-                    onClick={() => setShowProfileModal(false)}
-                    style={{
-                      width: '12px',
-                      height: '12px',
-                      borderRadius: '50%',
-                      backgroundColor: '#ff5f57',
-                      cursor: 'pointer'
-                    }}
-                  />
-                  <div style={{
-                    width: '12px',
-                    height: '12px',
-                    borderRadius: '50%',
-                    backgroundColor: '#febc2e'
-                  }} />
-                  <div style={{
-                    width: '12px',
-                    height: '12px',
-                    borderRadius: '50%',
-                    backgroundColor: '#28c840'
-                  }} />
-                </div>
-                {/* Browser tab */}
-                <div style={{
-                  backgroundColor: theme === 'dark' ? '#2a2a2a' : '#fce7f3',
-                  padding: '6px 16px',
-                  borderRadius: '8px 8px 0 0',
-                  fontSize: '12px',
-                  color: theme === 'dark' ? '#fff' : '#333',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  marginTop: '4px'
-                }}>
-                  <span style={{ fontSize: '14px' }}>♡</span>
-                  My Profile
-                </div>
-              </div>
-              {/* URL bar */}
-              <div style={{
-                backgroundColor: theme === 'dark' ? '#3a3a3a' : '#fff',
-                borderRadius: '8px',
-                padding: '8px 12px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px'
-              }}>
-                {/* Navigation buttons */}
-                <div style={{ display: 'flex', gap: '8px', color: theme === 'dark' ? '#666' : '#999' }}>
-                  <span style={{ cursor: 'pointer' }}>←</span>
-                  <span style={{ cursor: 'pointer' }}>→</span>
-                  <span style={{ cursor: 'pointer' }}>↻</span>
-                </div>
-                {/* URL */}
-                <div style={{
-                  flex: 1,
-                  fontSize: '13px',
-                  color: theme === 'dark' ? '#888' : '#666',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px'
-                }}>
-                  <span style={{ color: '#28c840' }}>🔒</span>
-                  myspace.com/citlalli
-                </div>
-              </div>
-            </div>
-
-            {/* Profile Content */}
-            <div style={{ flex: '1 1 auto', minHeight: 0, overflow: 'auto' }}>
-            {/* Profile Header */}
-            <div style={{
-              background: '#E8A2D7',
-              padding: '20px',
-              position: 'relative'
-            }}>
-
-              {/* Profile Picture */}
-              <div style={{
-                width: '120px',
-                height: '120px',
-                borderRadius: '50%',
-                border: '4px solid white',
-                margin: '0 auto 15px',
-                overflow: 'hidden',
-                backgroundColor: '#f9a8d4'
-              }}>
-                <img
-                  src="/IMG_8198.jpg"
-                  alt="Profile"
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover'
-                  }}
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                  }}
-                />
-              </div>
-
-              <h2 style={{
-                color: 'white',
-                textAlign: 'center',
-                margin: '0',
-                fontSize: '24px',
-                textShadow: '0 2px 4px rgba(0,0,0,0.2)'
-              }}>
-                Citlalli
-              </h2>
-              <p style={{
-                color: 'rgba(255,255,255,0.9)',
-                textAlign: 'center',
-                margin: '5px 0 0',
-                fontSize: '14px'
-              }}>
-                @citlol
-              </p>
-            </div>
-
-            {/* Profile Content */}
-            <div style={{
-              padding: '20px',
-              color: theme === 'dark' ? '#e0e0e0' : '#333'
-            }}>
-              {/* About Me */}
-              <div style={{ marginBottom: '20px' }}>
-                <h3 style={{
-                  color: '#ec4899',
-                  fontSize: '16px',
-                  marginBottom: '10px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px'
-                }}>
-                  [~] About Me 
-                </h3>
-                <p style={{
-                  fontSize: '14px',
-                  lineHeight: '1.6',
-                  margin: '0',
-                  padding: '12px',
-                  backgroundColor: theme === 'dark' ? 'rgba(236, 72, 153, 0.1)' : 'rgba(236, 72, 153, 0.05)',
-                  borderRadius: '8px',
-                  border: '1px solid rgba(236, 72, 153, 0.2)'
-                }}>
-                  CS @ UT Dallas and full-stack developer building scalable web apps, iOS apps, and ML systems.
-                  Currently building Pancake (iOS + Plaid) and Phobos (Next.js wishlist app). Always exploring new technologies and design patterns!
-                </p>
-              </div>
-
-              {/* Current Favorite Song */}
-              <div style={{ marginBottom: '20px' }}>
-                <h3 style={{
-                  color: '#f472b6',
-                  fontSize: '16px',
-                  marginBottom: '10px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px'
-                }}>
-                  [♪] Current Favorite Song
-                </h3>
-                <div style={{
-                  padding: '12px',
-                  backgroundColor: theme === 'dark' ? 'rgba(244, 114, 182, 0.1)' : 'rgba(244, 114, 182, 0.05)',
-                  borderRadius: '8px',
-                  border: '1px solid rgba(244, 114, 182, 0.2)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  flexWrap: 'wrap',
-                  gap: '12px'
-                }}>
-                  <img
-                    src="/record.png"
-                    alt="Record"
-                    style={{
-                      width: 'clamp(48px, 18vw, 75px)',
-                      height: 'clamp(48px, 18vw, 75px)',
-                      flexShrink: 0,
-                      objectFit: 'contain',
-                      animation: 'spin 3s linear infinite'
-                    }}
-                  />
-                  <div style={{ minWidth: 0, flex: '1 1 140px' }}>
-                    <div style={{
-                      fontWeight: 'bold',
-                      fontSize: '14px',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap'
-                    }}>What You Saying</div>
-                    <div style={{ fontSize: '12px', opacity: 0.7 }}>Lil Uzi Vert</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Hobbies */}
-              <div>
-                <h3 style={{
-                  color: '#fb7185',
-                  fontSize: '16px',
-                  marginBottom: '10px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px'
-                }}>
-                  [*] Hobbies
-                </h3>
-                <div style={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  gap: '8px'
-                }}>
-                  {['Gaming', 'Coding', 'Music', 'Design', 'Reading'].map(hobby => (
-                    <span key={hobby} style={{
-                      padding: '6px 12px',
-                      backgroundColor: theme === 'dark' ? 'rgba(251, 113, 133, 0.15)' : 'rgba(251, 113, 133, 0.1)',
-                      border: '1px solid rgba(251, 113, 133, 0.3)',
-                      borderRadius: '20px',
-                      fontSize: '13px',
-                      color: '#fb7185'
-                    }}>
-                      {hobby}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Folder Windows */}
-      {openFolders.personal && (
-        <div style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: isMobile ? '95vw' : 'min(600px, calc(100vw - 280px))',
-          maxHeight: isMobile ? '80vh' : '70vh',
-          backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.95)' : 'rgba(255, 255, 255, 0.9)',
-          border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid rgba(236, 72, 153, 0.2)',
-          borderRadius: '12px',
-          boxShadow: theme === 'dark' ? '0 20px 40px rgba(0,0,0,0.7)' : '0 20px 40px rgba(0,0,0,0.15)',
-          backdropFilter: 'blur(20px)',
-          overflow: 'hidden',
-          zIndex: 200
-        }}>
-          {/* Folder Header */}
-          <div style={{
-            backgroundColor: theme === 'dark' ? 'rgba(51, 51, 51, 0.9)' : 'rgba(253, 242, 248, 0.95)',
-            padding: '12px 16px',
-            borderTopLeftRadius: '12px',
-            borderTopRightRadius: '12px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            borderBottom: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(236, 72, 153, 0.15)'
-          }}>
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <div
-                onClick={() => closeFolder('personal')}
-                style={{
-                  width: '12px',
-                  height: '12px',
-                  borderRadius: '50%',
-                  backgroundColor: '#ff5f57',
-                  cursor: 'pointer',
-                  transition: 'transform 0.2s ease'
-                }}
-                onMouseEnter={(e) => e.target.style.transform = 'scale(1.2)'}
-                onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
-              ></div>
-              <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ffbd2e' }}></div>
-              <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#28ca42' }}></div>
-            </div>
-            <span style={{ color: theme === 'dark' ? '#888' : '#6b7280', fontSize: '12px' }}>Personal</span>
-          </div>
-
-          {/* Folder Content */}
-          <div style={{
-            padding: '24px',
-            color: theme === 'dark' ? 'white' : '#1f2937',
-            overflowY: 'auto',
-            maxHeight: isMobile ? 'calc(80vh - 60px)' : 'calc(70vh - 60px)'
-          }}>
-            {/* Your content here - no placeholder text */}
-          </div>
-        </div>
-      )}
-
-      {openFolders.schoolWork && (
-        <div style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: isMobile ? '95vw' : 'min(600px, calc(100vw - 280px))',
-          maxHeight: isMobile ? '80vh' : '70vh',
-          backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.95)' : 'rgba(255, 255, 255, 0.9)',
-          border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid rgba(236, 72, 153, 0.2)',
-          borderRadius: '12px',
-          boxShadow: theme === 'dark' ? '0 20px 40px rgba(0,0,0,0.7)' : '0 20px 40px rgba(0,0,0,0.15)',
-          backdropFilter: 'blur(20px)',
-          overflow: 'hidden',
-          zIndex: 200
-        }}>
-          {/* Folder Header */}
-          <div style={{
-            backgroundColor: theme === 'dark' ? 'rgba(51, 51, 51, 0.9)' : 'rgba(253, 242, 248, 0.95)',
-            padding: '12px 16px',
-            borderTopLeftRadius: '12px',
-            borderTopRightRadius: '12px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            borderBottom: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(236, 72, 153, 0.15)'
-          }}>
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <div
-                onClick={() => closeFolder('schoolWork')}
-                style={{
-                  width: '12px',
-                  height: '12px',
-                  borderRadius: '50%',
-                  backgroundColor: '#ff5f57',
-                  cursor: 'pointer',
-                  transition: 'transform 0.2s ease'
-                }}
-                onMouseEnter={(e) => e.target.style.transform = 'scale(1.2)'}
-                onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
-              ></div>
-              <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ffbd2e' }}></div>
-              <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#28ca42' }}></div>
-            </div>
-            <span style={{ color: theme === 'dark' ? '#888' : '#6b7280', fontSize: '12px' }}>School Work</span>
-          </div>
-
-          {/* Folder Content */}
-          <div style={{
-            padding: '24px',
-            color: theme === 'dark' ? 'white' : '#1f2937',
-            overflowY: 'auto',
-            maxHeight: isMobile ? 'calc(80vh - 60px)' : 'calc(70vh - 60px)'
-          }}>
-            {/* Your content here - no placeholder text */}
-          </div>
-        </div>
-      )}
-
-      {openFolders.mielPomodoro && (
-        <div style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: isMobile ? '95vw' : 'min(600px, calc(100vw - 280px))',
-          maxHeight: isMobile ? '80vh' : '70vh',
-          backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.95)' : 'rgba(255, 255, 255, 0.9)',
-          border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid rgba(236, 72, 153, 0.2)',
-          borderRadius: '12px',
-          boxShadow: theme === 'dark' ? '0 20px 40px rgba(0,0,0,0.7)' : '0 20px 40px rgba(0,0,0,0.15)',
-          backdropFilter: 'blur(20px)',
-          overflow: 'hidden',
-          zIndex: 200
-        }}>
-          {/* Folder Header */}
-          <div style={{
-            backgroundColor: theme === 'dark' ? 'rgba(51, 51, 51, 0.9)' : 'rgba(253, 242, 248, 0.95)',
-            padding: '12px 16px',
-            borderTopLeftRadius: '12px',
-            borderTopRightRadius: '12px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            borderBottom: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(236, 72, 153, 0.15)'
-          }}>
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <div
-                onClick={() => closeFolder('mielPomodoro')}
-                style={{
-                  width: '12px',
-                  height: '12px',
-                  borderRadius: '50%',
-                  backgroundColor: '#ff5f57',
-                  cursor: 'pointer',
-                  transition: 'transform 0.2s ease'
-                }}
-                onMouseEnter={(e) => e.target.style.transform = 'scale(1.2)'}
-                onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
-              ></div>
-              <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ffbd2e' }}></div>
-              <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#28ca42' }}></div>
-            </div>
-            <span style={{ color: theme === 'dark' ? '#888' : '#6b7280', fontSize: '12px' }}>Miel Pomodoro</span>
-          </div>
-
-          {/* Folder Content */}
-          <div style={{
-            padding: '24px',
-            color: theme === 'dark' ? 'white' : '#1f2937',
-            overflowY: 'auto',
-            maxHeight: isMobile ? 'calc(80vh - 60px)' : 'calc(70vh - 60px)'
-          }}>
-            {/* Your content here - no placeholder text */}
-          </div>
-        </div>
-      )}
+        <main className="main">
+          <Hero />
+          <Top8Section />
+          <ProjectsSection />
+          <WorkSection />
+          <ContactSection />
+          <footer className="foot">
+            <span className="heart">✦</span>&nbsp;made with care · {PROFILE.handle} · {new Date().getFullYear()}
+          </footer>
+        </main>
       </div>
     </>
   );
 }
-
-export default App;
