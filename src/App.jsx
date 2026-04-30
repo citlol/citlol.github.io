@@ -504,58 +504,90 @@ function App() {
     {
       id: 'pancake',
       name: 'Pancake',
-      description: 'A modern budgeting app that helps users track expenses and manage finances',
-      tech: ['Swift', 'SwiftUI', 'Python'],
-      role: 'Co-Founder & Frontend Developer',
+      description: 'iOS budgeting app integrating a Python backend and the Plaid API for secure aggregation and visualization of financial data',
+      tech: ['Swift', 'SwiftUI', 'Python', 'Plaid API'],
+      role: 'Frontend Developer',
       color: '#ec4899',
       highlights: [
-        'Built intuitive expense tracking with smart categorization',
-        'PLaid integration for up-to-date budget tracking',
+        'Led iOS development for an app integrating a Python backend and the Plaid API',
+        'Designed and implemented UI and financial data visualizations in Swift',
+        'Built with a modular, object-oriented architecture'
       ],
       github: 'https://pancakemoney.com/',
       status: 'Beta Testing'
     },
     {
+      id: 'phobos',
+      name: 'Phobos – Wishlist Web App',
+      description: 'Full-stack wishlist platform with multi-page routing, collaborative sharing, and a custom dark/light theme system',
+      tech: ['Next.js', 'React', 'TypeScript', 'Node.js', 'PostgreSQL', 'Vercel', 'Railway'],
+      role: 'Developer',
+      color: '#fb7185',
+      highlights: [
+        'Built a secure REST API with JWT auth, bcrypt hashing, email verification, and account lockout protection',
+        'Implemented production-ready hardening: rate limiting, input validation, Helmet, and CORS',
+        'Deployed on Vercel and Railway under a custom domain'
+      ],
+      github: 'https://myphobos.app',
+      status: 'Released'
+    },
+    {
+      id: 'bigram',
+      name: 'Bigram Language Model & Autocomplete',
+      description: 'Java bigram language model with Kneser-Ney smoothing supporting probabilistic text generation and autocomplete',
+      tech: ['Java 17', 'Maven', 'MySQL', 'JavaFX', 'JUnit 5'],
+      role: 'Developer',
+      color: '#f472b6',
+      highlights: [
+        'Architected a bigram language model with Kneser-Ney smoothing supporting beam search and greedy decoding',
+        'Designed a scalable MySQL persistence layer handling 600k+ relationships with batched writes and idempotent upserts',
+        'Built a clean DBInterface abstraction supporting autocomplete and sentence generation',
+        'Wrote JUnit 5 tests covering training, prediction, and edge cases; documented architecture for cross-team integration'
+      ],
+      github: 'https://github.com/citlol/bigram-language-model',
+      status: 'Released'
+    },
+    {
+      id: 'inpainting',
+      name: 'Partial Convolution U-Net Inpainting',
+      description: 'Image inpainting model based on published research, achieving 28–32 dB PSNR and SSIM up to 0.96',
+      tech: ['Python', 'PyTorch', 'TorchVision', 'OpenCV', 'Gradio'],
+      role: 'Developer',
+      color: '#ec4899',
+      highlights: [
+        'Implemented a 33M-parameter Partial Convolution U-Net for irregular image inpainting',
+        'Achieved PSNR of 28–32 dB and SSIM up to 0.96; evaluated performance with FID metrics',
+        'Built a full training pipeline with logging and an interactive Gradio demo'
+      ],
+      github: 'https://github.com/citlol/partial-conv-inpainting',
+      status: 'Released'
+    },
+    {
       id: 'miel-pomodoro',
-      name: 'Miel-Pomodoro',
-      description: 'A productivity timer app with an animal pal - pomodoro focus sessions',
-      tech: ['Swift', 'SwiftUI', 'UserNotifications', 'macOS'],
+      name: 'Miel – Pomodoro Timer',
+      description: 'macOS menu bar pomodoro timer with customizable UI components and an animal pal companion',
+      tech: ['Swift', 'SwiftUI', 'macOS', 'Procreate', 'Adobe Illustrator'],
       role: 'Solo Developer',
       color: '#f472b6',
       highlights: [
-        'Custom timer with ambient sounds',
-        'Progress tracking and statistics on desktop widget',
-        'Animal pals for companionship and haptic feedback'
+        'macOS menu bar timer with customizable UI components built with object-oriented design',
+        'Hand-illustrated animal pal companion features designed in Procreate and Illustrator',
+        'Rapidly prototyped and debugged features using AI tools and Git-based workflows'
       ],
       github: 'https://github.com/citlol/miel-pomodoro',
       status: 'WIP'
     },
     {
-      id: 'light-dal',
-      name: 'Light Dal',
-      description: 'A full-stack wishlist application where users can create, manage, and share their wishlists with friends and family',
-      tech: ['Node.js', 'Express.js', 'JavaScript', 'REST API', 'Git'],
-      role: 'Developer',
-      color: '#fb7185',
-      highlights: [
-        'RESTful API backend with Express.js',
-        'Plans for TypeScript migration & React frontend',
-        'User authentication with JWT (planned)'
-      ],
-      github: 'https://github.com/citlol/light-dal',
-      status: 'In Development'
-    },
-    {
       id: 'top-escrow',
       name: 'Top Escrow Website Redesign',
-      description: 'Overhauled the company website from the ground up, modernizing design, structure, and user experience',
+      description: 'Redesigned and rebuilt the company website using modern frontend practices, improving usability and visual consistency',
       tech: ['Web Design', 'UI/UX', 'Frontend'],
-      role: 'Contract Developer',
-      color: '#ec4899',
+      role: 'Website Redesign Contractor',
+      color: '#fb7185',
       highlights: [
-        'Complete website redesign and modernization',
-        'Collaborated closely with company stakeholders',
-        'Multiple iterations incorporating feedback until final approval'
+        'Redesigned and rebuilt the company website with modern frontend practices',
+        'Collaborated with stakeholders to deliver iterative revisions based on feedback',
+        'Supported deployment by configuring the domain and ensuring contact form functionality'
       ],
       website: 'https://topescrow.com',
       status: 'Contract'
@@ -590,11 +622,11 @@ function App() {
       case 'whoami':
         output = [
           { type: 'success', text: 'Hi! I\'m Citlalli Trejo Del Rio' },
-          { type: 'text', text: '   Computer Science Student & Full-Stack Developer' },
-          { type: 'text', text: '   Co-Founder of Pancake - A modern budgeting app' },
-          { type: 'text', text: '   Passionate about creating intuitive user experiences' },
+          { type: 'text', text: '   CS @ UT Dallas — Full-Stack Developer' },
+          { type: 'text', text: '   Frontend Developer at Pancake Money' },
+          { type: 'text', text: '   Building scalable web apps, iOS apps, and ML systems' },
           { type: 'info', text: '   Currently seeking software engineering opportunities' },
-          { type: 'info', text: '   Graduating May 2026!!'}
+          { type: 'info', text: '   Graduating June 2026!!'}
         ];
         break;
       case 'ls':
@@ -643,9 +675,9 @@ function App() {
         break;
       case 'skills':
         output = [
-          { type: 'success', text: '[>] Frontend: React, JavaScript, HTML/CSS, Swift' },
-          { type: 'info', text: '[>] Backend: Node.js, MongoDB, Firebase' },
-          { type: 'warning', text: '[>] Tools: Git, Figma, VS Code, Adobe Illustrator' },
+          { type: 'success', text: '[>] Languages: Java, TypeScript, Swift, Python, C++, SQL, JavaScript, HTML, CSS/Tailwind' },
+          { type: 'info', text: '[>] Frameworks: React, Next.js, Node.js, SwiftUI, PyTorch' },
+          { type: 'warning', text: '[>] Tools: Git, VS Code, Linux, Xcode, Figma, MongoDB' },
         ];
         break;
       case 'contact':
@@ -658,11 +690,13 @@ function App() {
       case 'now':
         output = [
           { type: 'success', text: ' Currently Building:' },
-          { type: 'text', text: '   • Pancake - Finalizing budget tracking features' },
-          { type: 'text', text: '   • Miel Pomodoro - Character animation' },
+          { type: 'text', text: '   • Pancake - iOS budgeting app with Plaid integration' },
+          { type: 'text', text: '   • Phobos - Full-stack wishlist platform on Next.js' },
+          { type: 'text', text: '   • Bigram language model & autocomplete (Java + MySQL)' },
+          { type: 'text', text: '   • Miel Pomodoro - macOS menu bar timer' },
           { type: 'info', text: ' Learning:' },
           { type: 'text', text: '   • Advanced SwiftUI animations' },
-          { type: 'text', text: '   • ' },
+          { type: 'text', text: '   • Production-ready full-stack architecture' },
         ];
         break;
       case 'clear':
@@ -1188,13 +1222,13 @@ function App() {
               <div style={{ marginBottom: '20px' }}>
                 <h3 style={{ color: theme === 'dark' ? '#ec4899' : '#db2777', marginBottom: '16px', fontSize: '18px' }}># About Me</h3>
                 <div style={{ marginBottom: '12px' }}>
-                  <span style={{ color: '#f472b6' }}></span> Computer Science Student & Full-Stack Developer
+                  <span style={{ color: '#f472b6' }}></span> CS @ UT Dallas (Expected 06/2026) — Full-Stack Developer
                 </div>
                 <div style={{ marginBottom: '12px' }}>
-                  <span style={{ color: '#fb7185' }}></span> Co-Founder of Pancake - A modern budgeting app
+                  <span style={{ color: '#fb7185' }}></span> Frontend Developer at Pancake Money (iOS + Plaid)
                 </div>
                 <div style={{ marginBottom: '12px' }}>
-                  <span style={{ color: '#f472b6' }}></span> Passionate about creating intuitive user experiences
+                  <span style={{ color: '#f472b6' }}></span> Building scalable web apps, iOS apps, and ML systems
                 </div>
 
                 {/* Currently Building Section */}
@@ -1207,8 +1241,10 @@ function App() {
                 }}>
                   <h4 style={{ color: '#f472b6', marginBottom: '12px', fontSize: '14px' }}>[*] Currently Building</h4>
                   <div style={{ color: theme === 'dark' ? '#d1d5db' : '#4b5563', fontSize: '13px' }}>
-                    <div style={{ marginBottom: '6px' }}>• Pancake - Finalizing budget tracking features</div>
-                    <div style={{ marginBottom: '6px' }}>• light dal - Wishlist website with item tracking</div>
+                    <div style={{ marginBottom: '6px' }}>• Pancake — iOS budgeting app with Plaid integration</div>
+                    <div style={{ marginBottom: '6px' }}>• Phobos — Full-stack wishlist web app on Next.js</div>
+                    <div style={{ marginBottom: '6px' }}>• Bigram language model & autocomplete (Java + MySQL)</div>
+                    <div style={{ marginBottom: '6px' }}>• Miel Pomodoro — macOS menu bar timer</div>
                   </div>
                 </div>
 
@@ -1590,9 +1626,9 @@ function App() {
               </div>
               <div style={{ marginBottom: '20px' }}>
                 <div style={{ marginBottom: '16px' }}>
-                  <h4 style={{ color: '#ec4899', marginBottom: '8px' }}>Frontend</h4>
+                  <h4 style={{ color: '#ec4899', marginBottom: '8px' }}>Languages</h4>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                    {['React', 'JavaScript', 'HTML/CSS', 'Swift'].map(skill => (
+                    {['Java', 'TypeScript', 'Swift', 'Python', 'C++', 'SQL', 'JavaScript', 'HTML', 'CSS/Tailwind'].map(skill => (
                       <span key={skill} style={{
                         backgroundColor: 'rgba(236, 72, 153, 0.2)',
                         color: '#ec4899',
@@ -1607,9 +1643,9 @@ function App() {
                   </div>
                 </div>
                 <div style={{ marginBottom: '16px' }}>
-                  <h4 style={{ color: '#f472b6', marginBottom: '8px' }}>Backend</h4>
+                  <h4 style={{ color: '#f472b6', marginBottom: '8px' }}>Frameworks & Libraries</h4>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                    {['Node.js', 'MongoDB', 'Firebase'].map(skill => (
+                    {['React', 'Next.js', 'Node.js', 'SwiftUI', 'PyTorch', 'TorchVision', 'JavaFX', 'Express'].map(skill => (
                       <span key={skill} style={{
                         backgroundColor: 'rgba(244, 114, 182, 0.2)',
                         color: '#f472b6',
@@ -1624,9 +1660,9 @@ function App() {
                   </div>
                 </div>
                 <div style={{ marginBottom: '16px' }}>
-                  <h4 style={{ color: '#fb7185', marginBottom: '8px' }}>Tools</h4>
+                  <h4 style={{ color: '#fb7185', marginBottom: '8px' }}>Tools & Platforms</h4>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                    {['Git', 'Figma', 'VS Code', 'XCode', 'Adobe Illustrator'].map(skill => (
+                    {['Git', 'VS Code', 'Linux', 'Xcode', 'Figma', 'MongoDB', 'PostgreSQL', 'MySQL', 'Vercel', 'Railway'].map(skill => (
                       <span key={skill} style={{
                         backgroundColor: 'rgba(251, 113, 133, 0.2)',
                         color: '#fb7185',
@@ -1674,12 +1710,12 @@ function App() {
           zIndex: 99
         }}>
           {[
-            { text: 'Graduating May 2026', delay: '0s' },
+            { text: 'Graduating June 2026', delay: '0s' },
             { text: 'Full-Stack Dev', delay: '0.1s' },
             { text: 'Open to Work', delay: '0.2s' },
-            { text: 'React / JS', delay: '0.3s' },
-            { text: 'UI/UX Design', delay: '0.4s' },
-            { text: 'Creative Mind', delay: '0.5s' }
+            { text: 'TypeScript / Java / Swift', delay: '0.3s' },
+            { text: 'iOS + ML + Web', delay: '0.4s' },
+            { text: 'CS @ UT Dallas', delay: '0.5s' }
           ].map((bubble, i) => (
             <div
               key={i}
@@ -2501,8 +2537,8 @@ function App() {
                   borderRadius: '8px',
                   border: '1px solid rgba(236, 72, 153, 0.2)'
                 }}>
-                  CS student and full-stack developer passionate about creating intuitive user experiences.
-                  Currently building Pancake and light dal. Always exploring new technologies and design patterns!
+                  CS @ UT Dallas and full-stack developer building scalable web apps, iOS apps, and ML systems.
+                  Currently building Pancake (iOS + Plaid) and Phobos (Next.js wishlist app). Always exploring new technologies and design patterns!
                 </p>
               </div>
 
