@@ -499,23 +499,44 @@ function App() {
   // Project detail state
   const [selectedProject, setSelectedProject] = useState(null);
 
-  // Project data with case studies
-  const projects = [
+  // Professional experience (work)
+  const experience = [
     {
       id: 'pancake',
-      name: 'Pancake',
+      name: 'Pancake Money',
       description: 'iOS budgeting app integrating a Python backend and the Plaid API for secure aggregation and visualization of financial data',
       tech: ['Swift', 'SwiftUI', 'Python', 'Plaid API'],
       role: 'Frontend Developer',
+      period: '06/2025 – Present',
       color: '#ec4899',
       highlights: [
         'Led iOS development for an app integrating a Python backend and the Plaid API',
         'Designed and implemented UI and financial data visualizations in Swift',
         'Built with a modular, object-oriented architecture'
       ],
-      github: 'https://pancakemoney.com/',
-      status: 'Beta Testing'
+      website: 'https://pancakemoney.com/',
+      status: 'Current'
     },
+    {
+      id: 'top-escrow',
+      name: 'Top Escrow',
+      description: 'Redesigned and rebuilt the company website using modern frontend practices, improving usability and visual consistency',
+      tech: ['Web Design', 'UI/UX', 'Frontend'],
+      role: 'Website Redesign Contractor',
+      period: '07/2025 – 08/2025',
+      color: '#fb7185',
+      highlights: [
+        'Redesigned and rebuilt the company website with modern frontend practices',
+        'Collaborated with stakeholders to deliver iterative revisions based on feedback',
+        'Supported deployment by configuring the domain and ensuring contact form functionality'
+      ],
+      website: 'https://topescrow.com',
+      status: 'Contract'
+    }
+  ];
+
+  // Project data with case studies
+  const projects = [
     {
       id: 'phobos',
       name: 'Phobos – Wishlist Web App',
@@ -576,21 +597,6 @@ function App() {
       ],
       github: 'https://github.com/citlol/miel-pomodoro',
       status: 'WIP'
-    },
-    {
-      id: 'top-escrow',
-      name: 'Top Escrow Website Redesign',
-      description: 'Redesigned and rebuilt the company website using modern frontend practices, improving usability and visual consistency',
-      tech: ['Web Design', 'UI/UX', 'Frontend'],
-      role: 'Website Redesign Contractor',
-      color: '#fb7185',
-      highlights: [
-        'Redesigned and rebuilt the company website with modern frontend practices',
-        'Collaborated with stakeholders to deliver iterative revisions based on feedback',
-        'Supported deployment by configuring the domain and ensuring contact form functionality'
-      ],
-      website: 'https://topescrow.com',
-      status: 'Contract'
     }
   ];
 
@@ -611,6 +617,7 @@ function App() {
           { type: 'command', text: '  ls            - List sections' },
           { type: 'command', text: '  cat resume    - View/download resume' },
           { type: 'command', text: '  github        - View GitHub stats' },
+          { type: 'command', text: '  work          - Professional experience' },
           { type: 'command', text: '  projects      - List projects' },
           { type: 'command', text: '  skills        - Show skills' },
           { type: 'command', text: '  contact       - Contact info' },
@@ -632,6 +639,7 @@ function App() {
       case 'ls':
         output = [
           { type: 'text', text: 'drwxr-xr-x  about.md' },
+          { type: 'text', text: 'drwxr-xr-x  work/' },
           { type: 'text', text: 'drwxr-xr-x  projects/' },
           { type: 'text', text: 'drwxr-xr-x  skills.config' },
           { type: 'text', text: '-rwxr-xr-x  contact.sh' },
@@ -671,6 +679,20 @@ function App() {
             text: `   ${p.name} - ${p.tech.join(', ')} [${p.status}]`,
             color: p.color
           }))
+        ];
+        break;
+      case 'work':
+      case 'experience':
+        output = [
+          { type: 'info', text: '[>] Professional Experience:' },
+          ...experience.flatMap(w => [
+            {
+              type: 'project',
+              text: `   ${w.name} — ${w.role} [${w.period}]`,
+              color: w.color
+            },
+            { type: 'text', text: `      ${w.description}` }
+          ])
         ];
         break;
       case 'skills':
@@ -1093,6 +1115,23 @@ function App() {
                   ./about.md
                 </button>
                 <button
+                  onClick={() => handleNavClick('work')}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: theme === 'dark' ? 'white' : '#1f2937',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                    fontSize: '14px',
+                    fontFamily: 'monospace',
+                    padding: '4px 0'
+                  }}
+                  onMouseEnter={(e) => e.target.style.color = '#ec4899'}
+                  onMouseLeave={(e) => e.target.style.color = theme === 'dark' ? 'white' : '#1f2937'}
+                >
+                  ~/work/
+                </button>
+                <button
                   onClick={() => handleNavClick('projects')}
                   style={{
                     background: 'none',
@@ -1283,6 +1322,120 @@ function App() {
                 <div style={{ color: '#6b7280', fontSize: '13px', marginTop: '16px', padding: '12px', backgroundColor: theme === 'dark' ? 'rgba(236, 72, 153, 0.1)' : 'rgba(22, 163, 74, 0.1)', borderRadius: '8px', border: '1px solid rgba(236, 72, 153, 0.2)' }}>
                   <span style={{ color: '#ec4899' }}>[*]</span> Currently seeking software engineering opportunities to contribute to innovative projects
                 </div>
+              </div>
+              <button
+                onClick={() => handleNavClick('home')}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#4a9eff',
+                  cursor: 'pointer',
+                  fontSize: '12px',
+                  fontFamily: 'monospace'
+                }}
+              >
+                ← back to home
+              </button>
+            </div>
+          )}
+
+          {activeSection === 'work' && (
+            <div>
+              <div style={{ color: theme === 'dark' ? '#888' : '#6b7280', marginBottom: '16px' }}>
+                citlol@portfolio ~/work % cat experience.md
+              </div>
+              <div style={{ marginBottom: '20px' }}>
+                {experience.map((job) => (
+                  <div
+                    key={job.id}
+                    style={{
+                      padding: '16px',
+                      backgroundColor: `${job.color}15`,
+                      borderRadius: '8px',
+                      marginBottom: '12px',
+                      border: `1px solid ${job.color}40`,
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-start',
+                      flexWrap: 'wrap',
+                      gap: '8px',
+                      marginBottom: '8px'
+                    }}>
+                      <div>
+                        <div style={{ color: job.color, fontWeight: 'bold', fontSize: '15px' }}>
+                          [@] {job.name}
+                        </div>
+                        <div style={{
+                          color: theme === 'dark' ? '#d1d5db' : '#4b5563',
+                          fontSize: '12px',
+                          marginTop: '2px'
+                        }}>
+                          {job.role}
+                        </div>
+                      </div>
+                      <span style={{
+                        fontSize: '11px',
+                        padding: '3px 10px',
+                        borderRadius: '12px',
+                        backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
+                        color: theme === 'dark' ? '#d1d5db' : '#4b5563',
+                        whiteSpace: 'nowrap'
+                      }}>
+                        {job.period}
+                      </span>
+                    </div>
+                    <div style={{
+                      color: theme === 'dark' ? '#d1d5db' : '#4b5563',
+                      fontSize: '13px',
+                      marginBottom: '10px',
+                      lineHeight: '1.5'
+                    }}>
+                      {job.description}
+                    </div>
+                    <ul style={{
+                      margin: '0 0 12px 0',
+                      paddingLeft: '20px',
+                      color: theme === 'dark' ? '#d1d5db' : '#4b5563'
+                    }}>
+                      {job.highlights.map((h, i) => (
+                        <li key={i} style={{ fontSize: '12px', marginBottom: '4px', lineHeight: '1.5' }}>{h}</li>
+                      ))}
+                    </ul>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '10px' }}>
+                      {job.tech.map((tech, idx) => (
+                        <span key={idx} style={{
+                          fontSize: '11px',
+                          padding: '2px 8px',
+                          borderRadius: '4px',
+                          backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)',
+                          color: theme === 'dark' ? '#9ca3af' : '#6b7280'
+                        }}>
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                    {job.website && (
+                      <a
+                        href={job.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          display: 'inline-block',
+                          fontSize: '12px',
+                          color: job.color,
+                          textDecoration: 'none',
+                          fontWeight: 500
+                        }}
+                      >
+                        Visit site →
+                      </a>
+                    )}
+                  </div>
+                ))}
               </div>
               <button
                 onClick={() => handleNavClick('home')}
@@ -2069,11 +2222,13 @@ function App() {
             borderRadius: '12px',
             padding: isMobile ? '15px' : '20px',
             position: 'relative',
-            maxWidth: isMobile ? 'calc(100% - 40px)' : '500px',
+            maxWidth: isMobile ? 'calc(100% - 40px)' : 'min(500px, calc(100vw - 40px))',
             width: '90%',
             margin: isMobile ? '20px' : '0',
-            maxHeight: isMobile ? 'calc(100vh - 40px)' : 'none',
-            overflow: isMobile ? 'auto' : 'visible'
+            maxHeight: 'calc(100vh - 40px)',
+            overflow: 'auto',
+            display: 'flex',
+            flexDirection: 'column'
           }}
           onClick={(e) => e.stopPropagation()}
           >
@@ -2104,7 +2259,8 @@ function App() {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                height: '380px',
+                minHeight: '200px',
+                height: 'min(380px, 60vh)',
                 marginBottom: '20px',
                 gap: '8px'
               }}>
@@ -2119,14 +2275,16 @@ function App() {
             <iframe
               src="https://embed.music.apple.com/us/playlist/%EC%B2%AD%EC%B6%98%EC%9D%80-%EB%B0%94%EB%A1%9C-%EC%A7%80%EA%B8%88/pl.u-JPAZZlGtJa55XR"
               width="100%"
-              height="380"
               frameBorder="0"
               allowTransparency="true"
               allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
               loading="lazy"
               style={{
                 borderRadius: '12px',
-                display: isAppleMusicLoading ? 'none' : 'block'
+                display: isAppleMusicLoading ? 'none' : 'block',
+                width: '100%',
+                height: 'min(380px, 60vh)',
+                minHeight: '220px'
               }}
               onLoad={() => setIsAppleMusicLoading(false)}
             ></iframe>
@@ -2369,8 +2527,10 @@ function App() {
             padding: '0',
             position: 'relative',
             maxWidth: '700px',
-            width: '90%',
-            maxHeight: '70vh',
+            width: 'min(90%, 700px)',
+            maxHeight: 'min(85vh, 800px)',
+            display: 'flex',
+            flexDirection: 'column',
             overflow: 'hidden',
             boxShadow: '0 25px 50px rgba(0,0,0,0.3)'
           }}
@@ -2460,7 +2620,7 @@ function App() {
             </div>
 
             {/* Profile Content */}
-            <div style={{ maxHeight: 'calc(70vh - 100px)', overflow: 'auto' }}>
+            <div style={{ flex: '1 1 auto', minHeight: 0, overflow: 'auto' }}>
             {/* Profile Header */}
             <div style={{
               background: '#E8A2D7',
@@ -2561,20 +2721,28 @@ function App() {
                   border: '1px solid rgba(244, 114, 182, 0.2)',
                   display: 'flex',
                   alignItems: 'center',
+                  flexWrap: 'wrap',
                   gap: '12px'
                 }}>
                   <img
                     src="/record.png"
                     alt="Record"
                     style={{
-                      width: '75px',
-                      height: '75px',
+                      width: 'clamp(48px, 18vw, 75px)',
+                      height: 'clamp(48px, 18vw, 75px)',
+                      flexShrink: 0,
                       objectFit: 'contain',
                       animation: 'spin 3s linear infinite'
                     }}
                   />
-                  <div>
-                    <div style={{ fontWeight: 'bold', fontSize: '14px' }}>What You Saying</div>
+                  <div style={{ minWidth: 0, flex: '1 1 140px' }}>
+                    <div style={{
+                      fontWeight: 'bold',
+                      fontSize: '14px',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap'
+                    }}>What You Saying</div>
                     <div style={{ fontSize: '12px', opacity: 0.7 }}>Lil Uzi Vert</div>
                   </div>
                 </div>
