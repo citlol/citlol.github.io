@@ -270,10 +270,69 @@ function ToolsModule() {
   );
 }
 
+function GamingModule() {
+  return (
+    <Module title="Now Playing" hint="✦ game" accent="var(--gold-mood)">
+      <div style={{ display: 'grid', gap: 8 }}>
+        <div
+          style={{
+            fontFamily: 'var(--display)',
+            fontSize: 20,
+            lineHeight: 1.1,
+            color: 'var(--ink)',
+            letterSpacing: '-0.01em',
+          }}
+        >
+          League of Legends
+        </div>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 'var(--space-xs)' }}>
+          <span
+            style={{
+              fontFamily: 'var(--mono)',
+              fontSize: 10,
+              textTransform: 'uppercase',
+              letterSpacing: '0.14em',
+              color: 'var(--ink-muted)',
+            }}
+          >
+            mains
+          </span>
+          <span style={{ fontSize: 13, color: 'var(--ink-soft)' }}>Rakan · Milio</span>
+        </div>
+      </div>
+    </Module>
+  );
+}
+
 function ListeningModule() {
   const [loading, setLoading] = useState(true);
   return (
     <Module title="Currently Listening" hint="♫ apple music">
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'baseline',
+          gap: 'var(--space-xs)',
+          marginBottom: 'var(--space-sm)',
+          flexWrap: 'wrap',
+        }}
+      >
+        <span
+          style={{
+            fontFamily: 'var(--mono)',
+            fontSize: 10,
+            textTransform: 'uppercase',
+            letterSpacing: '0.14em',
+            color: 'var(--ink-muted)',
+          }}
+        >
+          song
+        </span>
+        <span style={{ color: 'var(--ink)', fontSize: 13, fontWeight: 600 }}>
+          Decode
+        </span>
+        <span style={{ color: 'var(--ink-muted)', fontSize: 12 }}>— Paramore</span>
+      </div>
       <div className="listening-frame">
         {loading && (
           <div style={{ padding: 'var(--space-md)', fontSize: 13, color: 'var(--ink-muted)' }}>
@@ -558,6 +617,7 @@ export default function App() {
           <NavModule active={active} onNav={scrollTo} />
           <ContactsModule />
           <ToolsModule />
+          <GamingModule />
           <ListeningModule />
         </aside>
 

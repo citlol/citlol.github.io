@@ -71,44 +71,44 @@
 [data-theme="dark"] {
   /* foggy japanese tea garden — twilight pond / enchanted forest edition */
 
-  /* surfaces — dark gray-blue pond water with hint of moss */
-  --paper:        oklch(0.158 0.018 250);  /* deep water at dusk */
-  --paper-soft:   oklch(0.215 0.022 250);  /* lifted, slight teal */
-  --paper-edge:   oklch(0.290 0.024 248);
+  /* surfaces — dark stone-grey with whisper of cool (was too blue) */
+  --paper:        oklch(0.165 0.005 260);  /* slate-grey, barely cool */
+  --paper-soft:   oklch(0.225 0.006 260);  /* lifted stone */
+  --paper-edge:   oklch(0.295 0.008 260);
 
   /* text — moonlit silver-blossom (cool with whisper of pink) */
   --ink:          oklch(0.920 0.018 320);
   --ink-soft:     oklch(0.810 0.022 320);
   --ink-muted:    oklch(0.625 0.018 320);
 
-  /* lines */
-  --line:         oklch(0.305 0.020 250);
-  --line-strong:  oklch(0.470 0.028 250);
+  /* lines — grey to match new bg */
+  --line:         oklch(0.310 0.008 260);
+  --line-strong:  oklch(0.475 0.012 260);
 
   /* "pink" scale = dusk blossom — soft pinks lifted to read on dark water */
   --pink-50:      oklch(0.205 0.020 320);
   --pink-100:     oklch(0.275 0.030 322);
-  --pink-200:     oklch(0.405 0.040 248);  /* deeper water — module heads */
   --pink-300:     oklch(0.745 0.075 348);  /* dusk blossom — CTA bg */
   --pink-500:     oklch(0.815 0.075 348);  /* hover/link */
   --pink-700:     oklch(0.895 0.045 340);  /* hot text accent — silver-pink */
 
-  /* module accent palette: water / twilight mist / forest moss / blossom */
-  --aqua-200:     oklch(0.395 0.035 235);  /* dark water */
-  --lavender-200: oklch(0.400 0.032 285);  /* twilight mist */
-  --gold-mood:    oklch(0.395 0.045 155);  /* moss in shadow */
+  /* module accents — two pinks + mist (no more water/moss in dark) */
+  --pink-200:     oklch(0.450 0.085 350);  /* first pink — Profile, Contacting, Listening */
+  --aqua-200:     oklch(0.450 0.085 350);  /* same first pink (was water) */
+  --lavender-200: oklch(0.400 0.032 285);  /* twilight mist — View My */
+  --gold-mood:    oklch(0.405 0.055 325);  /* second pink (cool dusty mauve) — Tools, Now Playing */
   --green-online: oklch(0.815 0.060 340);  /* online dot — silver-blossom */
 
   --shadow-sm: 0 1px 2px  oklch(0 0 0 / 0.50);
   --shadow-md: 0 8px 22px oklch(0 0 0 / 0.55);
   --shadow-lg: 0 20px 48px oklch(0 0 0 / 0.65);
 
-  --surface-raised: oklch(0.245 0.022 250);
-  --dot-color:      oklch(0.34 0.018 250 / 0.40);
+  --surface-raised: oklch(0.250 0.007 260);
+  --dot-color:      oklch(0.345 0.008 260 / 0.40);
 
   /* CTA: dark ink text on dusk blossom for high contrast */
-  --cta-fg:       oklch(0.158 0.018 250);
-  --cta-fg-hover: oklch(0.158 0.018 250);
+  --cta-fg:       oklch(0.165 0.005 260);
+  --cta-fg-hover: oklch(0.165 0.005 260);
 }
 
 * { box-sizing: border-box; }
