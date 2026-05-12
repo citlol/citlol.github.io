@@ -2,35 +2,38 @@
 @import "tailwindcss/utilities";
 
 :root {
-  /* surfaces */
-  --paper:        oklch(0.985 0.008 350);
-  --paper-soft:   oklch(0.965 0.020 350);
-  --paper-edge:   oklch(0.935 0.030 350);
+  /* foggy japanese tea garden — morning mist edition */
 
-  /* ink — plum-tinted, never pure black */
-  --ink:          oklch(0.235 0.025 350);
-  --ink-soft:     oklch(0.430 0.025 350);
-  --ink-muted:    oklch(0.585 0.020 350);
+  /* surfaces — pale fog, cool warm-white pearl */
+  --paper:        oklch(0.970 0.005 270);  /* fog-pearl */
+  --paper-soft:   oklch(0.945 0.008 275);  /* lifted mist */
+  --paper-edge:   oklch(0.900 0.014 280);  /* stone */
+
+  /* ink — calligraphy slate, cool not warm */
+  --ink:          oklch(0.245 0.018 260);  /* dark water-ink */
+  --ink-soft:     oklch(0.445 0.020 260);
+  --ink-muted:    oklch(0.605 0.015 265);
 
   /* lines */
-  --line:         oklch(0.870 0.025 350);
-  --line-strong:  oklch(0.780 0.045 345);
+  --line:         oklch(0.880 0.010 275);
+  --line-strong:  oklch(0.790 0.018 275);
 
-  /* pink scale (rooted on existing #E8A2D7 ≈ pink-300) */
-  --pink-50:      oklch(0.970 0.025 350);
-  --pink-100:     oklch(0.925 0.045 348);
-  --pink-200:     oklch(0.870 0.075 345);
-  --pink-300:     oklch(0.780 0.105 340);
-  --pink-500:     oklch(0.625 0.165 350);
-  --pink-700:     oklch(0.420 0.140 355);
+  /* "pink" scale = cherry blossom (sakura) ladder, pale and cool */
+  --pink-50:      oklch(0.970 0.012 350);
+  --pink-100:     oklch(0.930 0.025 348);
+  --pink-200:     oklch(0.875 0.045 345);  /* sakura petal — module heads */
+  --pink-300:     oklch(0.815 0.065 350);  /* CTA bg — blossom */
+  --pink-500:     oklch(0.660 0.115 350);  /* deeper blossom — links/eyebrow */
+  --pink-700:     oklch(0.495 0.110 355);  /* dusty rose — hot text accent */
 
-  --aqua-200:     oklch(0.880 0.075  10);  /* warm pink (was aqua) */
-  --lavender-200: oklch(0.870 0.075 320);  /* pink-violet (warmer than blue-lavender) */
-  --gold-mood:    oklch(0.870 0.085  75);
-  --green-online: oklch(0.700 0.190 355);  /* vivid pink dot (was green) */
+  /* module accent palette: water / mist / moss / blossom */
+  --aqua-200:     oklch(0.860 0.025 240);  /* still water */
+  --lavender-200: oklch(0.860 0.020 285);  /* mist */
+  --gold-mood:    oklch(0.870 0.030 150);  /* pale sage */
+  --green-online: oklch(0.660 0.135 350);  /* blossom dot (no flower glyph) */
 
   /* type */
-  --display: 'Caprasimo', 'Hoefler Text', Georgia, serif;
+  --display: 'Shippori Mincho', 'Hoefler Text', 'Cardo', Georgia, serif;
   --body:    'Hanken Grotesk', system-ui, -apple-system, sans-serif;
   --mono:    ui-monospace, 'SF Mono', 'Cascadia Mono', monospace;
 
@@ -61,49 +64,51 @@
   --cta-fg: var(--ink);
   --cta-fg-hover: #fff;
 
-  /* background dot pattern (overrideable per theme) */
-  --dot-color: oklch(0.88 0.04 348 / 0.55);
+  /* background mist pattern (very subtle in light mode, off in dark) */
+  --dot-color: oklch(0.85 0.012 275 / 0.55);
 }
 
 [data-theme="dark"] {
-  /* surfaces — deep base with a cool-pink tint so it reads warm-dark-pink, not graphite */
-  --paper:        oklch(0.115 0.018 340);  /* near-black with slight cool pink */
-  --paper-soft:   oklch(0.185 0.028 345);  /* lifted, more pink */
-  --paper-edge:   oklch(0.275 0.038 345);
+  /* foggy japanese tea garden — twilight pond / enchanted forest edition */
 
-  /* text — cool light pink ladder, very legible on dark */
-  --ink:          oklch(0.935 0.030 345);  /* cool blush cream */
-  --ink-soft:     oklch(0.840 0.040 345);
-  --ink-muted:    oklch(0.665 0.028 345);
+  /* surfaces — dark gray-blue pond water with hint of moss */
+  --paper:        oklch(0.158 0.018 250);  /* deep water at dusk */
+  --paper-soft:   oklch(0.215 0.022 250);  /* lifted, slight teal */
+  --paper-edge:   oklch(0.290 0.024 248);
+
+  /* text — moonlit silver-blossom (cool with whisper of pink) */
+  --ink:          oklch(0.920 0.018 320);
+  --ink-soft:     oklch(0.810 0.022 320);
+  --ink-muted:    oklch(0.625 0.018 320);
 
   /* lines */
-  --line:         oklch(0.305 0.035 345);
-  --line-strong:  oklch(0.470 0.055 345);
+  --line:         oklch(0.305 0.020 250);
+  --line-strong:  oklch(0.470 0.028 250);
 
-  /* accent ladder — cool pink throughout, lighter and punchier */
-  --pink-50:      oklch(0.215 0.035 348);
-  --pink-100:     oklch(0.320 0.075 348);
-  --pink-200:     oklch(0.620 0.110 345);  /* module headers — vivid mid-pink */
-  --pink-300:     oklch(0.860 0.085 348);  /* CTA bg — light cool pink */
-  --pink-500:     oklch(0.910 0.075 350);  /* hover, link, eyebrow */
-  --pink-700:     oklch(0.945 0.060 350);  /* hot text accent */
+  /* "pink" scale = dusk blossom — soft pinks lifted to read on dark water */
+  --pink-50:      oklch(0.205 0.020 320);
+  --pink-100:     oklch(0.275 0.030 322);
+  --pink-200:     oklch(0.405 0.040 248);  /* deeper water — module heads */
+  --pink-300:     oklch(0.745 0.075 348);  /* dusk blossom — CTA bg */
+  --pink-500:     oklch(0.815 0.075 348);  /* hover/link */
+  --pink-700:     oklch(0.895 0.045 340);  /* hot text accent — silver-pink */
 
-  /* module accents — shades of cool pink (was lavender/aqua/gold; flattened to pink for cohesion) */
-  --aqua-200:     oklch(0.610 0.090 355);  /* slightly warmer pink */
-  --lavender-200: oklch(0.605 0.105 335);  /* slightly cooler pink */
-  --gold-mood:    oklch(0.625 0.085   5);  /* slightly warm pink */
-  --green-online: oklch(0.680 0.130 150);
+  /* module accent palette: water / twilight mist / forest moss / blossom */
+  --aqua-200:     oklch(0.395 0.035 235);  /* dark water */
+  --lavender-200: oklch(0.400 0.032 285);  /* twilight mist */
+  --gold-mood:    oklch(0.395 0.045 155);  /* moss in shadow */
+  --green-online: oklch(0.815 0.060 340);  /* online dot — silver-blossom */
 
   --shadow-sm: 0 1px 2px  oklch(0 0 0 / 0.50);
   --shadow-md: 0 8px 22px oklch(0 0 0 / 0.55);
   --shadow-lg: 0 20px 48px oklch(0 0 0 / 0.65);
 
-  --surface-raised: oklch(0.255 0.030 345);
-  --dot-color:      oklch(0.34 0.040 345 / 0.55);
+  --surface-raised: oklch(0.245 0.022 250);
+  --dot-color:      oklch(0.34 0.018 250 / 0.40);
 
-  /* CTA: dark text on light cool pink for high contrast */
-  --cta-fg:       oklch(0.115 0.018 340);
-  --cta-fg-hover: oklch(0.115 0.018 340);
+  /* CTA: dark ink text on dusk blossom for high contrast */
+  --cta-fg:       oklch(0.158 0.018 250);
+  --cta-fg-hover: oklch(0.158 0.018 250);
 }
 
 * { box-sizing: border-box; }
