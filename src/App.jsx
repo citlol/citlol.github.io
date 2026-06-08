@@ -16,29 +16,43 @@ const PROFILE = {
   github: 'https://github.com/citlol',
   linkedin: 'https://linkedin.com/in/citlalli-trejo-del-rio',
   resume: '/resume.pdf',
-  bio: "Hi — I'm a CS senior at UT Dallas building thoughtful software at the intersection of frontend, iOS, and ML. I like soft tools, careful interfaces, and shipping things that feel a little personal.",
+  bio: "Hi — I'm a CS senior at UT Dallas building thoughtful, full-stack software across web, iOS, and AI systems. I like marketplace mechanics, careful interfaces, and shipping things that feel a little personal.",
 };
 
 // ── Tools / languages ────────────────────────────────────
 const TOOLS = {
-  Languages: ['Java', 'TypeScript', 'Swift', 'Python', 'C++', 'SQL', 'JavaScript'],
-  Frameworks: ['React', 'Next.js', 'Node.js', 'SwiftUI', 'PyTorch'],
-  Tools: ['Git', 'VS Code', 'Linux', 'Xcode', 'Figma', 'MongoDB'],
+  Languages: ['TypeScript', 'Python', 'Swift', 'Java', 'JavaScript', 'SQL'],
+  Frontend: ['React 18', 'Next.js 14', 'Tailwind', 'SwiftUI', 'Stripe Elements'],
+  'Backend / AI': ['FastAPI', 'Celery', 'Postgres + pgvector', 'Redis', 'SQLAlchemy', 'VLMs', 'PyTorch'],
 };
 
 // ── Featured projects (deep dives) ───────────────────────
 const PROJECTS = [
   {
+    id: 'greige',
+    name: 'Greige',
+    role: 'Technical Co-Founder',
+    period: '05/2026 – Present',
+    status: 'Current',
+    description: 'Fashion resale marketplace — full Python (FastAPI) backend and parts of the React (Next.js) frontend, with marketplace payments and AI-powered authentication.',
+    highlights: [
+      'End-to-end Stripe Connect marketplace payments: programmatic seller onboarding/KYC, separate charge-and-transfer escrow, signature-verified webhooks, transfer-reversal refunds',
+      'Confidence-driven authentication pipeline combining a vision-language model (Claude), a DINOv2 visual-similarity model, and EXIF metadata, with human-in-the-loop escalation',
+      'Owned the full backend stack from data modeling to webhook design',
+    ],
+    tech: ['Python', 'FastAPI', 'Next.js', 'React', 'Stripe Connect', 'Claude', 'DINOv2', 'Postgres'],
+  },
+  {
     id: 'pancake',
     name: 'Pancake Money',
-    role: 'Frontend Developer',
+    role: 'Technical Co-Founder',
     period: '06/2025 – Present',
     status: 'Current',
-    description: 'iOS budgeting app integrating a Python backend and the Plaid API for secure aggregation and visualization of financial data.',
+    description: 'iOS budgeting app integrating a Python backend, AI tools, and the Plaid API to simplify personal finance.',
     highlights: [
-      'Led iOS development for an app integrating a Python backend and Plaid API',
-      'Designed and built UI and financial data visualizations in Swift',
-      'Modular, object-oriented architecture',
+      'Led product vision and strategy for an iOS budgeting app with a Python backend and Plaid integration',
+      'Designed UI and interactive financial data visualizations in Swift with a modular, object-oriented architecture',
+      'Conducted user research, competitive analysis, and iterative testing to inform feature prioritization',
     ],
     tech: ['Swift', 'SwiftUI', 'Python', 'Plaid API'],
     link: 'https://pancakemoney.com/',
@@ -56,7 +70,7 @@ const PROJECTS = [
       'Production hardening: rate limiting, input validation, Helmet, CORS',
       'Deployed on Vercel + Railway under a custom domain',
     ],
-    tech: ['Next.js', 'React', 'TypeScript', 'Node.js', 'PostgreSQL', 'Vercel'],
+    tech: ['Next.js', 'React', 'TypeScript', 'Node.js', 'Express', 'MongoDB', 'JWT'],
     link: 'https://myphobos.app',
     linkLabel: 'myphobos.app',
   },
@@ -97,16 +111,30 @@ const PROJECTS = [
 // ── Work / experience ────────────────────────────────────
 const EXPERIENCE = [
   {
+    id: 'greige-job',
+    company: 'Greige',
+    role: 'Technical Co-Founder',
+    period: 'May 2026 – Present',
+    status: 'Current',
+    blurb: 'Took a fashion resale marketplace from 0 → 1: full Python (FastAPI) backend and parts of the React (Next.js) frontend.',
+    highlights: [
+      'Implemented end-to-end Stripe Connect marketplace payments — onboarding/KYC, escrow, signature-verified webhooks, transfer-reversal refunds',
+      'Architected a confidence-driven authentication pipeline combining a vision-language model (Claude), DINOv2 visual-similarity, and EXIF metadata with human-in-the-loop escalation',
+      'Owned the full backend stack from data modeling to webhook design',
+    ],
+    stack: ['Python', 'FastAPI', 'Next.js', 'React', 'Stripe Connect', 'Claude', 'DINOv2'],
+  },
+  {
     id: 'pancake-job',
     company: 'Pancake Money',
-    role: 'Frontend Developer (iOS)',
+    role: 'Technical Co-Founder',
     period: 'Jun 2025 – Present',
     status: 'Current',
-    blurb: 'Building an iOS budgeting app with secure Plaid integration and live financial visualizations.',
+    blurb: 'Building an iOS budgeting app with a Python backend, AI tools, and Plaid integration to simplify personal finance.',
     highlights: [
-      'Lead iOS development for a Plaid-integrated budgeting app with a Python backend',
-      'Design and implement UI + financial data visualizations in Swift / SwiftUI',
-      'Iterate on a modular, object-oriented architecture for fast feature work',
+      'Led product vision and strategy for an iOS budgeting app with a Python backend, AI tools, and Plaid API integration',
+      'Designed UI and interactive financial data visualizations in Swift, applying OOP principles for a modular architecture',
+      'Conducted user research, competitive analysis, and iterative testing to inform feature prioritization',
     ],
     stack: ['Swift', 'SwiftUI', 'Python', 'Plaid API'],
   },
@@ -118,9 +146,9 @@ const EXPERIENCE = [
     status: 'Contract',
     blurb: 'Redesigned and rebuilt the company website using modern frontend practices.',
     highlights: [
-      'Redesigned and rebuilt the company website with a modern frontend',
-      'Collaborated with stakeholders through iterative revisions',
-      'Configured the domain and contact form for production deployment',
+      'Redesigned and rebuilt the company website with a modern frontend — improving usability and visual consistency',
+      'Collaborated with stakeholders through iterative revisions based on feedback',
+      'Configured the domain and contact form for successful production launch',
     ],
     stack: ['Web Design', 'UI/UX', 'Frontend'],
   },
@@ -128,11 +156,11 @@ const EXPERIENCE = [
 
 // ── Top 8 (a curation: 6 projects + GitHub + LinkedIn) ──
 const TOP_8 = [
+  { name: 'Greige',  detail: 'Resale marketplace',    href: 'https://github.com/citlol' },
   { name: 'Pancake', detail: 'iOS budgeting',         href: 'https://pancakemoney.com/' },
   { name: 'Phobos',  detail: 'Wishlist web app',      href: 'https://myphobos.app' },
-  { name: 'Miel',    detail: 'macOS Pomodoro',        href: 'https://github.com/citlol/miel-pomodoro' },
-  { name: 'Bigram',  detail: 'Java language model',   href: 'https://github.com/citlol/bigram-language-model' },
   { name: 'Inpaint', detail: 'PyTorch U-Net',         href: 'https://github.com/citlol/partial-conv-inpainting' },
+  { name: 'Bigram',  detail: 'Java language model',   href: 'https://github.com/citlol/bigram-language-model' },
   { name: 'Top Escrow', detail: 'Site redesign',      href: 'https://topescrow.com' },
   { name: 'GitHub',  detail: '@citlol',               href: 'https://github.com/citlol' },
   { name: 'LinkedIn',detail: 'Connect',               href: 'https://linkedin.com/in/citlalli-trejo-del-rio' },
@@ -371,7 +399,7 @@ function Hero() {
         <div className="hero-meta">
           <dl>
             <dt>currently</dt>
-            <dd>Frontend Dev @ Pancake Money</dd>
+            <dd>Co-Founder @ Greige & Pancake Money</dd>
           </dl>
           <dl>
             <dt>studying</dt>
