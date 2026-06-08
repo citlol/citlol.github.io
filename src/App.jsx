@@ -8,14 +8,14 @@ const PROFILE = {
   handle: '@citlol',
   pronouns: 'she/her',
   school: 'CS @ UT Dallas',
-  status: 'Open to grad-role offers',
+  status: 'Open to new grad roles',
   graduation: 'Class of 2026',
   mood: { label: 'mood', text: 'caffeinated and shipping ✦' },
   photo: '/IMG_8198.jpg',
   email: 'citlalli.tdr@gmail.com',
   github: 'https://github.com/citlol',
   linkedin: 'https://linkedin.com/in/citlalli-trejo-del-rio',
-  resume: '/resume.pdf',
+  resume: '/Resume_Citlalli_TDR.pdf',
   bio: "Hi — I'm a CS senior at UT Dallas building thoughtful, full-stack software across web, iOS, and AI systems. I like marketplace mechanics, careful interfaces, and shipping things that feel a little personal.",
 };
 
@@ -407,7 +407,7 @@ function Hero() {
           </dl>
           <dl>
             <dt>open to</dt>
-            <dd>2026 grad-role offers</dd>
+            <dd>2026 new grad roles</dd>
           </dl>
         </div>
       </div>
