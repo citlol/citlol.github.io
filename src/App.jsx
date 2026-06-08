@@ -9,14 +9,14 @@ const PROFILE = {
   pronouns: 'she/her',
   school: 'CS @ UT Dallas',
   status: 'Open to new grad roles',
-  graduation: 'Class of 2026',
+  graduation: 'May 2026 grad',
   mood: { label: 'mood', text: 'caffeinated and shipping ✦' },
   photo: '/IMG_8198.jpg',
   email: 'citlalli.tdr@gmail.com',
   github: 'https://github.com/citlol',
   linkedin: 'https://linkedin.com/in/citlalli-trejo-del-rio',
   resume: '/Resume_Citlalli_TDR.pdf',
-  bio: "Hi — I'm a CS senior at UT Dallas building thoughtful, full-stack software across web, iOS, and AI systems. I like marketplace mechanics, careful interfaces, and shipping things that feel a little personal.",
+  bio: "Hi — I'm a recent CS grad from UT Dallas building thoughtful, full-stack software across web, iOS, and AI systems. I like marketplace mechanics, careful interfaces, and shipping things that feel a little personal.",
 };
 
 // ── Tools / languages ────────────────────────────────────
@@ -402,12 +402,12 @@ function Hero() {
             <dd>Co-Founder @ Greige & Pancake Money</dd>
           </dl>
           <dl>
-            <dt>studying</dt>
+            <dt>studied</dt>
             <dd>{PROFILE.school} · {PROFILE.graduation}</dd>
           </dl>
           <dl>
             <dt>open to</dt>
-            <dd>2026 new grad roles</dd>
+            <dd>new grad roles</dd>
           </dl>
         </div>
       </div>
@@ -523,9 +523,9 @@ function ContactSection() {
       <p className="section-eyebrow">✉ get in touch</p>
       <h2 className="section-title">Let's build something.</h2>
       <p className="section-lead">
-        I'm graduating in {PROFILE.graduation.replace('Class of ', '')} and looking for a role
-        where I can keep shipping thoughtful software. The fastest way to reach me is email —
-        otherwise the résumé and socials are linked in the sidebar.
+        I just graduated in May 2026 and I'm looking for a role where I can keep shipping
+        thoughtful software. The fastest way to reach me is email — otherwise the résumé
+        and socials are linked in the sidebar.
       </p>
       <div
         style={{
