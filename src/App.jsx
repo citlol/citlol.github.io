@@ -19,6 +19,14 @@ const PROFILE = {
   bio: "Hi — I'm a recent CS grad from UT Dallas building thoughtful, full-stack software across web, iOS, and AI systems. I like marketplace mechanics, careful interfaces, and shipping things that feel a little personal.",
 };
 
+// ── Case study (recruiter-only) ──────────────────────────
+// TO CHANGE THE PASSWORD: edit the string below. To swap the PDF, drop a new
+// file at public/case_study.pdf (or update CASE_STUDY_URL). Note: this is a
+// client-side gate — anyone reading the JS bundle can find the password.
+// Strong enough for "casual visitors don't get in", not a secret.
+const CASE_STUDY_PASSWORD = 'CASE2026';
+const CASE_STUDY_URL = '/case_study.pdf';
+
 // ── Tools / languages ────────────────────────────────────
 const TOOLS = {
   Languages: ['TypeScript', 'Python', 'Swift', 'Java', 'JavaScript', 'SQL'],
@@ -224,7 +232,7 @@ function ProfileModule({ ghStats }) {
   );
 }
 
-function NavModule({ active, onNav }) {
+function NavModule({ active, onNav, onOpenCaseStudy }) {
   return (
     <Module title="View My:" hint="navigate" accent="var(--lavender-200)">
       <nav>
@@ -250,8 +258,91 @@ function NavModule({ active, onNav }) {
         <a className="btn" href={PROFILE.resume} download>
           ⬇ Download résumé
         </a>
+        <button type="button" className="btn" onClick={onOpenCaseStudy}>
+          ↗ Case Study
+        </button>
       </div>
     </Module>
+  );
+}
+
+function CaseStudyGate({ open, onClose }) {
+  const [pw, setPw] = useState('');
+  const [error, setError] = useState(false);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (!open) {
+      setPw('');
+      setError(false);
+      return;
+    }
+    const t = setTimeout(() => inputRef.current?.focus(), 30);
+    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  const submit = (e) => {
+    e.preventDefault();
+    if (pw.trim() === CASE_STUDY_PASSWORD) {
+      try { window.sessionStorage.setItem('citlol-case-unlocked', '1'); } catch (_) {}
+      window.open(CASE_STUDY_URL, '_blank', 'noopener,noreferrer');
+      onClose();
+    } else {
+      setError(true);
+    }
+  };
+
+  return (
+    <div
+      className="case-backdrop"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="case-title"
+    >
+      <div className="case-card" onClick={(e) => e.stopPropagation()}>
+        <header className="module-head">
+          <span id="case-title">Case Study</span>
+          <small>✦ recruiter access</small>
+        </header>
+        <div className="module-body">
+          <p style={{ marginTop: 0, color: 'var(--ink-soft)', fontSize: 14, lineHeight: 1.5 }}>
+            A deep dive on one of my projects, shared with people I've applied to.
+            Enter the access code from my application to view the PDF.
+          </p>
+          <form onSubmit={submit}>
+            <input
+              ref={inputRef}
+              type="password"
+              value={pw}
+              onChange={(e) => { setPw(e.target.value); setError(false); }}
+              placeholder="access code"
+              aria-label="Access code"
+              aria-invalid={error}
+              className="case-input"
+              autoComplete="off"
+              spellCheck={false}
+            />
+            {error && (
+              <div className="case-error" role="alert">
+                That code didn't match — double-check the application I sent you.
+              </div>
+            )}
+            <div className="btn-row" style={{ marginTop: 'var(--space-md)' }}>
+              <button type="submit" className="btn btn-primary">✦ Unlock</button>
+              <button type="button" className="btn" onClick={onClose}>Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -600,6 +691,7 @@ function useTheme() {
 export default function App() {
   const [ghStats, setGhStats] = useState(null);
   const [theme, toggleTheme] = useTheme();
+  const [caseGateOpen, setCaseGateOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -642,7 +734,7 @@ export default function App() {
       <div className="page">
         <aside className="sidebar">
           <ProfileModule ghStats={ghStats} />
-          <NavModule active={active} onNav={scrollTo} />
+          <NavModule active={active} onNav={scrollTo} onOpenCaseStudy={() => setCaseGateOpen(true)} />
           <ContactsModule />
           <ToolsModule />
           <GamingModule />
@@ -660,6 +752,8 @@ export default function App() {
           </footer>
         </main>
       </div>
+
+      <CaseStudyGate open={caseGateOpen} onClose={() => setCaseGateOpen(false)} />
     </>
   );
 }

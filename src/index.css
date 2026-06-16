@@ -771,6 +771,66 @@ img { max-width: 100%; display: block; }
 }
 .foot .heart { color: var(--pink-500); }
 
+/* ── Case study gate (modal) ──────────────────────────── */
+.case-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: var(--space-md);
+  background: color-mix(in oklab, var(--paper) 75%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: case-fade 160ms ease-out;
+}
+.case-card {
+  width: min(420px, 100%);
+  background: var(--paper-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  animation: case-rise 200ms ease-out;
+}
+.case-card .module-head {
+  background: var(--pink-200);
+}
+.case-input {
+  width: 100%;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 15px;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  outline: none;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+.case-input:focus {
+  border-color: var(--pink-500);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--pink-500) 18%, transparent);
+}
+.case-input[aria-invalid="true"] {
+  border-color: var(--pink-700);
+}
+.case-error {
+  margin-top: var(--space-sm);
+  font-size: 13px;
+  color: var(--pink-700);
+  font-family: var(--mono);
+  letter-spacing: 0.01em;
+}
+@keyframes case-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes case-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 /* ── Reduced motion ───────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
