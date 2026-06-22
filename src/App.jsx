@@ -15,7 +15,7 @@ const PROFILE = {
   email: 'citlalli.tdr@gmail.com',
   github: 'https://github.com/citlol',
   linkedin: 'https://linkedin.com/in/citlalli-trejo-del-rio',
-  resume: '/Resume_Citlalli_TDR.pdf',
+  resume: '/Citlalli_Trejo_Resume_.pdf',
   bio: "Hi — I'm a recent CS grad from UT Dallas building thoughtful, full-stack software across web, iOS, and AI systems. I like marketplace mechanics, careful interfaces, and shipping things that feel a little personal.",
 };
 
