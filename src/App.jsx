@@ -78,7 +78,7 @@ const PROJECTS = [
       'Production hardening: rate limiting, input validation, Helmet, CORS',
       'Deployed on Vercel + Railway under a custom domain',
     ],
-    tech: ['Next.js', 'React', 'TypeScript', 'Node.js', 'Express', 'MongoDB', 'JWT'],
+    tech: ['Next.js', 'React', 'TypeScript', 'Node.js', 'Express', 'PostgreSQL', 'JWT'],
     link: 'https://myphobos.app',
     linkLabel: 'myphobos.app',
   },
